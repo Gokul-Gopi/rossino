@@ -1,15 +1,7 @@
-import dynamic from "next/dynamic";
-
-const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
-  ssr: false,
-});
+import AppLayout from "@/components/layout/AppLayout";
 
 const Home = () => {
-  return (
-    <div className="flex flex-col items-center justify-center h-dvh">
-      <DarkMode />
-    </div>
-  );
+  return <AppLayout>Home page</AppLayout>;
 };
 
 export default Home;

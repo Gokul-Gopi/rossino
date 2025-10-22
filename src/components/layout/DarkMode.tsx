@@ -1,7 +1,11 @@
 import { Moon, Sun } from "lucide-react";
-import { Button } from "../ui/Button";
+import { Button } from "@/components/ui/Button";
 import { useTheme } from "next-themes";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components//ui/Tooltip";
 
 const DarkMode = () => {
   const { theme, setTheme } = useTheme();
