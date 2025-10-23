@@ -22,7 +22,7 @@ const DarkMode = () => {
         </Button>
       </TooltipTrigger>
 
-      <TooltipContent>
+      <TooltipContent className="font-medium">
         <p>Switch to {theme === "light" ? "Dark" : "Light"} mode</p>
       </TooltipContent>
     </Tooltip>

@@ -1,6 +1,11 @@
 import dynamic from "next/dynamic";
-import { Button } from "../ui/Button";
-import { SidebarTrigger } from "../ui/Sidebar";
+import { Button } from "@/components/ui/Button";
+import { SidebarTrigger } from "@/components/ui/Sidebar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/Tooltip";
 
 const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
   ssr: false,
@@ -13,7 +18,18 @@ const Header = () => {
 
       <div className="flex gap-2 ml-auto">
         <DarkMode />
-        <Button>Signin</Button>
+
+        <Tooltip>
+          <TooltipTrigger>
+            <Button>Signin</Button>
+          </TooltipTrigger>
+
+          <TooltipContent>
+            <p className="font-medium text-balance w-24">
+              Sign in to use all the features
+            </p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     </header>
   );

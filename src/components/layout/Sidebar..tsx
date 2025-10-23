@@ -75,7 +75,7 @@ const Sidebar = () => {
           <SidebarMenu className="gap-6">
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.label}>
-                <SidebarMenuButton>
+                <SidebarMenuButton className="transition-[background]">
                   <Link href={item.link} className="flex gap-2">
                     {item.icon} {item.label}
                   </Link>
