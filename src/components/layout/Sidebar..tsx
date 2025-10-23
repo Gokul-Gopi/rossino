@@ -12,15 +12,15 @@ import { cn } from "@/utils/helpers";
 import {
   Bolt,
   ChartColumn,
-  ChevronsLeftRight,
   CircleQuestionMark,
   FolderHeart,
   LogOut,
+  PanelLeft,
 } from "lucide-react";
 import Link from "next/link";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
-  className: "size-5! -translate-x-0.5",
+  className: "size-5! -translate-x-[2.5px]",
 };
 
 const menuItems = [
@@ -47,54 +47,57 @@ const menuItems = [
 ];
 
 const Sidebar = () => {
-  const { open, toggleSidebar } = useSidebar();
+  const { open, openMobile, toggleSidebar } = useSidebar();
 
   return (
-    <SidebarRoot collapsible="icon">
-      <SidebarHeader className="px-3 mb-6">
-        <Link
-          href="/"
-          className="text-nowrap text-lg flex gap-1.5 overflow-hidden"
-        >
-          🍅
-          <span
-            className={cn(
-              "inline transition-opacity duration-200 text-nowrap overflow-hidden ",
-              {
-                "opacity-0": !open,
-              }
-            )}
+    <nav>
+      <SidebarRoot collapsible="icon">
+        <SidebarHeader className="px-3 mb-6 mt-2">
+          <Link
+            href="/"
+            className="text-nowrap text-lg flex gap-1.5 overflow-hidden"
           >
-            Rossino
-          </span>
-        </Link>
-      </SidebarHeader>
+            🍅
+            <span
+              className={cn(
+                "inline transition-opacity duration-200 text-nowrap overflow-hidden ",
+                {
+                  "opacity-0": !open && !openMobile,
+                }
+              )}
+            >
+              Rossino
+            </span>
+          </Link>
+        </SidebarHeader>
 
-      <SidebarContent className="px-2">
-        <SidebarMenu className="gap-6">
-          {menuItems.map((item) => (
-            <SidebarMenuItem key={item.label}>
-              <SidebarMenuButton tooltip={item.label}>
-                {item.icon}
-                <Link href={item.link}> {item.label}</Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarContent>
+        <SidebarContent className="px-2">
+          <SidebarMenu className="gap-6">
+            {menuItems.map((item) => (
+              <SidebarMenuItem key={item.label}>
+                <SidebarMenuButton tooltip={item.label}>
+                  <Link href={item.link} className="flex gap-2">
+                    {item.icon} {item.label}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarContent>
 
-      <SidebarFooter>
-        <SidebarMenuButton tooltip="Expand" onClick={toggleSidebar}>
-          <ChevronsLeftRight {...iconProps} />
-          <span>Collapse</span>
-        </SidebarMenuButton>
+        <SidebarFooter>
+          <SidebarMenuButton tooltip="Expand" onClick={toggleSidebar}>
+            <PanelLeft {...iconProps} />
+            <span>Collapse</span>
+          </SidebarMenuButton>
 
-        <SidebarMenuButton tooltip="Logout">
-          <LogOut {...iconProps} />
-          <span>Logout</span>
-        </SidebarMenuButton>
-      </SidebarFooter>
-    </SidebarRoot>
+          <SidebarMenuButton tooltip="Logout">
+            <LogOut {...iconProps} />
+            <span>Logout</span>
+          </SidebarMenuButton>
+        </SidebarFooter>
+      </SidebarRoot>
+    </nav>
   );
 };
 

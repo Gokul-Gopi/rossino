@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { ChevronsRight } from "lucide-react";
+import { PanelLeft } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/utils/helpers";
@@ -253,33 +253,27 @@ function Sidebar({
 }
 
 function SidebarTrigger({
-  className,
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { open, toggleSidebar } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
 
-  return (
+  return isMobile ? (
     <Button
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
-      variant="secondary"
+      variant="outline"
       size="icon"
-      className={cn("size-7", className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
       }}
       {...props}
     >
-      <ChevronsRight
-        className={cn({
-          "rotate-180 transition-transform duration-300": open,
-        })}
-      />
+      <PanelLeft />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
-  );
+  ) : null;
 }
 
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {

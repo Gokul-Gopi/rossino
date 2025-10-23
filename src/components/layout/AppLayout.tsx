@@ -11,9 +11,11 @@ const AppLayout = ({ children }: IAppLayoutProps) => {
     <SidebarProvider defaultOpen={false}>
       <Sidebar />
 
-      <Header />
+      <section className="w-full min-h-dvh">
+        <Header />
 
-      <main className="min-h-dvh p-4">{children}</main>
+        <main className="p-4">{children}</main>
+      </section>
     </SidebarProvider>
   );
 };
