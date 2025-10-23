@@ -1,12 +1,18 @@
 import AppLayout from "@/components/layout/AppLayout";
-import SignInForm from "@/components/pages/signin/SignInForm";
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import SignInForm from "@/components/pages/signin/SignupForm";
+// import { Button } from "@/components/ui/Button";
+// import { AnimatePresence, motion } from "motion/react";
+// import { useState } from "react";
 
 const Page = () => {
+  // const [form, setForm] = useState<"signin" | "signup">("signin");
+
   return (
     <AppLayout>
-      <div className="flex h-screen items-center justify-center">
-        <SignInForm />
+      <div className="flex flex-col gap-4 h-screen items-center justify-center">
+        <div className="bg-card shadow p-4 border rounded-lg">
+          <SignInForm />
+        </div>
       </div>
     </AppLayout>
   );
