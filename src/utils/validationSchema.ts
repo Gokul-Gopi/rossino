@@ -21,3 +21,10 @@ export const signupSchema = z
   });
 
 export type SignupData = z.infer<typeof signupSchema>;
+
+export const loginSchema = z.object({
+  email: z.email("Invalid email"),
+  password: z.string("Password is required"),
+});
+
+export type LoginData = z.infer<typeof loginSchema>;
