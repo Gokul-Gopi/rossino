@@ -7,7 +7,11 @@ import { signupSchema, SignupData } from "@/utils/validationSchema";
 import { Button } from "@/components/ui/Button";
 import { motion } from "motion/react";
 
-const SignupForm = () => {
+interface ISignupFormProps {
+  formSwitch: () => void;
+}
+
+const SignupForm = ({ formSwitch }: ISignupFormProps) => {
   const form = useForm<SignupData>({
     resolver: zodResolver(signupSchema),
   });
@@ -40,6 +44,8 @@ const SignupForm = () => {
         <div className="text-sm flex gap-1 justify-center items-center">
           <p>Already have an account?</p>
           <Button
+            type="button"
+            onClick={formSwitch}
             variant="link"
             size="sm"
             className="text-sm size-fit px-0 bg-transparent font-medium"
