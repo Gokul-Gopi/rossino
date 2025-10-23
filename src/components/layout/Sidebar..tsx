@@ -99,7 +99,7 @@ const Sidebar = () => {
         <SidebarFooter className="pb-4 flex flex-col gap-4">
           <SidebarMenuButton
             onClick={toggleSidebar}
-            className="transition-[background] duration-200"
+            className="transition-all duration-200"
           >
             <PanelLeft {...iconProps} />
             <span>Collapse</span>
