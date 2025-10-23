@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/Button";
 import { SidebarTrigger } from "@/components/ui/Sidebar";
 import {
@@ -6,10 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
-
-const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
-  ssr: false,
-});
+import DarkMode from "./DarkMode";
 
 const Header = () => {
   return (
@@ -20,7 +16,7 @@ const Header = () => {
         <DarkMode />
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button>Signin</Button>
           </TooltipTrigger>
 
