@@ -1,4 +1,4 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/Sidebar";
+import { SidebarProvider } from "@/components/ui/Sidebar";
 import Sidebar from "./Sidebar.";
 import Header from "./Header";
 
@@ -8,7 +8,7 @@ interface IAppLayoutProps {
 
 const AppLayout = ({ children }: IAppLayoutProps) => {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <Sidebar />
 
       <Header />

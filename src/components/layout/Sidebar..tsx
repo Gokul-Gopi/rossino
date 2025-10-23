@@ -12,37 +12,42 @@ import { cn } from "@/utils/helpers";
 import {
   Bolt,
   ChartColumn,
+  ChevronsLeftRight,
   CircleQuestionMark,
   FolderHeart,
   LogOut,
 } from "lucide-react";
 import Link from "next/link";
 
+const iconProps: React.SVGProps<SVGSVGElement> = {
+  className: "size-5! -translate-x-0.5",
+};
+
 const menuItems = [
   {
     label: "Projects",
     link: "/projects",
-    icon: <FolderHeart className="size-5! -translate-x-0.5" />,
+    icon: <FolderHeart {...iconProps} />,
   },
   {
     label: "Reports",
     link: "/reports",
-    icon: <ChartColumn scale={2} className="size-5! -translate-x-0.5" />,
+    icon: <ChartColumn scale={2} {...iconProps} />,
   },
   {
     label: "Settings",
     link: "/settings",
-    icon: <Bolt className="size-5! -translate-x-0.5" />,
+    icon: <Bolt {...iconProps} />,
   },
   {
     label: "Philosophy",
     link: "/philosophy",
-    icon: <CircleQuestionMark className="size-5! -translate-x-0.5" />,
+    icon: <CircleQuestionMark {...iconProps} />,
   },
 ];
 
 const Sidebar = () => {
-  const { state } = useSidebar();
+  const { open, toggleSidebar } = useSidebar();
 
   return (
     <SidebarRoot collapsible="icon">
@@ -56,7 +61,7 @@ const Sidebar = () => {
             className={cn(
               "inline transition-opacity duration-200 text-nowrap overflow-hidden ",
               {
-                "opacity-0": state === "collapsed",
+                "opacity-0": !open,
               }
             )}
           >
@@ -79,8 +84,13 @@ const Sidebar = () => {
       </SidebarContent>
 
       <SidebarFooter>
+        <SidebarMenuButton tooltip="Expand" onClick={toggleSidebar}>
+          <ChevronsLeftRight {...iconProps} />
+          <span>Collapse</span>
+        </SidebarMenuButton>
+
         <SidebarMenuButton tooltip="Logout">
-          <LogOut className="size-5! -translate-x-0.5" />
+          <LogOut {...iconProps} />
           <span>Logout</span>
         </SidebarMenuButton>
       </SidebarFooter>
