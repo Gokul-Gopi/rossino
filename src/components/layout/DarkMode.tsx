@@ -13,7 +13,10 @@ const DarkMode = () => {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+        <Button
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          variant="outline"
+        >
           {theme === "light" ? <Moon /> : <Sun />}
         </Button>
       </TooltipTrigger>

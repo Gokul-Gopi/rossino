@@ -6,7 +6,7 @@ const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
 
 const Header = () => {
   return (
-    <header>
+    <header className="px-4">
       <DarkMode />
     </header>
   );

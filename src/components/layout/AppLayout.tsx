@@ -13,7 +13,7 @@ const AppLayout = ({ children }: IAppLayoutProps) => {
 
       <Header />
 
-      <main className="min-h-dvh">{children}</main>
+      <main className="min-h-dvh p-4">{children}</main>
     </SidebarProvider>
   );
 };
