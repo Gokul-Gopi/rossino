@@ -5,9 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: hsl(40 60% 95%);
+  --background: hsl(24 93% 95%);
   --foreground: hsl(0 0% 9%);
-  --card: hsl(0 0% 100%);
+  --card: hsl(24 93% 94%);
   --card-foreground: hsl(0 0% 9%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(0 0% 9%);
@@ -29,7 +29,7 @@
   --chart-3: hsl(60 80% 60%);
   --chart-4: hsl(90 80% 60%);
   --chart-5: hsl(120 80% 60%);
-  --sidebar: hsl(0 0% 98%);
+  --sidebar: hsl(24 93% 94%);
   --sidebar-foreground: hsl(0 0% 9%);
   --sidebar-primary: hsl(0 84% 60%);
   --sidebar-primary-foreground: hsl(0 0% 98%);
