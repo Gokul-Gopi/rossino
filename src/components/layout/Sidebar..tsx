@@ -75,7 +75,7 @@ const Sidebar = () => {
           <SidebarMenu className="gap-6">
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.label}>
-                <SidebarMenuButton className="transition-[background]">
+                <SidebarMenuButton className="transition-[background] duration-200">
                   <Link href={item.link} className="flex gap-2">
                     {item.icon} {item.label}
                   </Link>
@@ -86,12 +86,15 @@ const Sidebar = () => {
         </SidebarContent>
 
         <SidebarFooter className="pb-4">
-          <SidebarMenuButton onClick={toggleSidebar}>
+          <SidebarMenuButton
+            onClick={toggleSidebar}
+            className="transition-[background] duration-200"
+          >
             <PanelLeft {...iconProps} />
             <span>Collapse</span>
           </SidebarMenuButton>
 
-          <SidebarMenuButton>
+          <SidebarMenuButton className="transition-[background] duration-200">
             <LogOut {...iconProps} />
             <span>Logout</span>
           </SidebarMenuButton>
