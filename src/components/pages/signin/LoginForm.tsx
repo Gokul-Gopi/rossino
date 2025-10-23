@@ -4,6 +4,8 @@ import LoaderButton from "@/components/ui/LoaderButton";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginData } from "@/utils/validationSchema";
+import { Button } from "@/components/ui/Button";
+import { motion } from "motion/react";
 
 const LoginForm = () => {
   const form = useForm<LoginData>({
@@ -15,14 +17,33 @@ const LoginForm = () => {
   });
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4">
+    <motion.form
+      key="signin-form"
+      initial={{ x: 30, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -10, opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      onSubmit={onSubmit}
+      className="flex flex-col gap-4"
+    >
       <FormProvider {...form}>
         <ControlledTextInput name="email" placeholder="Email" />
         <ControlledPasswordInput name="password" placeholder="Password" />
 
-        <LoaderButton type="submit">Submit</LoaderButton>
+        <LoaderButton type="submit">Sign in</LoaderButton>
+
+        <div className="text-sm flex gap-1 justify-center items-center">
+          <p>Don&apos;t have an account? </p>
+          <Button
+            variant="link"
+            size="sm"
+            className="text-sm size-fit px-0 bg-transparent font-medium"
+          >
+            Sign up
+          </Button>
+        </div>
       </FormProvider>
-    </form>
+    </motion.form>
   );
 };
 
