@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/Button";
 import { SidebarTrigger } from "@/components/ui/Sidebar";
 import {
@@ -5,7 +6,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
-import DarkMode from "./DarkMode";
+
+const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
+  ssr: false,
+});
 
 const Header = () => {
   return (

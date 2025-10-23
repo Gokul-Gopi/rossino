@@ -12,7 +12,7 @@ const DarkMode = () => {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
+      <TooltipTrigger>
         <Button
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
           className="hover:bg-transparent hover:text-primary"
