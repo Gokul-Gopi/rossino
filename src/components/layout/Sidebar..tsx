@@ -32,7 +32,7 @@ const menuItems = [
   {
     label: "Reports",
     link: "/reports",
-    icon: <ChartColumn scale={2} {...iconProps} />,
+    icon: <ChartColumn {...iconProps} />,
   },
   {
     label: "Settings",
