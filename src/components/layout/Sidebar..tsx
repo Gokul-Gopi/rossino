@@ -75,7 +75,7 @@ const Sidebar = () => {
           <SidebarMenu className="gap-6">
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.label}>
-                <SidebarMenuButton tooltip={item.label}>
+                <SidebarMenuButton>
                   <Link href={item.link} className="flex gap-2">
                     {item.icon} {item.label}
                   </Link>
@@ -85,13 +85,13 @@ const Sidebar = () => {
           </SidebarMenu>
         </SidebarContent>
 
-        <SidebarFooter>
-          <SidebarMenuButton tooltip="Expand" onClick={toggleSidebar}>
+        <SidebarFooter className="pb-4">
+          <SidebarMenuButton onClick={toggleSidebar}>
             <PanelLeft {...iconProps} />
             <span>Collapse</span>
           </SidebarMenuButton>
 
-          <SidebarMenuButton tooltip="Logout">
+          <SidebarMenuButton>
             <LogOut {...iconProps} />
             <span>Logout</span>
           </SidebarMenuButton>
