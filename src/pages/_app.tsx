@@ -9,6 +9,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { PagesTopLoader } from "nextjs-toploader/pages";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
@@ -27,6 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <ThemeProvider attribute="class" enableSystem={false}>
+          <PagesTopLoader color="hsl(0 84% 60%)" />
           <Component {...pageProps} />
           <Toaster {...toasterOptions} />
         </ThemeProvider>
