@@ -11,7 +11,7 @@ const FormLayout = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
 
   return (
-    <div className="flex items-center w-full max-w-4xl px-4">
+    <div className="flex items-center w-full max-w-4xl">
       <div className="bg-card w-full items-center min-h-[34rem] flex relative gap-4 shadow p-4 border rounded-lg">
         <LayoutGroup>
           <div className="flex-1">
