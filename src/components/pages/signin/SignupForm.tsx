@@ -6,18 +6,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, SignupData } from "@/utils/validationSchema";
 import { Button } from "@/components/ui/Button";
 import { motion } from "motion/react";
+import { useSignup } from "@/query/auth.queries";
+import { useRouter } from "next/router";
+import { toast } from "sonner";
 
 interface ISignupFormProps {
   switchForm: () => void;
 }
 
 const SignupForm = ({ switchForm }: ISignupFormProps) => {
+  const router = useRouter();
   const form = useForm<SignupData>({
     resolver: zodResolver(signupSchema),
   });
 
+  const signup = useSignup();
+
   const onSubmit = form.handleSubmit((data) => {
-    console.log(data);
+    signup.mutate(data, {
+      onSuccess: () => {
+        router.push("/");
+        toast.success("Let's Pomodoro with Rossino!");
+      },
+    });
   });
 
   return (
@@ -39,7 +50,7 @@ const SignupForm = ({ switchForm }: ISignupFormProps) => {
           placeholder="Confirm Password"
         />
 
-        <LoaderButton size="lg" type="submit">
+        <LoaderButton loading={signup.isPending} size="lg" type="submit">
           Sign up
         </LoaderButton>
 

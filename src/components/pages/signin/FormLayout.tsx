@@ -19,7 +19,7 @@ const FormLayout = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full hover:bg-background hover:text-black hover:shadow"
+                className="w-full hover:bg-background hover:text-black hover:shadow dark:text-white"
               >
                 <Image
                   src={googleIcon}

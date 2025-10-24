@@ -1,10 +1,13 @@
-import { createClient as createClientPrimitive } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 
-export function createClient() {
-  const supabase = createClientPrimitive(
+const createClient = () => {
+  const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
   );
-
   return supabase;
-}
+};
+
+const supabase = createClient();
+
+export default supabase;
