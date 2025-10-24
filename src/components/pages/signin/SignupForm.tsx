@@ -39,7 +39,9 @@ const SignupForm = ({ switchForm }: ISignupFormProps) => {
           placeholder="Confirm Password"
         />
 
-        <LoaderButton type="submit">Sign up</LoaderButton>
+        <LoaderButton size="lg" type="submit">
+          Sign up
+        </LoaderButton>
 
         <div className="text-sm flex gap-1 justify-center items-center">
           <p>Already have an account?</p>

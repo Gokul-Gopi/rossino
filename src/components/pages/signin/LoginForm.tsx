@@ -34,7 +34,9 @@ const LoginForm = ({ switchForm }: ILoginFormProps) => {
         <ControlledTextInput name="email" placeholder="Email" />
         <ControlledPasswordInput name="password" placeholder="Password" />
 
-        <LoaderButton type="submit">Sign in</LoaderButton>
+        <LoaderButton size="lg" type="submit">
+          Sign in
+        </LoaderButton>
 
         <div className="text-sm flex gap-1 justify-center items-center">
           <p>Don&apos;t have an account? </p>

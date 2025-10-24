@@ -11,9 +11,10 @@ const FormLayout = () => {
 
   return (
     <div className="flex items-center w-full max-w-4xl px-4">
-      <div className="bg-card w-full items-center lg:min-h-[32rem] flex relative gap-4 shadow p-4 border rounded-lg">
+      <div className="bg-card w-full items-center min-h-[34rem] flex relative gap-4 shadow p-4 border rounded-lg">
         <div className="flex-1">
           <Button
+            size="lg"
             variant="outline"
             className="w-full hover:bg-background hover:text-black hover:shadow"
           >
