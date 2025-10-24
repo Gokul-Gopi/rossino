@@ -133,7 +133,7 @@ const Sidebar = () => {
       </SidebarRoot>
 
       <ConfirmDialog
-        title="Are you sure you want to logout soldier?"
+        title="Are you sure you want to logout?"
         loading={logout.isPending}
         open={confirmLogout}
         onOpenChange={() => setConfirmLogout(!confirmLogout)}

@@ -1,7 +1,16 @@
 import AppLayout from "@/components/layout/AppLayout";
+import withAuth from "@/utils/withAuth";
 
-const Home = () => {
+export const getServerSideProps = withAuth(async (_ctx, user) => {
+  return {
+    props: {
+      user,
+    },
+  };
+});
+
+const Page = () => {
   return <AppLayout>Home page</AppLayout>;
 };
 
-export default Home;
+export default Page;
