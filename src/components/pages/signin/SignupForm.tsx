@@ -26,7 +26,7 @@ const SignupForm = ({ switchForm }: ISignupFormProps) => {
       initial={{ x: 30, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: -10, opacity: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
       onSubmit={onSubmit}
       className="flex flex-col gap-4"
     >
