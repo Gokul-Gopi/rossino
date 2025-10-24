@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "motion/react";
 
 interface ISignupFormProps {
-  formSwitch: () => void;
+  switchForm: () => void;
 }
 
-const SignupForm = ({ formSwitch }: ISignupFormProps) => {
+const SignupForm = ({ switchForm }: ISignupFormProps) => {
   const form = useForm<SignupData>({
     resolver: zodResolver(signupSchema),
   });
@@ -45,7 +45,7 @@ const SignupForm = ({ formSwitch }: ISignupFormProps) => {
           <p>Already have an account?</p>
           <Button
             type="button"
-            onClick={formSwitch}
+            onClick={switchForm}
             variant="link"
             size="sm"
             className="text-sm size-fit px-0 bg-transparent font-medium"
