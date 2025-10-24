@@ -14,6 +14,7 @@ export function cn(...inputs: ClassValue[]) {
 export const onError = async (
   error: FunctionsHttpError | FunctionsRelayError | FunctionsFetchError
 ) => {
+  console.log({ error });
   let errorMessage = "Something went wrong";
 
   if (error instanceof FunctionsHttpError)

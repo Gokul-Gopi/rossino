@@ -8,6 +8,7 @@ import {
   SidebarFooter,
   SidebarMenuItem,
 } from "@/components/ui/Sidebar";
+import { useLogout } from "@/query/auth.queries";
 import { cn } from "@/utils/helpers";
 import {
   Bolt,
@@ -20,6 +21,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { toast } from "sonner";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
   className: "size-5! -translate-x-[2.5px]",
@@ -56,6 +60,19 @@ const navLinks = [
 const Sidebar = () => {
   const router = useRouter();
   const { open, openMobile, toggleSidebar } = useSidebar();
+
+  const [confirmLogout, setConfirmLogout] = useState(false);
+
+  const logout = useLogout();
+
+  const onLogout = () => {
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        router.push("/signin");
+        toast.success("Logged out");
+      },
+    });
+  };
 
   return (
     <nav>
@@ -105,12 +122,23 @@ const Sidebar = () => {
             <span>Collapse</span>
           </SidebarMenuButton>
 
-          <SidebarMenuButton className="transition-[background] duration-200">
+          <SidebarMenuButton
+            onClick={() => setConfirmLogout(true)}
+            className="transition-[background] duration-200"
+          >
             <LogOut {...iconProps} />
             <span>Logout</span>
           </SidebarMenuButton>
         </SidebarFooter>
       </SidebarRoot>
+
+      <ConfirmDialog
+        title="Are you sure you want to logout soldier?"
+        loading={logout.isPending}
+        open={confirmLogout}
+        onOpenChange={() => setConfirmLogout(!confirmLogout)}
+        onConfirm={onLogout}
+      />
     </nav>
   );
 };

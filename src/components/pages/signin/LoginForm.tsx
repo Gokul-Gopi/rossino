@@ -6,18 +6,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginData } from "@/utils/validationSchema";
 import { Button } from "@/components/ui/Button";
 import { motion } from "motion/react";
+import { useRouter } from "next/router";
+import { useLogin } from "@/query/auth.queries";
+import { toast } from "sonner";
 
 interface ILoginFormProps {
   switchForm: () => void;
 }
 
 const LoginForm = ({ switchForm }: ILoginFormProps) => {
+  const router = useRouter();
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });
 
+  const login = useLogin();
+
   const onSubmit = form.handleSubmit((data) => {
-    console.log(data);
+    login.mutate(data, {
+      onSuccess: () => {
+        router.push("/");
+        toast.success("Welcome back. Time to focus!");
+      },
+    });
   });
 
   return (
