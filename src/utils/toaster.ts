@@ -14,7 +14,8 @@ const toasterOptions: ToasterProps = {
         "bg-sidebar! text-foreground! border-green-500! *:data-icon:text-green-500!",
       error:
         "bg-sidebar! text-foreground! border-red-500! *:data-icon:text-red-500!",
-      closeButton: "bg-sidebar! text-foreground! border! border-gray-400!",
+      closeButton:
+        "bg-sidebar! text-foreground! border! border-gray-400! -right-4! left-[unset]! hover:bg-gray-200!",
     },
   },
 };
