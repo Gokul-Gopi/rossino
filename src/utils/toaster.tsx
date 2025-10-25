@@ -20,7 +20,7 @@ const toasterOptions: ToasterProps = {
       error:
         "bg-gradient-to-r! to-red-400/40! from-sidebar! text-gray-800! border-red-400! *:data-icon:text-red-500!",
       closeButton:
-        "bg-sidebar! text-foreground! border! border-gray-400! -top-0.5! -right-4! left-[unset]! hover:bg-gray-200!",
+        "bg-secondary! text-foreground! border! border-gray-400! -top-0.5! -right-4! left-[unset]! hover:bg-gray-200!",
     },
   },
 };
