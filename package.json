@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:start": "supabase start",
-    "db:stop": "supabase stop"
+    "sb:start": "supabase start",
+    "sb:stop": "supabase stop",
+    "sb:status": "supabase status",
+    "sb:restart": "supabase stop && supabase start"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
