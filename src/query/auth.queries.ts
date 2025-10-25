@@ -13,6 +13,7 @@ export const useSignup = () => {
           data: {
             name: data.name,
           },
+          emailRedirectTo: `${process.env.NEXT_PUBLIC_ORIGIN}/verify-email`,
         },
       });
       if (error) throw error;
@@ -38,5 +39,12 @@ export const useLogout = () => {
       if (error) throw error;
     },
     onError: onError,
+  });
+};
+
+export const useCreateSession = () => {
+  return useMutation({
+    mutationFn: async (code: string) =>
+      supabase.auth.exchangeCodeForSession(code),
   });
 };

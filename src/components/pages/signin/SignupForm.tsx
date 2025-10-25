@@ -7,7 +7,6 @@ import { signupSchema, SignupData } from "@/utils/validationSchema";
 import { Button } from "@/components/ui/Button";
 import { motion } from "motion/react";
 import { useSignup } from "@/query/auth.queries";
-import { useRouter } from "next/router";
 import { toast } from "sonner";
 
 interface ISignupFormProps {
@@ -15,7 +14,6 @@ interface ISignupFormProps {
 }
 
 const SignupForm = ({ switchForm }: ISignupFormProps) => {
-  const router = useRouter();
   const form = useForm<SignupData>({
     resolver: zodResolver(signupSchema),
   });
@@ -25,8 +23,10 @@ const SignupForm = ({ switchForm }: ISignupFormProps) => {
   const onSubmit = form.handleSubmit((data) => {
     signup.mutate(data, {
       onSuccess: () => {
-        router.push("/");
-        toast.success("Let's Pomodoro with Rossino!");
+        form.reset();
+        toast.success(
+          "Please check your inbox. Kindly verify your email to continue"
+        );
       },
     });
   });
