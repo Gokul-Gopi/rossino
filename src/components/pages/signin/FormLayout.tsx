@@ -6,9 +6,22 @@ import tomato from "../../../../public/assets/tomato.avif";
 import googleIcon from "../../../../public/assets/google-icon.svg";
 import { Button } from "@/components/ui/Button";
 import { LayoutGroup, motion } from "motion/react";
+import supabase from "@/utils/supabase";
 
 const FormLayout = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
+
+  const onGoogleSignin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_ORIGIN}/verify-email`,
+        queryParams: {
+          prompt: "consent",
+        },
+      },
+    });
+  };
 
   return (
     <div className="flex items-center w-full max-w-4xl">
@@ -17,6 +30,7 @@ const FormLayout = () => {
           <div className="flex-1">
             <motion.div layout transition={{ duration: 0.3 }}>
               <Button
+                onClick={onGoogleSignin}
                 size="lg"
                 variant="outline"
                 className="w-full hover:bg-background hover:text-black hover:shadow dark:text-white"
