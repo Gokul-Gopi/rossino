@@ -18,7 +18,9 @@ const ConfirmDialog = ({
   return (
     <Dialog withHeader={false} {...props}>
       <DialogHeader>
-        <DialogTitle className="text-center">{title}</DialogTitle>
+        <DialogTitle className="text-center text-muted-foreground">
+          {title}
+        </DialogTitle>
         {description && <DialogDescription>{description}</DialogDescription>}
       </DialogHeader>
 

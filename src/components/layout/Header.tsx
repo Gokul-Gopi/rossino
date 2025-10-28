@@ -6,6 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
+import Link from "next/link";
 
 const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
   ssr: false,
@@ -20,8 +21,10 @@ const Header = () => {
         <DarkMode />
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button>Signin</Button>
+          <TooltipTrigger asChild>
+            <Link href="/signin">
+              <Button>Signin</Button>
+            </Link>
           </TooltipTrigger>
 
           <TooltipContent>
