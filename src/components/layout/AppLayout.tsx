@@ -14,7 +14,7 @@ const AppLayout = ({ children }: IAppLayoutProps) => {
       <section className="w-full min-h-dvh">
         <Header />
 
-        <main className="p-4">{children}</main>
+        <main className="p-4 flex justify-center">{children}</main>
       </section>
     </SidebarProvider>
   );

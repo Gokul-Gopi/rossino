@@ -1,4 +1,5 @@
 import AppLayout from "@/components/layout/AppLayout";
+import Pomodoro from "@/components/pages/home/Pomodoro";
 import withAuth from "@/utils/withAuth";
 
 export const getServerSideProps = withAuth(async (_ctx, user) => {
@@ -10,7 +11,11 @@ export const getServerSideProps = withAuth(async (_ctx, user) => {
 });
 
 const Page = () => {
-  return <AppLayout>Home page</AppLayout>;
+  return (
+    <AppLayout>
+      <Pomodoro />
+    </AppLayout>
+  );
 };
 
 export default Page;
