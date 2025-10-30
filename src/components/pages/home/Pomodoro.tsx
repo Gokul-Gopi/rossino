@@ -17,8 +17,18 @@ const Timer = () => {
       <RingProgress
         value={timer}
         className="size-80"
-        circleProps={{ strokeWidth: 7 }}
-        progressCircleProps={{ strokeWidth: 7 }}
+        circleProps={{
+          strokeWidth: 6,
+          // className: cn("stroke-primary/20", {
+          //   "stroke-green-400/20": isBreak,
+          // }),
+        }}
+        progressCircleProps={{
+          strokeWidth: 6,
+          // className: cn("stroke-primary", {
+          //   "stroke-green-400/60": isBreak,
+          // }),
+        }}
       />
     </div>
   );

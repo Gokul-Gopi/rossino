@@ -31,7 +31,7 @@ export function RingProgress({
           "--circle-size": "100px",
           "--circumference": circumference,
           "--percent-to-px": `${percentPx}px`,
-          "--gap-percent": "5",
+          "--gap-percent": "4",
           "--offset-factor": "0",
           "--transition-length": "1s",
           "--transition-step": "200ms",
@@ -56,11 +56,14 @@ export function RingProgress({
             strokeDashoffset="0"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="opacity-100 stroke-primary/20"
+            className="stroke-primary/20"
             {...circleProps}
             style={
               {
-                "--stroke-percent": 90 - currentPercent,
+                // determines the remaining part of the circle,
+                // and the gap maintained b/w progress circle
+                // & remaining circle
+                "--stroke-percent": 92 - currentPercent,
                 "--offset-factor-secondary": "calc(1 - var(--offset-factor))",
                 strokeDasharray:
                   "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
@@ -69,6 +72,7 @@ export function RingProgress({
                 transition: "all var(--transition-length) ease var(--delay)",
                 transformOrigin:
                   "calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)",
+                opacity: "100",
               } as React.CSSProperties
             }
           />
@@ -82,7 +86,7 @@ export function RingProgress({
           strokeDashoffset="0"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="opacity-100 stroke-primary"
+          className="stroke-primary"
           {...progressCircleProps}
           style={
             {
@@ -96,6 +100,7 @@ export function RingProgress({
                 "rotate(calc(-90deg + var(--gap-percent) * var(--offset-factor) * var(--percent-to-deg)))",
               transformOrigin:
                 "calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)",
+              opacity: "100",
             } as React.CSSProperties
           }
         />
