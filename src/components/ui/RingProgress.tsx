@@ -1,11 +1,12 @@
 import { cn } from "@/utils/helpers";
 
-interface RingProgressProps {
+interface IRingProgressProps {
   max?: number;
   min?: number;
   value: number;
-  gaugePrimaryColor: string;
-  gaugeSecondaryColor: string;
+  content?: React.ReactNode;
+  circleProps?: React.SVGProps<SVGCircleElement>;
+  progressCircleProps?: React.SVGProps<SVGCircleElement>;
   className?: string;
 }
 
@@ -13,17 +14,18 @@ export function RingProgress({
   max = 100,
   min = 0,
   value = 0,
-  gaugePrimaryColor,
-  gaugeSecondaryColor,
+  content,
   className,
-}: RingProgressProps) {
+  circleProps,
+  progressCircleProps,
+}: IRingProgressProps) {
   const circumference = 2 * Math.PI * 45;
   const percentPx = circumference / 100;
   const currentPercent = Math.round(((value - min) / (max - min)) * 100);
 
   return (
     <div
-      className={cn("relative size-40 text-2xl font-semibold", className)}
+      className={cn("relative size-40", className)}
       style={
         {
           "--circle-size": "100px",
@@ -54,10 +56,10 @@ export function RingProgress({
             strokeDashoffset="0"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="opacity-100"
+            className="opacity-100 stroke-primary/20"
+            {...circleProps}
             style={
               {
-                stroke: gaugeSecondaryColor,
                 "--stroke-percent": 90 - currentPercent,
                 "--offset-factor-secondary": "calc(1 - var(--offset-factor))",
                 strokeDasharray:
@@ -71,6 +73,7 @@ export function RingProgress({
             }
           />
         )}
+
         <circle
           cx="50"
           cy="50"
@@ -79,10 +82,10 @@ export function RingProgress({
           strokeDashoffset="0"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="opacity-100"
+          className="opacity-100 stroke-primary"
+          {...progressCircleProps}
           style={
             {
-              stroke: gaugePrimaryColor,
               "--stroke-percent": currentPercent,
               strokeDasharray:
                 "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
@@ -97,11 +100,12 @@ export function RingProgress({
           }
         />
       </svg>
+
       <span
         data-current-value={currentPercent}
         className="animate-in fade-in absolute inset-0 m-auto size-fit delay-[var(--delay)] duration-[var(--transition-length)] ease-linear"
       >
-        {currentPercent}
+        {content ?? currentPercent}
       </span>
     </div>
   );

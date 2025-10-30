@@ -16,8 +16,9 @@ const Timer = () => {
     <div>
       <RingProgress
         value={timer}
-        gaugePrimaryColor="rgb(79 70 229)"
-        gaugeSecondaryColor="rgba(0, 0, 0, 0.1)"
+        className="size-80"
+        circleProps={{ strokeWidth: 7 }}
+        progressCircleProps={{ strokeWidth: 7 }}
       />
     </div>
   );
