@@ -1,5 +1,6 @@
 -- Enums
-create type public."sessionKind" as enum ('focus','short_break','long_break');
+create type public."sessionType" as enum ('FOCUS','SHORTBREAK','LONGBREAK');
+create type public."sessionStatus" as enum ('PAUSED','COMPLETED','RUNNING');
 
 -- extension for auto-updating updatedAt
 create extension if not exists moddatetime with schema extensions;
@@ -7,9 +8,9 @@ create extension if not exists moddatetime with schema extensions;
 -- SETTINGS
 create table public.settings (
   "userId" uuid primary key references auth.users(id) on delete cascade,
-  "pomoMinutes" int not null default 25,
-  "shortBreakMinutes" int not null default 5,
-  "longBreakMinutes" int not null default 15,
+  "pomoDuration" int not null default 1500,
+  "shortBreakDuration" int not null default 300,
+  "longBreakDuration" int not null default 900,
   "longBreakInterval" int not null default 4,
   "notificationsEnabled" boolean not null default true,
   "autoStartBreak" boolean not null default false,
@@ -65,10 +66,11 @@ create table public.sessions (
   id uuid primary key default gen_random_uuid(),
   "userId" uuid not null references auth.users(id) on delete cascade,
   "projectId" uuid references public.projects(id) on delete set null,
-  kind public."sessionKind" not null default 'focus',
+  type public."sessionType" not null default 'FOCUS',
+  status public."sessionStatus" not null default 'PAUSED',
   "startedAt" timestamptz not null default now(),
   "endedAt" timestamptz,
-  "intendedMinutes" int not null,
+  "intendedDuration" int not null,
   "interruptionCount" int not null default 0,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now()
