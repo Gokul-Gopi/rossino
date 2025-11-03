@@ -7,7 +7,7 @@ const testSettings: Database["public"]["Tables"]["settings"]["Row"] = {
   userId: "user-123",
   autoStartBreak: true,
   autoStartPomo: true,
-  pomoDuration: 10,
+  pomoDuration: 60,
   shortBreakDuration: 300,
   longBreakDuration: 900,
   longBreakInterval: 4,
@@ -47,7 +47,9 @@ const Pomodoro = () => {
     totalPausedDuration: 0,
   });
 
-  const remainingTime = formatTime(Math.floor(session.elapsedTime));
+  const remainingTime = formatTime(
+    Math.floor(testSettings.pomoDuration - session.elapsedTime)
+  );
 
   useEffect(() => {
     if (session.status === "RUNNING") {
@@ -119,7 +121,7 @@ const Pomodoro = () => {
   return (
     <div>
       <RingProgress
-        value={((session.elapsedTime ?? 0) / testSettings.pomoDuration) * 100}
+        value={(session.elapsedTime / testSettings.pomoDuration) * 100}
         className="size-80"
         circleProps={{
           strokeWidth: 6,
