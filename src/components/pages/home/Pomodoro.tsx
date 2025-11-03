@@ -49,6 +49,18 @@ const Pomodoro = () => {
 
   const remainingTime = formatTime(Math.floor(session.elapsedTime));
 
+  useEffect(() => {
+    if (session.status === "RUNNING") {
+      intervalRef.current = setInterval(updateTimer, 500);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [session.status]);
+
   const updateTimer = () => {
     const elapsedTime =
       (Date.now() -
@@ -73,18 +85,6 @@ const Pomodoro = () => {
       elapsedTime,
     }));
   };
-
-  useEffect(() => {
-    if (session.status === "RUNNING") {
-      intervalRef.current = setInterval(updateTimer, 500);
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [session.status]);
 
   const onStart = () => {
     if (session.status === "IDLE") {
