@@ -129,15 +129,15 @@ const Pomodoro = () => {
         className="size-100"
         circleProps={{
           strokeWidth: 6,
-          // className: cn("stroke-primary/20", {
-          //   "stroke-green-400/20": isBreak,
-          // }),
+          className: cn("stroke-primary/20", {
+            "stroke-green-400/20": session.type === "SHORTBREAK",
+          }),
         }}
         progressCircleProps={{
           strokeWidth: 6,
-          // className: cn("stroke-primary", {
-          //   "stroke-green-400/60": isBreak,
-          // }),
+          className: cn("stroke-primary", {
+            "stroke-green-400/60": session.type === "SHORTBREAK",
+          }),
         }}
         content={
           <div className="flex flex-col gap-2 items-center justify-center relative">
@@ -160,14 +160,14 @@ const Pomodoro = () => {
             {session.status !== "COMPLETED" && (
               <Button
                 onClick={onStart}
-                className="absolute text-primary size-20 hover:scale-105 transition-transform bg-transparent hover:bg-transparent -bottom-[90%]"
+                className="absolute text-primary size-16 hover:scale-105 transition-transform bg-transparent hover:bg-transparent -bottom-[75%]"
               >
                 {session.status === "IDLE" ? (
-                  <Power className="size-10" />
+                  <Power className="size-8" />
                 ) : session.status === "PAUSED" ? (
-                  <Play className="size-10" />
+                  <Play className="size-8" />
                 ) : (
-                  <Pause className="size-10" />
+                  <Pause className="size-8" />
                 )}
               </Button>
             )}
