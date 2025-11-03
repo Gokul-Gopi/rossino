@@ -1,5 +1,5 @@
 import { RingProgress } from "@/components/ui/RingProgress";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Database } from "@/utils/database.types";
 import { Button } from "@/components/ui/Button";
 
@@ -7,7 +7,7 @@ const testSettings: Database["public"]["Tables"]["settings"]["Row"] = {
   userId: "user-123",
   autoStartBreak: true,
   autoStartPomo: true,
-  pomoDuration: 120,
+  pomoDuration: 60,
   shortBreakDuration: 300,
   longBreakDuration: 900,
   longBreakInterval: 4,
@@ -18,49 +18,108 @@ const testSettings: Database["public"]["Tables"]["settings"]["Row"] = {
   updatedAt: new Date().toISOString(),
 };
 
+interface ISession {
+  startTimestamp: number | null;
+  endTimestamp: number | null;
+  lastPausedAt: number | null;
+  totalPausedDuration: number;
+  status: "IDLE" | "RUNNING" | "COMPLETED" | "PAUSED";
+  elapsedTime: number;
+}
+
+const formatTime = (totalSeconds: number) => {
+  const minutes = Math.floor(totalSeconds / 60)
+    .toString()
+    .padStart(2, "0");
+  const seconds = (totalSeconds % 60).toString().padStart(2, "0");
+  return `${minutes}:${seconds}`;
+};
+
 const Pomodoro = () => {
-  const [timeLeft, setTimeLeft] = useState(testSettings.pomoDuration);
-  const [isPaused, setIsPaused] = useState(true);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const interval = useRef<ReturnType<typeof setInterval>>(null);
-  const isCompleted = useMemo(() => timeLeft === 0, [timeLeft]);
+  const [session, setSession] = useState<ISession>({
+    startTimestamp: null,
+    endTimestamp: null,
+    lastPausedAt: null,
+    status: "IDLE",
+    elapsedTime: 0,
+    totalPausedDuration: 0,
+  });
 
-  const time = useMemo(() => {
-    const date = new Date(timeLeft * 1000);
-    const minutes = date.getUTCMinutes().toString().padStart(2, "0");
-    const seconds = date.getUTCSeconds().toString().padStart(2, "0");
-    return `${minutes}:${seconds}`;
-  }, [timeLeft]);
+  const remainingTime = formatTime(Math.floor(session.elapsedTime));
 
   useEffect(() => {
-    if (isCompleted) {
-      clearInterval(interval.current!);
-      return;
+    if (session.status === "RUNNING") {
+      intervalRef.current = setInterval(() => {
+        const elapsedTime =
+          Date.now() -
+          (session.startTimestamp ?? 0) -
+          session.totalPausedDuration;
+
+        const elapsedTimeInSec = elapsedTime / 1000;
+
+        if (elapsedTimeInSec >= testSettings.pomoDuration) {
+          setSession((prev) => ({
+            ...prev,
+            status: "COMPLETED",
+            elapsedTime: testSettings.pomoDuration,
+          }));
+
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+          }
+
+          return;
+        }
+
+        setSession((prev) => ({
+          ...prev,
+          elapsedTime: elapsedTimeInSec,
+        }));
+      }, 500);
     }
-  }, [isCompleted]);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [session.status]);
 
   const onStart = () => {
-    if (isCompleted) return;
+    if (session.status === "IDLE") {
+      const startTimestamp = Date.now();
+      setSession((prev) => ({
+        ...prev,
+        startTimestamp,
+        status: "RUNNING",
+      }));
+    } else if (session.status === "RUNNING") {
+      const lastPausedAt = Date.now();
 
-    if (isPaused) {
-      interval.current = setInterval(() => {
-        console.log("tick");
-        setTimeLeft((prev) => (prev > 0 ? prev - 1 : prev));
-      }, 1000);
-    } else {
-      clearInterval(interval.current!);
+      setSession((prev) => ({
+        ...prev,
+        status: "PAUSED",
+        lastPausedAt,
+      }));
+    } else if (session.status === "PAUSED") {
+      const pausedDuration =
+        (session.lastPausedAt ? Date.now() - session.lastPausedAt : 0) +
+        session.totalPausedDuration;
+
+      setSession((prev) => ({
+        ...prev,
+        status: "RUNNING",
+        totalPausedDuration: pausedDuration,
+      }));
     }
-
-    setIsPaused((prev) => !prev);
   };
 
   return (
     <div>
       <RingProgress
-        value={
-          ((testSettings.pomoDuration - timeLeft) / testSettings.pomoDuration) *
-          100
-        }
+        value={((session.elapsedTime ?? 0) / testSettings.pomoDuration) * 100}
         className="size-80"
         circleProps={{
           strokeWidth: 6,
@@ -76,8 +135,12 @@ const Pomodoro = () => {
         }}
         content={
           <div className="flex flex-col gap-2 items-center justify-center">
-            {time}
-            <Button onClick={onStart}>{isPaused ? "Start" : "Pause"}</Button>
+            {remainingTime}
+            <Button onClick={onStart}>
+              {session.status === "IDLE" || session.status === "PAUSED"
+                ? "Start"
+                : "Pause"}
+            </Button>
           </div>
         }
       />
