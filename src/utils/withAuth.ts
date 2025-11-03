@@ -12,20 +12,13 @@ const withAuth = (
     try {
       const supabase = createClient(ctx);
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getUser();
 
-      if (!user) {
-        return {
-          redirect: {
-            destination: "/signin",
-            permanent: false,
-          },
-        };
-      }
+      const user = !data.user
+        ? null
+        : ({ id: data.user.id, ...data.user.user_metadata } as IUser);
 
-      return handler(ctx, { id: user.id, ...user.user_metadata } as IUser);
+      return handler(ctx, user);
     } catch {
       return {
         redirect: {

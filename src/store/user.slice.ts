@@ -1,14 +1,14 @@
 import { IUser } from "@/utils/types";
 import { StateCreator } from "zustand";
 
-export interface IUserSlice {
+export type UserSlice = {
   id: string | null;
   email: string | null;
   name: string | null;
   setUser: (user: IUser) => void;
-}
+};
 
-const createUserSlice: StateCreator<IUserSlice> = (set) => ({
+const createUserSlice: StateCreator<UserSlice> = (set) => ({
   id: null,
   email: null,
   name: null,

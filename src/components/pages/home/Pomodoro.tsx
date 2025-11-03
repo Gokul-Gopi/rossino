@@ -1,24 +1,9 @@
 import { RingProgress } from "@/components/ui/RingProgress";
 import { useEffect, useRef, useState } from "react";
-import { Database } from "@/utils/database.types";
 import { Button } from "@/components/ui/Button";
 import { Pause, Play, Power } from "lucide-react";
 import { cn } from "@/utils/helpers";
-
-const testSettings: Database["public"]["Tables"]["settings"]["Row"] = {
-  userId: "user-123",
-  autoStartBreak: true,
-  autoStartPomo: true,
-  pomoDuration: 60,
-  shortBreakDuration: 300,
-  longBreakDuration: 900,
-  longBreakInterval: 4,
-  breakEndReminder: 5,
-  timeLeftReminder: 5,
-  notificationsEnabled: true,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
+import { useSettings } from "@/store";
 
 interface ISession {
   startTimestamp: number | null;
@@ -39,6 +24,7 @@ const formatTime = (totalSeconds: number) => {
 };
 
 const Pomodoro = () => {
+  const { pomoDuration } = useSettings();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [session, setSession] = useState<ISession>({
@@ -52,20 +38,8 @@ const Pomodoro = () => {
   });
 
   const remainingTime = formatTime(
-    Math.floor(testSettings.pomoDuration - session.elapsedTime)
+    Math.floor(pomoDuration - session.elapsedTime)
   );
-
-  useEffect(() => {
-    if (session.status === "RUNNING") {
-      intervalRef.current = setInterval(updateTimer, 500);
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [session.status]);
 
   const updateTimer = () => {
     const elapsedTime =
@@ -74,11 +48,11 @@ const Pomodoro = () => {
         session.totalPausedDuration) /
       1000;
 
-    if (elapsedTime >= testSettings.pomoDuration) {
+    if (elapsedTime >= pomoDuration) {
       setSession((prev) => ({
         ...prev,
         status: "COMPLETED",
-        elapsedTime: testSettings.pomoDuration,
+        elapsedTime: pomoDuration,
       }));
 
       clearInterval(intervalRef.current!);
@@ -122,10 +96,22 @@ const Pomodoro = () => {
     }
   };
 
+  useEffect(() => {
+    if (session.status === "RUNNING") {
+      intervalRef.current = setInterval(updateTimer, 500);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [session.status]);
+
   return (
     <div>
       <RingProgress
-        value={(session.elapsedTime / testSettings.pomoDuration) * 100}
+        value={(session.elapsedTime / pomoDuration) * 100}
         className="size-100"
         circleProps={{
           strokeWidth: 6,
