@@ -2,6 +2,8 @@ import { RingProgress } from "@/components/ui/RingProgress";
 import { useEffect, useRef, useState } from "react";
 import { Database } from "@/utils/database.types";
 import { Button } from "@/components/ui/Button";
+import { Pause, Play, Power } from "lucide-react";
+import { cn } from "@/utils/helpers";
 
 const testSettings: Database["public"]["Tables"]["settings"]["Row"] = {
   userId: "user-123",
@@ -25,6 +27,7 @@ interface ISession {
   totalPausedDuration: number;
   status: "IDLE" | "RUNNING" | "COMPLETED" | "PAUSED";
   elapsedTime: number;
+  type: "FOCUS" | "SHORTBREAK" | "LONGBREAK";
 }
 
 const formatTime = (totalSeconds: number) => {
@@ -45,6 +48,7 @@ const Pomodoro = () => {
     status: "IDLE",
     elapsedTime: 0,
     totalPausedDuration: 0,
+    type: "FOCUS",
   });
 
   const remainingTime = formatTime(
@@ -122,7 +126,7 @@ const Pomodoro = () => {
     <div>
       <RingProgress
         value={(session.elapsedTime / testSettings.pomoDuration) * 100}
-        className="size-80"
+        className="size-100"
         circleProps={{
           strokeWidth: 6,
           // className: cn("stroke-primary/20", {
@@ -136,15 +140,37 @@ const Pomodoro = () => {
           // }),
         }}
         content={
-          <div className="flex flex-col gap-2 items-center justify-center">
-            {remainingTime}
-            <Button onClick={onStart}>
-              {session.status === "IDLE"
-                ? "Start"
-                : session.status === "PAUSED"
-                ? "Resume"
-                : "Pause"}
-            </Button>
+          <div className="flex flex-col gap-2 items-center justify-center relative">
+            <p
+              className={cn(
+                "font-bold text-6xl text-black/70 dark:text-white/90",
+                {
+                  "text-muted-foreground dark:text-muted-foreground":
+                    session.status === "PAUSED",
+                }
+              )}
+            >
+              {remainingTime}
+            </p>
+
+            <p className="tracking-widest text-primary font-medium">
+              {session.type === "FOCUS" ? "🍅 FOCUS MODE" : "BREAK TIME"}
+            </p>
+
+            {session.status !== "COMPLETED" && (
+              <Button
+                onClick={onStart}
+                className="absolute text-primary size-20 hover:scale-105 transition-transform bg-transparent hover:bg-transparent -bottom-[90%]"
+              >
+                {session.status === "IDLE" ? (
+                  <Power className="size-10" />
+                ) : session.status === "PAUSED" ? (
+                  <Play className="size-10" />
+                ) : (
+                  <Pause className="size-10" />
+                )}
+              </Button>
+            )}
           </div>
         }
       />
