@@ -7,7 +7,7 @@ const testSettings: Database["public"]["Tables"]["settings"]["Row"] = {
   userId: "user-123",
   autoStartBreak: true,
   autoStartPomo: true,
-  pomoDuration: 60,
+  pomoDuration: 10,
   shortBreakDuration: 300,
   longBreakDuration: 900,
   longBreakInterval: 4,
@@ -49,35 +49,34 @@ const Pomodoro = () => {
 
   const remainingTime = formatTime(Math.floor(session.elapsedTime));
 
+  const updateTimer = () => {
+    const elapsedTime =
+      (Date.now() -
+        (session.startTimestamp ?? 0) -
+        session.totalPausedDuration) /
+      1000;
+
+    if (elapsedTime >= testSettings.pomoDuration) {
+      setSession((prev) => ({
+        ...prev,
+        status: "COMPLETED",
+        elapsedTime: testSettings.pomoDuration,
+      }));
+
+      clearInterval(intervalRef.current!);
+
+      return;
+    }
+
+    setSession((prev) => ({
+      ...prev,
+      elapsedTime,
+    }));
+  };
+
   useEffect(() => {
     if (session.status === "RUNNING") {
-      intervalRef.current = setInterval(() => {
-        const elapsedTime =
-          Date.now() -
-          (session.startTimestamp ?? 0) -
-          session.totalPausedDuration;
-
-        const elapsedTimeInSec = elapsedTime / 1000;
-
-        if (elapsedTimeInSec >= testSettings.pomoDuration) {
-          setSession((prev) => ({
-            ...prev,
-            status: "COMPLETED",
-            elapsedTime: testSettings.pomoDuration,
-          }));
-
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-          }
-
-          return;
-        }
-
-        setSession((prev) => ({
-          ...prev,
-          elapsedTime: elapsedTimeInSec,
-        }));
-      }, 500);
+      intervalRef.current = setInterval(updateTimer, 500);
     }
 
     return () => {
@@ -90,6 +89,7 @@ const Pomodoro = () => {
   const onStart = () => {
     if (session.status === "IDLE") {
       const startTimestamp = Date.now();
+
       setSession((prev) => ({
         ...prev,
         startTimestamp,
@@ -100,18 +100,18 @@ const Pomodoro = () => {
 
       setSession((prev) => ({
         ...prev,
-        status: "PAUSED",
         lastPausedAt,
+        status: "PAUSED",
       }));
     } else if (session.status === "PAUSED") {
-      const pausedDuration =
+      const totalPausedDuration =
         (session.lastPausedAt ? Date.now() - session.lastPausedAt : 0) +
         session.totalPausedDuration;
 
       setSession((prev) => ({
         ...prev,
+        totalPausedDuration,
         status: "RUNNING",
-        totalPausedDuration: pausedDuration,
       }));
     }
   };
@@ -137,8 +137,10 @@ const Pomodoro = () => {
           <div className="flex flex-col gap-2 items-center justify-center">
             {remainingTime}
             <Button onClick={onStart}>
-              {session.status === "IDLE" || session.status === "PAUSED"
+              {session.status === "IDLE"
                 ? "Start"
+                : session.status === "PAUSED"
+                ? "Resume"
                 : "Pause"}
             </Button>
           </div>
