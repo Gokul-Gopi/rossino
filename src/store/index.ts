@@ -6,11 +6,12 @@ import { persist } from "zustand/middleware";
 import createSessionSlice, { SessionSlice } from "./session.slice";
 import { LOCAL_STORAGE_KEY } from "@/utils/constants";
 import createResetSlice, { ResetSlice } from "./reset.slice";
+import createTaskSlice, { TaskSlice } from "./task.slice";
 
 export type Store = UserSlice & SettingsSlice & SessionSlice;
 
 const useStore = create<
-  UserSlice & SettingsSlice & SessionSlice & ResetSlice
+  UserSlice & SettingsSlice & SessionSlice & ResetSlice & TaskSlice
 >()(
   persist(
     (...a) => ({
@@ -18,6 +19,7 @@ const useStore = create<
       ...createSettingsSlice(...a),
       ...createSessionSlice(...a),
       ...createResetSlice(...a),
+      ...createTaskSlice(...a),
     }),
     { name: LOCAL_STORAGE_KEY },
   ),
@@ -66,6 +68,17 @@ export const useSessionStore = () =>
       unSyncedSessions: state.unSyncedSessions,
       setSession: state.setSession,
       nextSession: state.nextSession,
+    })),
+  );
+
+export const useTaskStore = () =>
+  useStore(
+    useShallow((state) => ({
+      tasks: state.tasks,
+      addTask: state.addTask,
+      deleteTask: state.deleteTask,
+      editTask: state.editTask,
+      toggleCompletion: state.toggleCompletion,
     })),
   );
 
