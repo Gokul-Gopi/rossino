@@ -1,11 +1,11 @@
 import { GetServerSideProps, type GetServerSidePropsContext } from "next";
-import { IUser } from "./types";
 import { createServerClient, serializeCookieHeader } from "@supabase/ssr";
+import { User } from "@/types";
 
 const withAuth = (
   handler: (
     context: GetServerSidePropsContext,
-    user: IUser | null
+    user: User | null
   ) => ReturnType<GetServerSideProps>
 ) => {
   return async (ctx: GetServerSidePropsContext) => {
@@ -16,7 +16,7 @@ const withAuth = (
 
       const user = !data.user
         ? null
-        : ({ id: data.user.id, ...data.user.user_metadata } as IUser);
+        : ({ id: data.user.id, ...data.user.user_metadata } as User);
 
       return handler(ctx, user);
     } catch {

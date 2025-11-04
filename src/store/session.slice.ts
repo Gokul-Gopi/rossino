@@ -1,14 +1,11 @@
-import { Database } from "@/utils/database.types";
+import { Session } from "@/types";
 import { StateCreator } from "zustand/vanilla";
 
-type Session = Omit<
-  Database["public"]["Tables"]["sessions"]["Row"],
-  "userId" | "createdAt" | "updatedAt" | "id"
->;
+type SessionStore = Omit<Session, "userId" | "createdAt" | "updatedAt" | "id">;
 
-export type SessionSlice = Session & {
-  setSession: (session: Session) => void;
-  unSyncedSessions: Session[];
+export type SessionSlice = SessionStore & {
+  setSession: (session: SessionStore) => void;
+  unSyncedSessions: SessionStore[];
 };
 
 const createSessionSlice: StateCreator<SessionSlice> = () => ({
@@ -21,7 +18,7 @@ const createSessionSlice: StateCreator<SessionSlice> = () => ({
   interruptionCount: 0,
   status: "IDLE",
   type: "FOCUS",
-  setSession: (session: Session) => session,
+  setSession: (session: SessionStore) => session,
   unSyncedSessions: [],
 });
 

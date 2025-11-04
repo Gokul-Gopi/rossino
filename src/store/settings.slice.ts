@@ -1,12 +1,9 @@
-import { Database } from "@/utils/database.types";
+import { Settings } from "@/types";
 import { StateCreator } from "zustand/vanilla";
 
-type Settings = Omit<
-  Database["public"]["Tables"]["settings"]["Row"],
-  "userId" | "createdAt" | "updatedAt"
->;
+type SettingsStore = Omit<Settings, "userId" | "createdAt" | "updatedAt">;
 
-export type SettingsSlice = Settings & {
+export type SettingsSlice = SettingsStore & {
   setSettings: (settings: SettingsSlice) => void;
 };
 
@@ -20,7 +17,7 @@ const createSettingsSlice: StateCreator<SettingsSlice> = () => ({
   breakEndReminder: 300,
   timeLeftReminder: 300,
   notificationsEnabled: true,
-  setSettings: (settings: Settings) => settings,
+  setSettings: (settings: SettingsStore) => settings,
 });
 
 export default createSettingsSlice;
