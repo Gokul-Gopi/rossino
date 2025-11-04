@@ -1,6 +1,6 @@
 -- Enums
 create type public."sessionType" as enum ('FOCUS','SHORTBREAK','LONGBREAK');
-create type public."sessionStatus" as enum ('PAUSED','COMPLETED','RUNNING');
+create type public."sessionStatus" as enum ('IDLE','PAUSED','COMPLETED','RUNNING');
 
 -- extension for auto-updating updatedAt
 create extension if not exists moddatetime with schema extensions;
@@ -27,12 +27,12 @@ for each row execute procedure extensions.moddatetime("updatedAt");
 
 -- PROJECTS
 create table public.projects (
-  id uuid primary key default gen_random_uuid(),
+  "id" uuid primary key default gen_random_uuid(),
   "userId" uuid not null references auth.users(id) on delete cascade,
-  title text not null,
-  description text,
-  theme text,
-  icon text,
+  "title" text not null,
+  "description" text,
+  "theme" text,
+  "icon" text,
   "isArchived" boolean not null default false,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now()
@@ -46,10 +46,10 @@ for each row execute procedure extensions.moddatetime("updatedAt");
 
 -- TASKS
 create table public.tasks (
-  id uuid primary key default gen_random_uuid(),
+  "id" uuid primary key default gen_random_uuid(),
   "userId" uuid not null references auth.users(id) on delete cascade,
   "projectId" uuid references public.projects(id) on delete set null,
-  title text not null,
+  "title" text not null,
   "isCompleted" boolean not null default false,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now()
@@ -63,14 +63,16 @@ for each row execute procedure extensions.moddatetime("updatedAt");
 
 -- SESSIONS
 create table public.sessions (
-  id uuid primary key default gen_random_uuid(),
+  "id" uuid primary key default gen_random_uuid(),
   "userId" uuid not null references auth.users(id) on delete cascade,
   "projectId" uuid references public.projects(id) on delete set null,
-  type public."sessionType" not null default 'FOCUS',
-  status public."sessionStatus" not null default 'PAUSED',
+  "type" public."sessionType" not null default 'FOCUS',
+  "status" public."sessionStatus" not null default 'PAUSED',
   "startedAt" timestamptz not null default now(),
   "endedAt" timestamptz,
+  "lastPausedAt" timestamptz,
   "intendedDuration" int not null,
+  "totalPausedDuration" int not null default 0,
   "interruptionCount" int not null default 0,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now()
@@ -83,6 +85,32 @@ create index sessions_project_started_idx
 create trigger sessions_set_updated_at
 before update on public.sessions
 for each row execute procedure extensions.moddatetime("updatedAt");
+
+
+-- Trigger to create default settings for new users:
+
+-- 1) FUNCTION: runs after a user is created; inserts a default settings row
+create or replace function public.handle_new_user_settings()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.settings("userId")
+  values (new.id)
+  on conflict ("userId") do nothing; -- safety if retried
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created_settings on auth.users;
+
+create trigger on_auth_user_created_settings
+after insert on auth.users
+for each row
+execute function public.handle_new_user_settings();
+
 
 -- RLS
 alter table public.settings enable row level security;
