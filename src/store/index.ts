@@ -19,8 +19,8 @@ const useStore = create<
       ...createSessionSlice(...a),
       ...createResetSlice(...a),
     }),
-    { name: LOCAL_STORAGE_KEY }
-  )
+    { name: LOCAL_STORAGE_KEY },
+  ),
 );
 
 export const useUserStore = () =>
@@ -30,7 +30,7 @@ export const useUserStore = () =>
       email: state.email,
       name: state.name,
       setUser: state.setUser,
-    }))
+    })),
   );
 
 export const useSettingsStore = () =>
@@ -46,7 +46,7 @@ export const useSettingsStore = () =>
       timeLeftReminder: state.timeLeftReminder,
       notificationsEnabled: state.notificationsEnabled,
       setSettings: state.setSettings,
-    }))
+    })),
   );
 
 export const useSessionStore = () =>
@@ -66,14 +66,14 @@ export const useSessionStore = () =>
       unSyncedSessions: state.unSyncedSessions,
       setSession: state.setSession,
       nextSession: state.nextSession,
-    }))
+    })),
   );
 
 export const useResetStore = () =>
   useStore(
     useShallow((state) => ({
       resetAll: state.resetAll,
-    }))
+    })),
   );
 
 export default useStore;

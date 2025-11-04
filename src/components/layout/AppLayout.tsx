@@ -1,12 +1,14 @@
 import { SidebarProvider } from "@/components/ui/Sidebar";
 import Sidebar from "./Sidebar.";
 import Header from "./Header";
+import { cn } from "@/utils/helpers";
 
 interface IAppLayoutProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-const AppLayout = ({ children }: IAppLayoutProps) => {
+const AppLayout = ({ children, className }: IAppLayoutProps) => {
   return (
     <SidebarProvider defaultOpen={false}>
       <Sidebar />
@@ -14,7 +16,9 @@ const AppLayout = ({ children }: IAppLayoutProps) => {
       <section className="w-full min-h-dvh">
         <Header />
 
-        <main className="p-4 flex justify-center">{children}</main>
+        <main className={cn("p-4 flex justify-center", className)}>
+          {children}
+        </main>
       </section>
     </SidebarProvider>
   );

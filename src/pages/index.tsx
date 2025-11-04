@@ -1,9 +1,10 @@
 import AppLayout from "@/components/layout/AppLayout";
 import Pomodoro from "@/components/pages/home/Pomodoro";
+import Tasks from "@/components/pages/home/Tasks";
+import { Button } from "@/components/ui/Button";
 import { useSettings } from "@/query/settings.queries";
 import { useSettingsStore, useUserStore } from "@/store";
 import { createClient } from "@/utils/helpers";
-
 import withAuth from "@/utils/withAuth";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -48,8 +49,16 @@ const Page = () => {
   }, [data]);
 
   return (
-    <AppLayout>
-      <Pomodoro />
+    <AppLayout className="grid grid-cols-3 gap-8 px-8">
+      <Tasks />
+      <div className="flex flex-col gap-6">
+        <Pomodoro />
+
+        <Button className="mr-auto border" variant="outline">
+          Add Tasks
+        </Button>
+      </div>
+      Some data
     </AppLayout>
   );
 };
