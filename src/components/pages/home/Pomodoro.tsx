@@ -1,19 +1,10 @@
 import { RingProgress } from "@/components/ui/RingProgress";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import { Pause, Play, Power } from "lucide-react";
 import { cn } from "@/utils/helpers";
-import { useSettings } from "@/store";
-
-interface ISession {
-  startTimestamp: number | null;
-  endTimestamp: number | null;
-  lastPausedAt: number | null;
-  totalPausedDuration: number;
-  status: "IDLE" | "RUNNING" | "COMPLETED" | "PAUSED";
-  elapsedTime: number;
-  type: "FOCUS" | "SHORTBREAK" | "LONGBREAK";
-}
+import { useSession, useSettings } from "@/store";
+import dayjs from "dayjs";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -24,80 +15,71 @@ const formatTime = (totalSeconds: number) => {
 };
 
 const Pomodoro = () => {
-  const { pomoDuration } = useSettings();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const [session, setSession] = useState<ISession>({
-    startTimestamp: null,
-    endTimestamp: null,
-    lastPausedAt: null,
-    status: "IDLE",
-    elapsedTime: 0,
-    totalPausedDuration: 0,
-    type: "FOCUS",
-  });
+  const { pomoDuration } = useSettings();
 
-  const remainingTime = formatTime(
-    Math.floor(pomoDuration - session.elapsedTime)
-  );
+  const {
+    status,
+    type,
+    startedAt,
+    lastPausedAt,
+    elapsedTime,
+    totalPausedDuration,
+    setSession,
+  } = useSession();
+
+  const remainingTime = formatTime(Math.floor(pomoDuration - elapsedTime));
 
   const updateTimer = () => {
     const elapsedTime =
-      (Date.now() -
-        (session.startTimestamp ?? 0) -
-        session.totalPausedDuration) /
-      1000;
+      dayjs().diff(dayjs(startedAt), "second") - totalPausedDuration;
 
     if (elapsedTime >= pomoDuration) {
-      setSession((prev) => ({
-        ...prev,
+      setSession({
         status: "COMPLETED",
         elapsedTime: pomoDuration,
-      }));
+        endedAt: dayjs().toISOString(),
+      });
 
       clearInterval(intervalRef.current!);
 
       return;
     }
 
-    setSession((prev) => ({
-      ...prev,
+    setSession({
       elapsedTime,
-    }));
+    });
   };
 
   const onStart = () => {
-    if (session.status === "IDLE") {
-      const startTimestamp = Date.now();
+    if (status === "IDLE") {
+      const startedAt = dayjs().toISOString();
 
-      setSession((prev) => ({
-        ...prev,
-        startTimestamp,
+      setSession({
+        startedAt,
         status: "RUNNING",
-      }));
-    } else if (session.status === "RUNNING") {
-      const lastPausedAt = Date.now();
+      });
+    } else if (status === "RUNNING") {
+      const lastPausedAt = dayjs().toISOString();
 
-      setSession((prev) => ({
-        ...prev,
+      setSession({
         lastPausedAt,
         status: "PAUSED",
-      }));
-    } else if (session.status === "PAUSED") {
-      const totalPausedDuration =
-        (session.lastPausedAt ? Date.now() - session.lastPausedAt : 0) +
-        session.totalPausedDuration;
+      });
+    } else if (status === "PAUSED") {
+      const pausedDuration =
+        dayjs().diff(dayjs(lastPausedAt), "second") + totalPausedDuration;
 
-      setSession((prev) => ({
-        ...prev,
-        totalPausedDuration,
+      setSession({
+        totalPausedDuration: pausedDuration,
         status: "RUNNING",
-      }));
+      });
     }
   };
 
   useEffect(() => {
-    if (session.status === "RUNNING") {
+    if (status === "RUNNING") {
       intervalRef.current = setInterval(updateTimer, 500);
     }
 
@@ -106,23 +88,23 @@ const Pomodoro = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [session.status]);
+  }, [status]);
 
   return (
     <div>
       <RingProgress
-        value={(session.elapsedTime / pomoDuration) * 100}
+        value={(elapsedTime / pomoDuration) * 100}
         className="size-100"
         circleProps={{
           strokeWidth: 6,
           className: cn("stroke-primary/20", {
-            "stroke-green-400/20": session.type === "SHORTBREAK",
+            "stroke-green-400/20": type === "SHORTBREAK",
           }),
         }}
         progressCircleProps={{
           strokeWidth: 6,
           className: cn("stroke-primary", {
-            "stroke-green-400/60": session.type === "SHORTBREAK",
+            "stroke-green-400/60": type === "SHORTBREAK",
           }),
         }}
         content={
@@ -132,7 +114,7 @@ const Pomodoro = () => {
                 "font-bold text-6xl text-black/70 dark:text-white/90",
                 {
                   "text-muted-foreground dark:text-muted-foreground":
-                    session.status === "PAUSED",
+                    status === "PAUSED",
                 }
               )}
             >
@@ -140,17 +122,17 @@ const Pomodoro = () => {
             </p>
 
             <p className="tracking-widest text-primary font-medium">
-              {session.type === "FOCUS" ? "🍅 FOCUS MODE" : "BREAK TIME"}
+              {type === "FOCUS" ? "🍅 FOCUS MODE" : "BREAK TIME"}
             </p>
 
-            {session.status !== "COMPLETED" && (
+            {status !== "COMPLETED" && (
               <Button
                 onClick={onStart}
                 className="absolute text-primary size-16 hover:scale-105 transition-transform bg-transparent hover:bg-transparent -bottom-[75%]"
               >
-                {session.status === "IDLE" ? (
+                {status === "IDLE" ? (
                   <Power className="size-8" />
-                ) : session.status === "PAUSED" ? (
+                ) : status === "PAUSED" ? (
                   <Play className="size-8" />
                 ) : (
                   <Pause className="size-8" />

@@ -49,6 +49,7 @@ export const useSession = () =>
       startedAt: state.startedAt,
       endedAt: state.endedAt,
       lastPausedAt: state.lastPausedAt,
+      elapsedTime: state.elapsedTime,
       intendedDuration: state.intendedDuration,
       totalPausedDuration: state.totalPausedDuration,
       interruptionCount: state.interruptionCount,

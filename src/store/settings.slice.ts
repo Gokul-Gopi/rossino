@@ -4,20 +4,20 @@ import { StateCreator } from "zustand/vanilla";
 type SettingsStore = Omit<Settings, "userId" | "createdAt" | "updatedAt">;
 
 export type SettingsSlice = SettingsStore & {
-  setSettings: (settings: SettingsSlice) => void;
+  setSettings: (settings: Partial<SettingsSlice>) => void;
 };
 
-const createSettingsSlice: StateCreator<SettingsSlice> = () => ({
+const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({
   autoStartBreak: false,
   autoStartPomo: false,
-  pomoDuration: 1500,
+  pomoDuration: 60,
   shortBreakDuration: 300,
   longBreakDuration: 900,
   longBreakInterval: 4,
   breakEndReminder: 300,
   timeLeftReminder: 300,
   notificationsEnabled: true,
-  setSettings: (settings: SettingsStore) => settings,
+  setSettings: (settings) => set((state) => ({ ...state, ...settings })),
 });
 
 export default createSettingsSlice;
