@@ -22,7 +22,7 @@ const Header = () => {
 
       <div className="flex gap-2 ml-auto">
         <DarkMode />
-        {!id && (
+        {!id ? (
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/signin">
@@ -36,6 +36,8 @@ const Header = () => {
               </p>
             </TooltipContent>
           </Tooltip>
+        ) : (
+          <Button>Zen mode</Button>
         )}
       </div>
     </header>
