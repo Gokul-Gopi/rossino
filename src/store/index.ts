@@ -3,12 +3,14 @@ import createUserSlice, { UserSlice } from "./user.slice";
 import createSettingsSlice, { SettingsSlice } from "./settings.slice";
 import { useShallow } from "zustand/react/shallow";
 import { persist } from "zustand/middleware";
+import createSessionSlice, { SessionSlice } from "./session.slice";
 
-const useStore = create<UserSlice & SettingsSlice>()(
+const useStore = create<UserSlice & SettingsSlice & SessionSlice>()(
   persist(
     (...a) => ({
       ...createUserSlice(...a),
       ...createSettingsSlice(...a),
+      ...createSessionSlice(...a),
     }),
     { name: "rossino-store" }
   )
@@ -37,6 +39,22 @@ export const useSettings = () =>
       timeLeftReminder: state.timeLeftReminder,
       notificationsEnabled: state.notificationsEnabled,
       setSettings: state.setSettings,
+    }))
+  );
+
+export const useSession = () =>
+  useStore(
+    useShallow((state) => ({
+      projectId: state.projectId,
+      startedAt: state.startedAt,
+      endedAt: state.endedAt,
+      lastPausedAt: state.lastPausedAt,
+      intendedDuration: state.intendedDuration,
+      totalPausedDuration: state.totalPausedDuration,
+      interruptionCount: state.interruptionCount,
+      status: state.status,
+      type: state.type,
+      setSession: state.setSession,
     }))
   );
 
