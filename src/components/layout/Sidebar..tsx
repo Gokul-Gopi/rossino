@@ -24,6 +24,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { LOCAL_STORAGE_KEY } from "@/utils/constants";
+import { useUserStore } from "@/store";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
   className: "size-5! -translate-x-[2.5px]",
@@ -59,7 +61,9 @@ const navLinks = [
 
 const Sidebar = () => {
   const router = useRouter();
+
   const { open, openMobile, toggleSidebar } = useSidebar();
+  const { id } = useUserStore();
 
   const [confirmLogout, setConfirmLogout] = useState(false);
 
@@ -69,6 +73,7 @@ const Sidebar = () => {
     logout.mutate(undefined, {
       onSuccess: () => {
         router.push("/signin");
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
         toast.success("Logged out");
       },
     });
@@ -122,13 +127,15 @@ const Sidebar = () => {
             <span>Collapse</span>
           </SidebarMenuButton>
 
-          <SidebarMenuButton
-            onClick={() => setConfirmLogout(true)}
-            className="transition-[background] duration-200"
-          >
-            <LogOut {...iconProps} />
-            <span>Logout</span>
-          </SidebarMenuButton>
+          {id && (
+            <SidebarMenuButton
+              onClick={() => setConfirmLogout(true)}
+              className="transition-[background] duration-200"
+            >
+              <LogOut {...iconProps} />
+              <span>Logout</span>
+            </SidebarMenuButton>
+          )}
         </SidebarFooter>
       </SidebarRoot>
 

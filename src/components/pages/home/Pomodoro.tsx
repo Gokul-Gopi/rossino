@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import { Pause, Play, Power } from "lucide-react";
 import { cn } from "@/utils/helpers";
-import { useSession } from "@/store";
+import { useSessionStore } from "@/store";
 import dayjs from "dayjs";
 
 const formatTime = (totalSeconds: number) => {
@@ -27,7 +27,7 @@ const Pomodoro = () => {
     setSession,
     nextSession,
     intendedDuration,
-  } = useSession();
+  } = useSessionStore();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
 

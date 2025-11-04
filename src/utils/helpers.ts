@@ -1,4 +1,6 @@
+import { createServerClient, serializeCookieHeader } from "@supabase/ssr";
 import { clsx, type ClassValue } from "clsx";
+import { GetServerSidePropsContext } from "next";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
@@ -12,4 +14,30 @@ export const onError = async (error: any) => {
 
   errorMessage = error.message ?? errorMessage;
   toast.error(errorMessage);
+};
+
+export const createClient = ({ req, res }: GetServerSidePropsContext) => {
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return Object.keys(req.cookies).map((name) => ({
+            name,
+            value: req.cookies[name] || "",
+          }));
+        },
+        setAll(cookiesToSet) {
+          res.setHeader(
+            "Set-Cookie",
+            cookiesToSet.map(({ name, value, options }) =>
+              serializeCookieHeader(name, value, options)
+            )
+          );
+        },
+      },
+    }
+  );
+  return supabase;
 };

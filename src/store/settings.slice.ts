@@ -5,9 +5,14 @@ type SettingsStore = Omit<Settings, "userId" | "createdAt" | "updatedAt">;
 
 export type SettingsSlice = SettingsStore & {
   setSettings: (settings: Partial<SettingsSlice>) => void;
+  resetSettings: () => void;
 };
 
-const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({
+const createSettingsSlice: StateCreator<SettingsSlice> = (
+  set,
+  _get,
+  state
+) => ({
   autoStartBreak: false,
   autoStartPomo: false,
   pomoDuration: 10,
@@ -18,6 +23,7 @@ const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({
   timeLeftReminder: 300,
   notificationsEnabled: true,
   setSettings: (settings) => set((state) => ({ ...state, ...settings })),
+  resetSettings: () => set(state.getInitialState()),
 });
 
 export default createSettingsSlice;

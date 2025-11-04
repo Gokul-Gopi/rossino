@@ -10,10 +10,10 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { PagesTopLoader } from "nextjs-toploader/pages";
-import { useUser } from "@/store";
+import { useUserStore } from "@/store";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { setUser } = useUser();
+  const { setUser } = useUserStore();
 
   const [queryClient] = useState(
     () =>

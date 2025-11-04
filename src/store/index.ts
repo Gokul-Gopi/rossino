@@ -4,19 +4,26 @@ import createSettingsSlice, { SettingsSlice } from "./settings.slice";
 import { useShallow } from "zustand/react/shallow";
 import { persist } from "zustand/middleware";
 import createSessionSlice, { SessionSlice } from "./session.slice";
+import { LOCAL_STORAGE_KEY } from "@/utils/constants";
+import createResetSlice, { ResetSlice } from "./reset.slice";
 
-const useStore = create<UserSlice & SettingsSlice & SessionSlice>()(
+export type Store = UserSlice & SettingsSlice & SessionSlice;
+
+const useStore = create<
+  UserSlice & SettingsSlice & SessionSlice & ResetSlice
+>()(
   persist(
     (...a) => ({
       ...createUserSlice(...a),
       ...createSettingsSlice(...a),
       ...createSessionSlice(...a),
+      ...createResetSlice(...a),
     }),
-    { name: "rossino-store" }
+    { name: LOCAL_STORAGE_KEY }
   )
 );
 
-export const useUser = () =>
+export const useUserStore = () =>
   useStore(
     useShallow((state) => ({
       id: state.id,
@@ -26,7 +33,7 @@ export const useUser = () =>
     }))
   );
 
-export const useSettings = () =>
+export const useSettingsStore = () =>
   useStore(
     useShallow((state) => ({
       autoStartBreak: state.autoStartBreak,
@@ -42,7 +49,7 @@ export const useSettings = () =>
     }))
   );
 
-export const useSession = () =>
+export const useSessionStore = () =>
   useStore(
     useShallow((state) => ({
       projectId: state.projectId,
@@ -59,6 +66,13 @@ export const useSession = () =>
       unSyncedSessions: state.unSyncedSessions,
       setSession: state.setSession,
       nextSession: state.nextSession,
+    }))
+  );
+
+export const useResetStore = () =>
+  useStore(
+    useShallow((state) => ({
+      resetAll: state.resetAll,
     }))
   );
 

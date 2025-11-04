@@ -1,8 +1,6 @@
 import { Session } from "@/types";
 import { StateCreator } from "zustand/vanilla";
-import { SettingsSlice } from "./settings.slice";
-
-type Store = SessionSlice & SettingsSlice;
+import { Store } from ".";
 
 type SessionStore = Omit<
   Session,
@@ -16,6 +14,7 @@ export type SessionSlice = SessionStore & {
   unSyncedSessions: SessionStore[];
   setSession: (session: Partial<SessionStore>) => void;
   nextSession: () => void;
+  resetSession: () => void;
 };
 
 const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
@@ -67,6 +66,7 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
 
       return updatedState;
     }),
+  resetSession: () => set(store.getInitialState()),
 });
 
 export default createSessionSlice;

@@ -9,6 +9,7 @@ import { motion } from "motion/react";
 import { useRouter } from "next/router";
 import { useLogin } from "@/query/auth.queries";
 import { toast } from "sonner";
+import { useResetStore } from "@/store";
 
 interface ILoginFormProps {
   switchForm: () => void;
@@ -21,10 +22,12 @@ const LoginForm = ({ switchForm }: ILoginFormProps) => {
   });
 
   const login = useLogin();
+  const { resetAll } = useResetStore();
 
   const onSubmit = form.handleSubmit((data) => {
     login.mutate(data, {
       onSuccess: () => {
+        resetAll();
         router.push("/");
         toast.success("Welcome back. Time to focus!");
       },
