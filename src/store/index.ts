@@ -53,9 +53,12 @@ export const useSession = () =>
       intendedDuration: state.intendedDuration,
       totalPausedDuration: state.totalPausedDuration,
       interruptionCount: state.interruptionCount,
+      focusSessionCompleted: state.focusSessionCompleted,
       status: state.status,
       type: state.type,
+      unSyncedSessions: state.unSyncedSessions,
       setSession: state.setSession,
+      nextSession: state.nextSession,
     }))
   );
 

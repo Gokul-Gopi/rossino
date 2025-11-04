@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import { Pause, Play, Power } from "lucide-react";
 import { cn } from "@/utils/helpers";
-import { useSession, useSettings } from "@/store";
+import { useSession } from "@/store";
 import dayjs from "dayjs";
 
 const formatTime = (totalSeconds: number) => {
@@ -17,8 +17,6 @@ const formatTime = (totalSeconds: number) => {
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { pomoDuration } = useSettings();
-
   const {
     status,
     type,
@@ -27,30 +25,11 @@ const Pomodoro = () => {
     elapsedTime,
     totalPausedDuration,
     setSession,
+    nextSession,
+    intendedDuration,
   } = useSession();
 
-  const remainingTime = formatTime(Math.floor(pomoDuration - elapsedTime));
-
-  const updateTimer = () => {
-    const elapsedTime =
-      dayjs().diff(dayjs(startedAt), "second") - totalPausedDuration;
-
-    if (elapsedTime >= pomoDuration) {
-      setSession({
-        status: "COMPLETED",
-        elapsedTime: pomoDuration,
-        endedAt: dayjs().toISOString(),
-      });
-
-      clearInterval(intervalRef.current!);
-
-      return;
-    }
-
-    setSession({
-      elapsedTime,
-    });
-  };
+  const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
 
   const onStart = () => {
     if (status === "IDLE") {
@@ -78,6 +57,28 @@ const Pomodoro = () => {
     }
   };
 
+  const updateTimer = () => {
+    const elapsedTime =
+      dayjs().diff(dayjs(startedAt), "second") - totalPausedDuration;
+
+    if (elapsedTime >= intendedDuration) {
+      setSession({
+        status: "COMPLETED",
+        elapsedTime: intendedDuration,
+        endedAt: dayjs().toISOString(),
+      });
+      nextSession();
+
+      clearInterval(intervalRef.current!);
+
+      return;
+    }
+
+    setSession({
+      elapsedTime,
+    });
+  };
+
   useEffect(() => {
     if (status === "RUNNING") {
       intervalRef.current = setInterval(updateTimer, 500);
@@ -93,18 +94,20 @@ const Pomodoro = () => {
   return (
     <div>
       <RingProgress
-        value={(elapsedTime / pomoDuration) * 100}
+        value={(elapsedTime / intendedDuration) * 100}
         className="size-100"
         circleProps={{
           strokeWidth: 6,
           className: cn("stroke-primary/20", {
             "stroke-green-400/20": type === "SHORTBREAK",
+            "stroke-blue-400/20": type === "LONGBREAK",
           }),
         }}
         progressCircleProps={{
           strokeWidth: 6,
           className: cn("stroke-primary", {
-            "stroke-green-400/60": type === "SHORTBREAK",
+            "stroke-green-400": type === "SHORTBREAK",
+            "stroke-blue-400": type === "LONGBREAK",
           }),
         }}
         content={
@@ -121,14 +124,25 @@ const Pomodoro = () => {
               {remainingTime}
             </p>
 
-            <p className="tracking-widest text-primary font-medium">
-              {type === "FOCUS" ? "🍅 FOCUS MODE" : "BREAK TIME"}
+            <p
+              className={cn("tracking-widest text-primary font-medium", {
+                "text-green-400": type === "SHORTBREAK",
+                "text-blue-400": type === "LONGBREAK",
+              })}
+            >
+              {type === "FOCUS" ? "🍅 FOCUS MODE" : "🍅 BREAK TIME"}
             </p>
 
             {status !== "COMPLETED" && (
               <Button
                 onClick={onStart}
-                className="absolute text-primary size-16 hover:scale-105 transition-transform bg-transparent hover:bg-transparent -bottom-[75%]"
+                className={cn(
+                  "absolute text-primary size-16 hover:scale-105 transition-transform bg-transparent hover:bg-transparent -bottom-[75%]",
+                  {
+                    "text-green-400": type === "SHORTBREAK",
+                    "text-blue-400": type === "LONGBREAK",
+                  }
+                )}
               >
                 {status === "IDLE" ? (
                   <Power className="size-8" />
