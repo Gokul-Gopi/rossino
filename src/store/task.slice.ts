@@ -15,7 +15,7 @@ export type TaskSlice = {
   resetTasks: () => void;
 };
 
-const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
+const createTaskSlice: StateCreator<TaskSlice> = (set, _get, state) => ({
   tasks: [],
 
   addTask: ({ title }) =>
@@ -42,7 +42,7 @@ const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
       ),
     })),
 
-  resetTasks: () => set({ tasks: [] }),
+  resetTasks: () => set(state.getInitialState()),
 });
 
 export default createTaskSlice;

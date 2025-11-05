@@ -8,7 +8,7 @@ import { cn } from "@/utils/helpers";
 import { addTaskSchema } from "@/utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import ClearTasksButton from "./ClearTasksButton";
 
@@ -27,10 +27,9 @@ const Tasks = () => {
     form.reset({ title: "" });
   });
 
-  const haveIncompleteTasks = useMemo(
-    () => tasks.length > 0 && tasks.some((task) => !task.completed),
-    [tasks],
-  );
+  const haveIncompleteTasks = tasks.length
+    ? tasks.some((task) => !task.completed)
+    : true;
 
   return (
     <div className="bg-card flex flex-col rounded-2xl border p-10 shadow">
