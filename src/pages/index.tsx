@@ -49,7 +49,7 @@ const Page = () => {
   }, [data]);
 
   return (
-    <AppLayout className="grid grid-cols-3 gap-8 px-8">
+    <AppLayout className="grid grid-cols-2 gap-8 px-8 lg:grid-cols-3">
       <Tasks />
       <div className="flex flex-col gap-6">
         <Pomodoro />
