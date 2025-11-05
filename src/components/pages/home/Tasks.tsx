@@ -2,6 +2,7 @@ import ControlledTextInput from "@/components/form/ControlledTextInput";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import { useTaskStore } from "@/store";
 import { cn } from "@/utils/helpers";
 import { addTaskSchema } from "@/utils/validationSchema";
@@ -50,7 +51,7 @@ const Tasks = () => {
         </FormProvider>
       </form>
 
-      <div className="flex max-h-[25rem] flex-col gap-2 overflow-y-auto">
+      <ScrollArea className="flex max-h-[25rem] flex-col gap-2 overflow-y-auto">
         {tasks.map((task) => (
           <div key={task.id} className="group flex items-center">
             <Checkbox
@@ -78,13 +79,13 @@ const Tasks = () => {
             <Button
               size="icon"
               onClick={() => deleteTask(task.id)}
-              className="text-primary w-fit! bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent"
+              className="text-primary mr-4 w-fit! bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent"
             >
               <X />
             </Button>
           </div>
         ))}
-      </div>
+      </ScrollArea>
     </div>
   );
 };
