@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/Button";
 import { useTaskStore } from "@/store";
 import confetti from "canvas-confetti";
+import { toast } from "sonner";
 
 const ClearTasksButton = () => {
   const { resetTasks } = useTaskStore();
 
   const onClearTasks = () => {
+    toast.success("Woohoo! You cleared all your tasks!");
     resetTasks();
     confetti();
   };

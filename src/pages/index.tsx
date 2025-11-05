@@ -2,8 +2,14 @@ import AppLayout from "@/components/layout/AppLayout";
 import Options from "@/components/pages/home/Options";
 import Pomodoro from "@/components/pages/home/Pomodoro";
 import Tasks from "@/components/pages/home/Tasks";
+import TodaySummary from "@/components/pages/home/TodaySummary";
 import { useSettings } from "@/query/settings.queries";
-import { useSettingsStore, useTaskStore, useUserStore } from "@/store";
+import {
+  useSettingsStore,
+  useSummaryStore,
+  useTaskStore,
+  useUserStore,
+} from "@/store";
 import { createClient } from "@/utils/helpers";
 import withAuth from "@/utils/withAuth";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
@@ -44,6 +50,7 @@ const Page = () => {
   const { setSettings } = useSettingsStore();
 
   const { showTasks } = useTaskStore();
+  const { showSummary } = useSummaryStore();
 
   useEffect(() => {
     if (data) {
@@ -56,11 +63,15 @@ const Page = () => {
       <AnimatePresence initial={false}>
         {showTasks && <Tasks />}
       </AnimatePresence>
+
       <div className="col-start-2 col-end-3 flex flex-col gap-6">
         <Pomodoro />
         <Options />
       </div>
-      Some data
+
+      <AnimatePresence initial={false}>
+        {showSummary && <TodaySummary />}
+      </AnimatePresence>
     </AppLayout>
   );
 };

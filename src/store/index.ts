@@ -7,12 +7,14 @@ import createSessionSlice, { SessionSlice } from "./session.slice";
 import { LOCAL_STORAGE_KEY } from "@/utils/constants";
 import createResetSlice, { ResetSlice } from "./reset.slice";
 import createTaskSlice, { TaskSlice } from "./task.slice";
+import createSummarySlice, { SummarySlice } from "./summary.slice";
 
 export type Store = UserSlice &
   SettingsSlice &
   SessionSlice &
   ResetSlice &
-  TaskSlice;
+  TaskSlice &
+  SummarySlice;
 
 const useStore = create<Store>()(
   persist(
@@ -22,6 +24,7 @@ const useStore = create<Store>()(
       ...createSessionSlice(...a),
       ...createResetSlice(...a),
       ...createTaskSlice(...a),
+      ...createSummarySlice(...a),
     }),
     { name: LOCAL_STORAGE_KEY },
   ),
@@ -84,6 +87,14 @@ export const useTaskStore = () =>
       editTask: state.editTask,
       toggleCompletion: state.toggleCompletion,
       resetTasks: state.resetTasks,
+    })),
+  );
+
+export const useSummaryStore = () =>
+  useStore(
+    useShallow((state) => ({
+      showSummary: state.showSummary,
+      toggleSummary: state.toggleSummary,
     })),
   );
 
