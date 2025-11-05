@@ -8,6 +8,8 @@ type Task = {
 
 export type TaskSlice = {
   tasks: Task[];
+  showTasks: boolean;
+  toggleTasksVisibility: () => void;
   addTask: (data: Omit<Task, "completed" | "id">) => void;
   deleteTask: (id: number) => void;
   editTask: (data: Omit<Task, "completed">) => void;
@@ -17,6 +19,11 @@ export type TaskSlice = {
 
 const createTaskSlice: StateCreator<TaskSlice> = (set, _get, state) => ({
   tasks: [],
+
+  showTasks: false,
+
+  toggleTasksVisibility: () =>
+    set((state) => ({ showTasks: !state.showTasks })),
 
   addTask: ({ title }) =>
     set((state) => ({

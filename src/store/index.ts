@@ -77,6 +77,8 @@ export const useTaskStore = () =>
   useStore(
     useShallow((state) => ({
       tasks: state.tasks,
+      showTasks: state.showTasks,
+      toggleTasksVisibility: state.toggleTasksVisibility,
       addTask: state.addTask,
       deleteTask: state.deleteTask,
       editTask: state.editTask,
