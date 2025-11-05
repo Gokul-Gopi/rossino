@@ -7,12 +7,13 @@ export type ResetSlice = {
 
 const createResetSlice: StateCreator<Store, [], [], ResetSlice> = (
   _set,
-  get
+  get,
 ) => ({
   resetAll: () => {
     get().resetSession();
     get().resetSettings();
     get().resetUser();
+    get().resetTasks();
   },
 });
 

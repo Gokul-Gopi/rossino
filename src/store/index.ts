@@ -8,11 +8,13 @@ import { LOCAL_STORAGE_KEY } from "@/utils/constants";
 import createResetSlice, { ResetSlice } from "./reset.slice";
 import createTaskSlice, { TaskSlice } from "./task.slice";
 
-export type Store = UserSlice & SettingsSlice & SessionSlice;
+export type Store = UserSlice &
+  SettingsSlice &
+  SessionSlice &
+  ResetSlice &
+  TaskSlice;
 
-const useStore = create<
-  UserSlice & SettingsSlice & SessionSlice & ResetSlice & TaskSlice
->()(
+const useStore = create<Store>()(
   persist(
     (...a) => ({
       ...createUserSlice(...a),
@@ -79,6 +81,7 @@ export const useTaskStore = () =>
       deleteTask: state.deleteTask,
       editTask: state.editTask,
       toggleCompletion: state.toggleCompletion,
+      resetTasks: state.resetTasks,
     })),
   );
 

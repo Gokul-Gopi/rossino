@@ -12,6 +12,7 @@ export type TaskSlice = {
   deleteTask: (id: number) => void;
   editTask: (data: Omit<Task, "completed">) => void;
   toggleCompletion: (id: number) => void;
+  resetTasks: () => void;
 };
 
 const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
@@ -40,6 +41,8 @@ const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
         task.id === id ? { ...task, completed: !task.completed } : task,
       ),
     })),
+
+  resetTasks: () => set({ tasks: [] }),
 });
 
 export default createTaskSlice;

@@ -30,10 +30,7 @@ export const loginSchema = z.object({
 export type LoginData = z.infer<typeof loginSchema>;
 
 export const addTaskSchema = z.object({
-  title: z
-    .string("Name is required")
-    .min(2, "Name must be at least 2 characters")
-    .max(100, "Name must be at most 100 characters"),
+  title: z.string("").max(100, "Name must be at most 100 characters"),
 });
 
 export type AddTaskData = z.infer<typeof addTaskSchema>;

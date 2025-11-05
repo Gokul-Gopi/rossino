@@ -8,8 +8,9 @@ import { cn } from "@/utils/helpers";
 import { addTaskSchema } from "@/utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import ClearTasksButton from "./ClearTasksButton";
 
 const Tasks = () => {
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
@@ -26,8 +27,13 @@ const Tasks = () => {
     form.reset({ title: "" });
   });
 
+  const haveIncompleteTasks = useMemo(
+    () => tasks.length > 0 && tasks.some((task) => !task.completed),
+    [tasks],
+  );
+
   return (
-    <div className="bg-card rounded-2xl border p-10 shadow">
+    <div className="bg-card flex flex-col rounded-2xl border p-10 shadow">
       <form onSubmit={onSubmit} className="mb-5 flex gap-2">
         <FormProvider {...form}>
           <ControlledTextInput
@@ -40,15 +46,14 @@ const Tasks = () => {
           </Button>
         </FormProvider>
       </form>
-
-      <ScrollArea className="flex max-h-[25rem] flex-col gap-2 overflow-y-auto">
+      <ScrollArea className="flex max-h-[25rem] flex-col gap-2 overflow-y-auto pb-4">
         {tasks.map((task) => (
           <div key={task.id} className="group flex items-center gap-2">
             <Checkbox
               onCheckedChange={() => toggleCompletion(task.id)}
               checked={task.completed}
               className={cn("size-5", {
-                "opacity-50": task.completed,
+                "opacity-50 transition-opacity duration-300": task.completed,
               })}
             />
 
@@ -67,9 +72,7 @@ const Tasks = () => {
                   }
                   onBlur={() => setEditingTaskId(null)}
                   onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
-                  className={cn(
-                    "focus-visible:border-input cursor-default! rounded-none border-0 px-0 shadow-none outline-none not-read-only:border-b read-only:cursor-text! focus-visible:ring-0",
-                  )}
+                  className="focus-visible:border-input cursor-default! rounded-none border-0 px-0 shadow-none outline-none not-read-only:border-b read-only:cursor-text! focus-visible:ring-0"
                 />
               ) : (
                 <div
@@ -93,6 +96,8 @@ const Tasks = () => {
           </div>
         ))}
       </ScrollArea>
+
+      {!haveIncompleteTasks && <ClearTasksButton />}
     </div>
   );
 };
