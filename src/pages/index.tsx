@@ -53,7 +53,6 @@ const Page = () => {
       <Tasks />
       <div className="flex flex-col gap-6">
         <Pomodoro />
-
         <Button className="mr-auto border" variant="outline">
           Add Tasks
         </Button>

@@ -54,11 +54,22 @@ const Tasks = () => {
             <Input
               readOnly={editingTaskId !== task.id}
               value={task.title}
-              onDoubleClick={() => setEditingTaskId(task.id)}
+              onDoubleClick={(e) => {
+                if (!task.completed) {
+                  const length = e.currentTarget.value.length;
+                  e.currentTarget.setSelectionRange(length, length);
+                  setEditingTaskId(task.id);
+                }
+              }}
               onChange={(e) => editTask({ id: task.id, title: e.target.value })}
-              className={cn("border-0 shadow-none focus-visible:ring-0", {
-                "text-muted-foreground line-through": task.completed,
-              })}
+              onBlur={() => setEditingTaskId(null)}
+              className={cn(
+                "focus-visible:border-input mx-2 cursor-default! rounded-none border-0 px-0 shadow-none outline-none not-read-only:border-b read-only:cursor-text! focus-visible:ring-0",
+                {
+                  "text-muted-foreground line-through read-only:cursor-default!":
+                    task.completed,
+                },
+              )}
             />
           </div>
         ))}
