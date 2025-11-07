@@ -95,6 +95,8 @@ export const useWidgetsStore = () =>
     useShallow((state) => ({
       showWidgets: state.showWidgets,
       toggleWidgets: state.toggleWidgets,
+      dailyGoalProgress: state.dailyGoalProgress,
+      setDailyGoalProgress: state.setDailyGoalProgress,
     })),
   );
 
