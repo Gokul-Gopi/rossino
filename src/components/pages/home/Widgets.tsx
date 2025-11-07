@@ -49,7 +49,7 @@ const WidgetCard = ({
 
 const Widgets = () => {
   return (
-    <div className="grid grid-cols-2 grid-rows-3 gap-6">
+    <div className="flex grid-cols-2 grid-rows-3 flex-col gap-4 md:grid md:gap-6">
       <WidgetCard
         {...commonMotionProps}
         transition={{ delay: 0.3 }}

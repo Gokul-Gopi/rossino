@@ -7,7 +7,7 @@ const DailyGoal = () => {
   return (
     <div className="flex items-center gap-4">
       <RingProgress value={dailyGoalProgress} className="size-30" />
-      <p>Daily Goal Progress</p>
+      <p className="font-medium max-md:text-sm">Daily Goal Progress</p>
     </div>
   );
 };

@@ -7,8 +7,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/Popover";
 import { Switch } from "@/components/ui/Switch";
+import { useMobile } from "@/hooks/useMobile";
 import { useWidgetsStore, useTaskStore, useSessionStore } from "@/store";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 
 const MoreOptions = () => {
@@ -17,6 +18,8 @@ const MoreOptions = () => {
   const { setSession } = useSessionStore();
   const { showWidgets, toggleWidgets } = useWidgetsStore();
   const { showTasks, toggleTasksVisibility } = useTaskStore();
+
+  const isMobile = useMobile();
 
   const onResetTimer = () => {
     setSession({
@@ -34,10 +37,16 @@ const MoreOptions = () => {
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="text-primary group absolute right-0 -bottom-12 bg-transparent px-0! font-medium hover:bg-transparent active:scale-100">
-            More options{" "}
-            <ChevronDown className="transition-transform group-data-[state=open]:rotate-180" />
-          </Button>
+          {isMobile ? (
+            <Button size="icon" className="fixed right-4 bottom-4 rounded-full">
+              <EllipsisVertical />
+            </Button>
+          ) : (
+            <Button className="text-primary group absolute right-4 bottom-2 bg-transparent px-0! font-medium hover:bg-transparent active:scale-100 max-md:hidden 2xl:right-0 2xl:-bottom-12">
+              More options{" "}
+              <ChevronDown className="transition-transform group-data-[state=open]:rotate-180" />
+            </Button>
+          )}
         </PopoverTrigger>
 
         <PopoverContent

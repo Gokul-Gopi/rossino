@@ -17,21 +17,27 @@ const PomodoroInnerContent = ({
   onStart,
 }: IPomodoroInnerContentProps) => {
   return (
-    <div className="flex flex-col gap-2 items-center justify-center relative">
+    <div className="relative flex flex-col items-center justify-center md:gap-2">
       <p
-        className={cn("font-bold text-6xl text-black/70 dark:text-white/90", {
-          "text-muted-foreground dark:text-muted-foreground":
-            status === "PAUSED",
-        })}
+        className={cn(
+          "text-4xl font-bold text-black/70 md:text-6xl dark:text-white/90",
+          {
+            "text-muted-foreground dark:text-muted-foreground":
+              status === "PAUSED",
+          },
+        )}
       >
         {remainingTime}
       </p>
 
       <p
-        className={cn("tracking-widest text-primary font-medium", {
-          "text-green-400": type === "SHORTBREAK",
-          "text-blue-400": type === "LONGBREAK",
-        })}
+        className={cn(
+          "text-primary text-[10px] font-semibold tracking-widest md:text-sm md:font-medium lg:text-base",
+          {
+            "text-green-400": type === "SHORTBREAK",
+            "text-blue-400": type === "LONGBREAK",
+          },
+        )}
       >
         {type === "FOCUS" ? "🍅 FOCUS MODE" : "🍅 BREAK TIME"}
       </p>
@@ -40,19 +46,19 @@ const PomodoroInnerContent = ({
         <Button
           onClick={onStart}
           className={cn(
-            "absolute text-primary size-16 hover:scale-105 transition-transform bg-transparent hover:bg-transparent -bottom-[75%]",
+            "text-primary absolute -bottom-[3.5rem] size-16 bg-transparent transition-transform hover:scale-105 hover:bg-transparent md:-bottom-[70%] lg:-bottom-[75%]",
             {
               "text-green-400": type === "SHORTBREAK",
               "text-blue-400": type === "LONGBREAK",
-            }
+            },
           )}
         >
           {status === "IDLE" ? (
-            <Power className="size-8" />
+            <Power className="size-4 md:size-6 lg:size-8" />
           ) : status === "PAUSED" ? (
-            <Play className="size-8" />
+            <Play className="size-4 md:size-6 lg:size-8" />
           ) : (
-            <Pause className="size-8" />
+            <Pause className="size-4 md:size-6 lg:size-8" />
           )}
         </Button>
       )}

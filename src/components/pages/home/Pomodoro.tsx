@@ -92,10 +92,10 @@ const Pomodoro = () => {
   }, [status]);
 
   return (
-    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow">
+    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow max-2xl:order-first">
       <RingProgress
         value={(elapsedTime / intendedDuration) * 100}
-        className="size-100"
+        className="size-50 md:size-80 lg:size-100"
         circleProps={{
           strokeWidth: 6,
           className: cn("stroke-primary/20", {

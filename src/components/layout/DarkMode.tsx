@@ -15,7 +15,7 @@ const DarkMode = () => {
       <TooltipTrigger asChild>
         <Button
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          className="hover:text-primary hover:bg-transparent"
+          className="hover:text-primary border-primary/20 bg-card hover:bg-transparent"
           variant="outline"
         >
           {theme === "light" ? <Moon /> : <Sun />}

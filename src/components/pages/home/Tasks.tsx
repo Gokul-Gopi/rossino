@@ -59,7 +59,7 @@ const Task = ({ id, title, completed }: ITaskProps) => {
         ) : (
           <div
             onDoubleClick={() => !completed && setEditingTaskId(id)}
-            className="line-clamp-3"
+            className="line-clamp-3 max-md:text-sm"
           >
             {title}
           </div>
@@ -69,7 +69,7 @@ const Task = ({ id, title, completed }: ITaskProps) => {
       <Button
         size="icon"
         onClick={() => deleteTask(id)}
-        className="text-primary mr-4 w-fit! bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent"
+        className="text-primary mr-4 w-fit! bg-transparent transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent lg:opacity-0"
       >
         <X />
       </Button>
@@ -100,7 +100,7 @@ const Tasks = () => {
       animate={{ x: 0, opacity: 1, scale: 1 }}
       exit={{ x: "100%", opacity: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 40 }}
-      className="bg-card flex flex-col rounded-2xl border p-10 shadow"
+      className="bg-card flex flex-col rounded-2xl border p-5 shadow md:p-10"
     >
       <form onSubmit={onSubmit} className="mb-5 flex gap-2">
         <FormProvider {...form}>
