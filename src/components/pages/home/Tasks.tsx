@@ -8,20 +8,81 @@ import { cn } from "@/utils/helpers";
 import { addTaskSchema } from "@/utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import ClearTasksButton from "./ClearTasksButton";
 import { motion } from "motion/react";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+
+type ITaskProps = {
+  id: number;
+  title: string;
+  completed: boolean;
+};
+
+const Task = ({ id, title, completed }: ITaskProps) => {
+  const [taskIdToEdit, setEditingTaskId] = useState<number | null>(null);
+  const [value, setValue] = useState(title);
+  const debounedValue = useDebouncedValue(value, 500);
+
+  const { editTask, deleteTask, toggleCompletion } = useTaskStore();
+
+  useEffect(() => {
+    editTask({ id, title: debounedValue });
+  }, [debounedValue, editTask, id]);
+
+  return (
+    <div className="group flex items-center gap-2">
+      <Checkbox
+        onCheckedChange={() => toggleCompletion(id)}
+        checked={completed}
+        className={cn("size-5", {
+          "opacity-50 transition-opacity duration-300": completed,
+        })}
+      />
+
+      <div
+        className={cn("w-full", {
+          "text-muted-foreground line-through opacity-50 transition-opacity duration-300 read-only:cursor-default!":
+            completed,
+        })}
+      >
+        {taskIdToEdit === id ? (
+          <Input
+            value={value}
+            autoFocus
+            onChange={(e) => setValue(e.target.value)}
+            onBlur={() => setEditingTaskId(null)}
+            onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+            className="focus-visible:border-input cursor-default! rounded-none border-0 px-0 shadow-none outline-none not-read-only:border-b read-only:cursor-text! focus-visible:ring-0"
+          />
+        ) : (
+          <div
+            onDoubleClick={() => !completed && setEditingTaskId(id)}
+            className="line-clamp-3"
+          >
+            {title}
+          </div>
+        )}
+      </div>
+
+      <Button
+        size="icon"
+        onClick={() => deleteTask(id)}
+        className="text-primary mr-4 w-fit! bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent"
+      >
+        <X />
+      </Button>
+    </div>
+  );
+};
 
 const Tasks = () => {
-  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
-
   const form = useForm({
     resolver: zodResolver(addTaskSchema),
   });
 
-  const { tasks, addTask, editTask, deleteTask, toggleCompletion } =
-    useTaskStore();
+  const { tasks, addTask } = useTaskStore();
 
   const onSubmit = form.handleSubmit((data) => {
     addTask(data);
@@ -57,54 +118,7 @@ const Tasks = () => {
       {tasks.length ? (
         <ScrollArea className="flex max-h-[25rem] flex-col gap-2 overflow-y-auto pb-4">
           {tasks.map((task) => (
-            <div key={task.id} className="group flex items-center gap-2">
-              <Checkbox
-                onCheckedChange={() => toggleCompletion(task.id)}
-                checked={task.completed}
-                className={cn("size-5", {
-                  "opacity-50 transition-opacity duration-300": task.completed,
-                })}
-              />
-
-              <div
-                className={cn("w-full", {
-                  "text-muted-foreground line-through opacity-50 transition-opacity duration-300 read-only:cursor-default!":
-                    task.completed,
-                })}
-              >
-                {editingTaskId === task.id ? (
-                  <Input
-                    value={task.title}
-                    autoFocus={task.id === editingTaskId}
-                    onChange={(e) =>
-                      editTask({ id: task.id, title: e.target.value })
-                    }
-                    onBlur={() => setEditingTaskId(null)}
-                    onKeyDown={(e) =>
-                      e.key === "Enter" && e.currentTarget.blur()
-                    }
-                    className="focus-visible:border-input cursor-default! rounded-none border-0 px-0 shadow-none outline-none not-read-only:border-b read-only:cursor-text! focus-visible:ring-0"
-                  />
-                ) : (
-                  <div
-                    onDoubleClick={() =>
-                      !task.completed && setEditingTaskId(task.id)
-                    }
-                    className="line-clamp-3"
-                  >
-                    {task.title}
-                  </div>
-                )}
-              </div>
-
-              <Button
-                size="icon"
-                onClick={() => deleteTask(task.id)}
-                className="text-primary mr-4 w-fit! bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent"
-              >
-                <X />
-              </Button>
-            </div>
+            <Task key={task.id} {...task} />
           ))}
         </ScrollArea>
       ) : (
