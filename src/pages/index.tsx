@@ -64,11 +64,6 @@ const Page = () => {
         {showTasks && <Tasks />}
       </AnimatePresence>
 
-      {/* <div className="col-start-2 col-end-3 flex flex-col gap-6">
-        <Pomodoro />
-        <Options />
-      </div> */}
-
       <Pomodoro />
 
       <AnimatePresence initial={false}>

@@ -4,8 +4,6 @@ import { cn } from "@/utils/helpers";
 import { useSessionStore } from "@/store";
 import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
-import { Button } from "@/components/ui/Button";
-import { RotateCcw } from "lucide-react";
 import MoreOptions from "./MoreOptions";
 
 const formatTime = (totalSeconds: number) => {
@@ -123,10 +121,6 @@ const Pomodoro = () => {
       />
 
       <p className="mt-4 text-center font-medium">Project Name</p>
-
-      <Button className="text-muted-foreground absolute top-2 right-2 border border-none bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent">
-        <RotateCcw className="size-4" />
-      </Button>
 
       <MoreOptions />
     </div>

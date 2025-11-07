@@ -63,7 +63,7 @@ const Card = ({
 
 const TodaySummary = () => {
   return (
-    <div className="grid grid-cols-2 grid-rows-3 gap-8">
+    <div className="grid grid-cols-2 grid-rows-3 gap-6">
       <Card
         {...commonMotionProps}
         transition={{ delay: 0.3 }}

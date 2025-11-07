@@ -10,8 +10,8 @@ import { useSummaryStore, useTaskStore } from "@/store";
 import { ChevronDown } from "lucide-react";
 
 const MoreOptions = () => {
-  const { toggleTasksVisibility } = useTaskStore();
-  const { toggleSummary } = useSummaryStore();
+  const { showTasks, toggleTasksVisibility } = useTaskStore();
+  const { showSummary, toggleSummary } = useSummaryStore();
 
   return (
     <Popover>
@@ -28,11 +28,19 @@ const MoreOptions = () => {
       >
         <div className="flex items-center justify-between">
           <Label htmlFor="tasks">Tasks</Label>
-          <Switch id="tasks" onCheckedChange={toggleTasksVisibility} />
+          <Switch
+            id="tasks"
+            checked={showTasks}
+            onCheckedChange={toggleTasksVisibility}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="stats">Stats</Label>
-          <Switch id="stats" onCheckedChange={toggleSummary} />
+          <Switch
+            id="stats"
+            checked={showSummary}
+            onCheckedChange={toggleSummary}
+          />
         </div>
 
         <Button size="sm" variant="outline" className="text-sm">
