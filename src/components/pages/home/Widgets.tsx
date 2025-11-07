@@ -1,6 +1,7 @@
 import { cn } from "@/utils/helpers";
-import { type HTMLMotionProps, motion, MotionProps } from "motion/react";
-import { useMemo } from "react";
+import { type HTMLMotionProps, motion, type MotionProps } from "motion/react";
+import QuickNotes from "./QuickNotes";
+import Interuptions from "./Interuptions";
 
 const commonMotionProps: MotionProps = {
   initial: { opacity: 0, scale: 0 },
@@ -8,26 +9,19 @@ const commonMotionProps: MotionProps = {
   exit: { opacity: 0, scale: 0 },
 };
 
-// const camelCaseToTitleCase = (str: string) => {
-//   const result = str.replace(/([A-Z])/g, " $1");
-//   return result.charAt(0).toUpperCase() + result.slice(1);
-// };
-
-interface CardProps extends HTMLMotionProps<"div"> {
+interface WidgetCardProps extends HTMLMotionProps<"div"> {
+  children: React.ReactNode;
   heading: string;
   description?: string;
-  data: Record<string, string | number>;
 }
 
-const Card = ({
+const WidgetCard = ({
+  children,
   heading,
   description,
-  data,
   className,
   ...props
-}: CardProps) => {
-  const items = useMemo(() => Object.entries(data), [data]);
-
+}: WidgetCardProps) => {
   return (
     <motion.div
       {...props}
@@ -44,19 +38,7 @@ const Card = ({
         </p>
       )}
 
-      {
-        <ul className={cn("mt-4 flex flex-col gap-2", {})}>
-          {items.map((el) => (
-            <li
-              key={el[0]}
-              className="bg-muted-foreground/5 flex items-center justify-between rounded-md px-3 py-2 text-sm"
-            >
-              <span className="text-card-foreground font-medium">{el[0]}</span>
-              <span className="text-card-foreground/80">{el[1]}</span>
-            </li>
-          ))}
-        </ul>
-      }
+      {children}
     </motion.div>
   );
 };
@@ -64,24 +46,26 @@ const Card = ({
 const Widgets = () => {
   return (
     <div className="grid grid-cols-2 grid-rows-3 gap-6">
-      <Card
+      <WidgetCard
         {...commonMotionProps}
         transition={{ delay: 0.3 }}
-        heading="Project"
-        description="Project currently being worked on"
+        heading="Quick Notes"
         className="row-span-2"
-        data={{ Name: "Project A", "Last worked on": "2 hours ago" }}
-      />
+      >
+        <QuickNotes />
+      </WidgetCard>
 
-      <Card
+      <WidgetCard
         {...commonMotionProps}
         transition={{ delay: 0.5 }}
         heading="Interruptions"
-        data={{ "Paused Count": 3, "Paused Duration": "36 min" }}
         className="col-start-1 row-start-3 justify-between"
-      />
+      >
+        <Interuptions />
+      </WidgetCard>
 
-      <Card
+      {/*
+      <WidgetCard
         {...commonMotionProps}
         transition={{ delay: 0.1 }}
         heading="Others"
@@ -89,7 +73,7 @@ const Widgets = () => {
         data={{ TBA: "TBA", TBA2: "TBA" }}
       />
 
-      <Card
+      <WidgetCard
         {...commonMotionProps}
         transition={{ delay: 0.8 }}
         heading="Focus Time"
@@ -100,7 +84,7 @@ const Widgets = () => {
           Duration: "1 hr 24 min",
           "Tasks Completed": 5,
         }}
-      />
+      /> */}
     </div>
   );
 };
