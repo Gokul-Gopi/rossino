@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   devIndicators: {
     position: "bottom-right",
   },
+  images: {
+    domains: ["www.google.com", "open.spotify.com", "www.youtube.com"],
+  },
 };
 
 export default nextConfig;

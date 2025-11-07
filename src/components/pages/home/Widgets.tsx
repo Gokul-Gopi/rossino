@@ -3,6 +3,7 @@ import { type HTMLMotionProps, motion, type MotionProps } from "motion/react";
 import QuickNotes from "./QuickNotes";
 import Interuptions from "./Interuptions";
 import DailyGoal from "./DailyGoal";
+import Recommendations from "./Recommendations";
 
 const commonMotionProps: MotionProps = {
   initial: { opacity: 0, scale: 0 },
@@ -75,13 +76,14 @@ const Widgets = () => {
         <DailyGoal />
       </WidgetCard>
 
-      {/* <WidgetCard
+      <WidgetCard
         {...commonMotionProps}
         transition={{ delay: 0.8 }}
-        heading="Focus Time"
-        description="Time spent on focused work"
+        heading="Recommendations"
         className="col-start-2 row-span-2 row-start-2"
-      /> */}
+      >
+        <Recommendations />
+      </WidgetCard>
     </div>
   );
 };
