@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
 import { Button } from "@/components/ui/Button";
 import { RotateCcw } from "lucide-react";
+import MoreOptions from "./MoreOptions";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -93,7 +94,7 @@ const Pomodoro = () => {
   }, [status]);
 
   return (
-    <div className="group bg-card relative flex flex-col items-center rounded-2xl border p-10 shadow">
+    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow">
       <RingProgress
         value={(elapsedTime / intendedDuration) * 100}
         className="size-100"
@@ -126,6 +127,8 @@ const Pomodoro = () => {
       <Button className="text-muted-foreground absolute top-2 right-2 border border-none bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent">
         <RotateCcw className="size-4" />
       </Button>
+
+      <MoreOptions />
     </div>
   );
 };

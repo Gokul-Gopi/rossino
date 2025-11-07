@@ -1,5 +1,4 @@
 import AppLayout from "@/components/layout/AppLayout";
-import Options from "@/components/pages/home/Options";
 import Pomodoro from "@/components/pages/home/Pomodoro";
 import Tasks from "@/components/pages/home/Tasks";
 import TodaySummary from "@/components/pages/home/TodaySummary";
@@ -45,6 +44,7 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
 });
 
 const Page = () => {
+  // Move this to settings page later
   const { id } = useUserStore();
   const { data } = useSettings(id);
   const { setSettings } = useSettingsStore();
@@ -64,10 +64,12 @@ const Page = () => {
         {showTasks && <Tasks />}
       </AnimatePresence>
 
-      <div className="col-start-2 col-end-3 flex flex-col gap-6">
+      {/* <div className="col-start-2 col-end-3 flex flex-col gap-6">
         <Pomodoro />
         <Options />
-      </div>
+      </div> */}
+
+      <Pomodoro />
 
       <AnimatePresence initial={false}>
         {showSummary && <TodaySummary />}
