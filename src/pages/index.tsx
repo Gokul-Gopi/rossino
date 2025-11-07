@@ -1,11 +1,11 @@
 import AppLayout from "@/components/layout/AppLayout";
 import Pomodoro from "@/components/pages/home/Pomodoro";
 import Tasks from "@/components/pages/home/Tasks";
-import TodaySummary from "@/components/pages/home/TodaySummary";
+import Widgets from "@/components/pages/home/Widgets";
 import { useSettings } from "@/query/settings.queries";
 import {
   useSettingsStore,
-  useSummaryStore,
+  useWidgetsStore,
   useTaskStore,
   useUserStore,
 } from "@/store";
@@ -50,7 +50,7 @@ const Page = () => {
   const { setSettings } = useSettingsStore();
 
   const { showTasks } = useTaskStore();
-  const { showSummary } = useSummaryStore();
+  const { showWidgets } = useWidgetsStore();
 
   useEffect(() => {
     if (data) {
@@ -67,7 +67,7 @@ const Page = () => {
       <Pomodoro />
 
       <AnimatePresence initial={false}>
-        {showSummary && <TodaySummary />}
+        {showWidgets && <Widgets />}
       </AnimatePresence>
     </AppLayout>
   );

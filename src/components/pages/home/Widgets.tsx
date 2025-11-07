@@ -61,7 +61,7 @@ const Card = ({
   );
 };
 
-const TodaySummary = () => {
+const Widgets = () => {
   return (
     <div className="grid grid-cols-2 grid-rows-3 gap-6">
       <Card
@@ -105,4 +105,4 @@ const TodaySummary = () => {
   );
 };
 
-export default TodaySummary;
+export default Widgets;

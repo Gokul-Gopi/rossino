@@ -1,20 +1,20 @@
 import { create } from "zustand";
-import createUserSlice, { UserSlice } from "./user.slice";
-import createSettingsSlice, { SettingsSlice } from "./settings.slice";
 import { useShallow } from "zustand/react/shallow";
 import { persist } from "zustand/middleware";
-import createSessionSlice, { SessionSlice } from "./session.slice";
 import { LOCAL_STORAGE_KEY } from "@/utils/constants";
+import createUserSlice, { UserSlice } from "./user.slice";
+import createSettingsSlice, { SettingsSlice } from "./settings.slice";
+import createSessionSlice, { SessionSlice } from "./session.slice";
 import createResetSlice, { ResetSlice } from "./reset.slice";
 import createTaskSlice, { TaskSlice } from "./task.slice";
-import createSummarySlice, { SummarySlice } from "./summary.slice";
+import createWidgetsSlice, { WidgetsSlice } from "./widgets.slice";
 
 export type Store = UserSlice &
   SettingsSlice &
   SessionSlice &
   ResetSlice &
   TaskSlice &
-  SummarySlice;
+  WidgetsSlice;
 
 const useStore = create<Store>()(
   persist(
@@ -24,7 +24,7 @@ const useStore = create<Store>()(
       ...createSessionSlice(...a),
       ...createResetSlice(...a),
       ...createTaskSlice(...a),
-      ...createSummarySlice(...a),
+      ...createWidgetsSlice(...a),
     }),
     { name: LOCAL_STORAGE_KEY },
   ),
@@ -90,11 +90,11 @@ export const useTaskStore = () =>
     })),
   );
 
-export const useSummaryStore = () =>
+export const useWidgetsStore = () =>
   useStore(
     useShallow((state) => ({
-      showSummary: state.showSummary,
-      toggleSummary: state.toggleSummary,
+      showWidgets: state.showWidgets,
+      toggleWidgets: state.toggleWidgets,
     })),
   );
 
