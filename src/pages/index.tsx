@@ -2,36 +2,31 @@ import AppLayout from "@/components/layout/AppLayout";
 import Pomodoro from "@/components/pages/home/Pomodoro";
 import Tasks from "@/components/pages/home/Tasks";
 import Widgets from "@/components/pages/home/Widgets";
-import { useSettings } from "@/query/settings.queries";
-import {
-  useSettingsStore,
-  useWidgetsStore,
-  useTaskStore,
-  useUserStore,
-} from "@/store";
-import { createClient } from "@/utils/helpers";
 import withAuth from "@/utils/withAuth";
+import { useDashboard } from "@/query/dashboard.queries";
+import { useWidgetsStore, useTaskStore, useSettingsStore } from "@/store";
+import { createClient } from "@/utils/helpers";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
 
-  if (user?.id) {
+  const projectId = ctx.query.projectId as string;
+
+  if (projectId) {
     const supabase = createClient(ctx);
 
     await queryClient.prefetchQuery({
-      queryKey: ["settings", user.id],
       queryFn: async () => {
-        const res = await supabase
-          .from("settings")
-          .select("*")
-          .eq("userId", user.id)
-          .single();
-
+        const res = await supabase.rpc("dashboard", {
+          projectId,
+        });
         return res.data;
       },
+      queryKey: ["dashboard", projectId],
     });
   }
 
@@ -44,19 +39,21 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
 });
 
 const Page = () => {
-  // Move this to settings page later
-  const { id } = useUserStore();
-  const { data } = useSettings(id);
-  const { setSettings } = useSettingsStore();
-
+  const router = useRouter();
   const { showTasks } = useTaskStore();
   const { showWidgets } = useWidgetsStore();
 
+  const { setNote } = useWidgetsStore();
+  const { setSettings } = useSettingsStore();
+
+  const { data } = useDashboard(router.query.projectId as string);
+
   useEffect(() => {
     if (data) {
-      setSettings(data);
+      setSettings(data.settings);
+      setNote(data.widgets.note ?? "");
     }
-  }, [data]);
+  }, [data, setSettings, setNote]);
 
   return (
     <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">

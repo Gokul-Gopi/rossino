@@ -13,7 +13,7 @@ const createUserSlice: StateCreator<UserSlice> = (set, _get, state) => ({
   id: null,
   email: null,
   name: null,
-  setUser: (user: User) => set(() => user),
+  setUser: (user) => set(() => user),
   resetUser: () => set(state.getInitialState()),
 });
 

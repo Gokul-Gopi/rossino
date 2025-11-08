@@ -14,10 +14,10 @@ const createWidgetsSlice: StateCreator<WidgetsSlice> = (set) => ({
   toggleWidgets: () => set((state) => ({ showWidgets: !state.showWidgets })),
 
   note: "",
-  setNote: (note: string) => set(() => ({ note })),
+  setNote: (note) => set(() => ({ note })),
 
   dailyGoalProgress: 0,
-  setDailyGoalProgress: (progress: number) =>
+  setDailyGoalProgress: (progress) =>
     set(() => ({ dailyGoalProgress: progress })),
 });
 

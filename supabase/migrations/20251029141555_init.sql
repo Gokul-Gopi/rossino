@@ -33,7 +33,7 @@ create table public.sessions (
   "projectId" uuid references public.projects(id) on delete set null,
   "type" public."sessionType" not null default 'FOCUS',
   "status" public."sessionStatus" not null default 'PAUSED',
-  "startedAt" timestamptz not null default now(),
+  "startedAt" timestamptz,
   "endedAt" timestamptz,
   "lastPausedAt" timestamptz,
   "intendedDuration" int not null,

@@ -24,6 +24,7 @@ const createSettingsSlice: StateCreator<SettingsSlice> = (
   breakEndReminder: 300,
   timeLeftReminder: 300,
   notificationsEnabled: true,
+  dailyGoal: null,
   zenMode: false,
   toggleZenMode: () =>
     set((state) => ({

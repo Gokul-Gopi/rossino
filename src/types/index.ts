@@ -8,6 +8,13 @@ export type User = SupabaseUser & {
   };
 };
 
+export type Dashboard = {
+  project: Project;
+  settings: Settings;
+  tasks: Task[];
+  widgets: Widget;
+};
+
 export type Project = Database["public"]["Tables"]["projects"]["Row"];
 
 export type Session = Database["public"]["Tables"]["sessions"]["Row"];
@@ -15,3 +22,5 @@ export type Session = Database["public"]["Tables"]["sessions"]["Row"];
 export type Task = Database["public"]["Tables"]["tasks"]["Row"];
 
 export type Settings = Database["public"]["Tables"]["settings"]["Row"];
+
+export type Widget = Database["public"]["Tables"]["widgets"]["Row"];
