@@ -20,14 +20,14 @@ export type SessionSlice = SessionStore & {
 const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   set,
   get,
-  store
+  store,
 ) => ({
   projectId: null,
   startedAt: null,
   endedAt: null,
   lastPausedAt: null,
   elapsedTime: 0,
-  intendedDuration: 10,
+  intendedDuration: 1500,
   totalPausedDuration: 0,
   interruptionCount: 0,
   status: "IDLE",

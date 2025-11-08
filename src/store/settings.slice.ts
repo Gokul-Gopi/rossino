@@ -4,6 +4,8 @@ import { StateCreator } from "zustand/vanilla";
 type SettingsStore = Omit<Settings, "userId" | "createdAt" | "updatedAt">;
 
 export type SettingsSlice = SettingsStore & {
+  zenMode: boolean;
+  toggleZenMode: () => void;
   setSettings: (settings: Partial<SettingsSlice>) => void;
   resetSettings: () => void;
 };
@@ -11,17 +13,22 @@ export type SettingsSlice = SettingsStore & {
 const createSettingsSlice: StateCreator<SettingsSlice> = (
   set,
   _get,
-  state
+  state,
 ) => ({
   autoStartBreak: false,
   autoStartPomo: false,
-  pomoDuration: 10,
-  shortBreakDuration: 5,
-  longBreakDuration: 15,
+  pomoDuration: 1500,
+  shortBreakDuration: 300,
+  longBreakDuration: 900,
   longBreakInterval: 3,
   breakEndReminder: 300,
   timeLeftReminder: 300,
   notificationsEnabled: true,
+  zenMode: false,
+  toggleZenMode: () =>
+    set((state) => ({
+      zenMode: !state.zenMode,
+    })),
   setSettings: (settings) => set((state) => ({ ...state, ...settings })),
   resetSettings: () => set(state.getInitialState()),
 });
