@@ -7,6 +7,8 @@ import googleIcon from "../../../../public/assets/google-icon.svg";
 import { Button } from "@/components/ui/Button";
 import { LayoutGroup, motion } from "motion/react";
 import supabase from "@/utils/supabase";
+import { Timer } from "lucide-react";
+import Link from "next/link";
 
 const FormLayout = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
@@ -24,55 +26,67 @@ const FormLayout = () => {
   };
 
   return (
-    <div className="flex items-center w-full max-w-4xl">
-      <div className="bg-card w-full items-center min-h-[34rem] flex relative gap-4 shadow p-4 border rounded-lg">
-        <LayoutGroup>
-          <div className="flex-1">
-            <motion.div layout transition={{ duration: 0.3 }}>
-              <Button
-                onClick={onGoogleSignin}
-                size="lg"
-                variant="outline"
-                className="w-full hover:bg-background hover:text-black hover:shadow dark:text-white"
+    <div className="flex w-full max-w-4xl items-center">
+      <div className="w-full">
+        <Link href="/">
+          <Button
+            variant="link"
+            className="dark:text-muted-foreground text-primary px-0! font-medium"
+          >
+            <Timer />
+            Back to Home
+          </Button>
+        </Link>
+
+        <div className="bg-card relative flex min-h-[34rem] w-full items-center gap-4 rounded-lg border p-4 shadow">
+          <LayoutGroup>
+            <div className="flex-1">
+              <motion.div layout transition={{ duration: 0.3 }}>
+                <Button
+                  onClick={onGoogleSignin}
+                  size="lg"
+                  variant="outline"
+                  className="hover:bg-background border-input w-full text-black hover:text-inherit hover:shadow dark:text-white"
+                >
+                  <Image
+                    src={googleIcon}
+                    alt="google icon"
+                    width={18}
+                    height={18}
+                  />
+                  Continue with Google
+                </Button>
+              </motion.div>
+
+              <motion.div
+                transition={{ duration: 0.3 }}
+                layout
+                className="my-4 flex items-center gap-2"
               >
-                <Image
-                  src={googleIcon}
-                  alt="google icon"
-                  width={18}
-                  height={18}
-                />
-                Continue with Google
-              </Button>
-            </motion.div>
+                <hr className="w-full" />
+                <span className="text-muted-foreground text-sm font-medium">
+                  OR
+                </span>
+                <hr className="w-full" />
+              </motion.div>
 
-            <motion.div
-              transition={{ duration: 0.3 }}
-              layout
-              className="flex items-center gap-2 my-4"
-            >
-              <hr className="w-full" />
-              <span className="font-medium text-sm text-muted-foreground">
-                OR
-              </span>
-              <hr className="w-full" />
-            </motion.div>
+              {isLoginForm ? (
+                <LoginForm switchForm={() => setIsLoginForm(!isLoginForm)} />
+              ) : (
+                <SignupForm switchForm={() => setIsLoginForm(!isLoginForm)} />
+              )}
+            </div>
+          </LayoutGroup>
 
-            {isLoginForm ? (
-              <LoginForm switchForm={() => setIsLoginForm(!isLoginForm)} />
-            ) : (
-              <SignupForm switchForm={() => setIsLoginForm(!isLoginForm)} />
-            )}
+          <div className="relative flex-1 self-stretch max-lg:hidden">
+            <Image
+              src={tomato}
+              alt="tomato"
+              className="rounded-lg"
+              fill
+              objectFit="cover"
+            />
           </div>
-        </LayoutGroup>
-
-        <div className="flex-1 relative self-stretch max-lg:hidden">
-          <Image
-            src={tomato}
-            alt="tomato"
-            className="rounded-lg"
-            fill
-            objectFit="cover"
-          />
         </div>
       </div>
     </div>
