@@ -26,7 +26,13 @@ const useStore = create<Store>()(
       ...createTaskSlice(...a),
       ...createWidgetsSlice(...a),
     }),
-    { name: LOCAL_STORAGE_KEY },
+    {
+      name: LOCAL_STORAGE_KEY,
+      partialize: (state) => {
+        const { id, email, name, setUser, ...rest } = state;
+        return rest;
+      },
+    },
   ),
 );
 

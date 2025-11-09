@@ -14,7 +14,7 @@ import { useEffect } from "react";
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
 
-  const projectId = ctx.query.projectId as string;
+  const projectId = ctx.query.project as string;
 
   if (projectId) {
     const supabase = createClient(ctx);
@@ -22,7 +22,7 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
     await queryClient.prefetchQuery({
       queryFn: async () => {
         const res = await supabase.rpc("dashboard", {
-          projectId,
+          project_id: projectId,
         });
         return res.data;
       },
@@ -46,7 +46,7 @@ const Page = () => {
   const { setNote } = useWidgetsStore();
   const { setSettings } = useSettingsStore();
 
-  const { data } = useDashboard(router.query.projectId as string);
+  const { data } = useDashboard(router.query.project as string);
 
   useEffect(() => {
     if (data) {

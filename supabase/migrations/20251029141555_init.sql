@@ -136,7 +136,7 @@ execute function public.handle_new_user_settings_widgets();
 
 
 -- Function that returns dashboard data (START)
-create or replace function public.dashboard("projectId" uuid)
+create or replace function public.dashboard(project_id uuid)
 returns jsonb
 language plpgsql
 security definer
@@ -155,7 +155,7 @@ begin
   p as (
     select id, title
     from projects
-    where id = "projectId" and "userId" = uid
+    where id = project_id and "userId" = uid
   ),
   s as (
     select "dailyGoal"
@@ -165,7 +165,7 @@ begin
   t as (
     select id, title
     from tasks
-    where "projectId" = "projectId"
+    where "projectId" = project_id
       and completed = false
       and "userId" = uid
     order by "createdAt" desc
