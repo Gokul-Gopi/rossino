@@ -138,42 +138,55 @@ execute function public.handle_new_user_settings_widgets();
 -- Function that returns dashboard data (START)
 create or replace function public.dashboard("projectId" uuid)
 returns jsonb
-language sql
+language plpgsql
 security definer
 set search_path = public
 as $$
-  with me as (
-    select auth.uid() as uid
-  ),
+declare
+  uid uuid := auth.uid();
+  payload jsonb;
+begin
+  if uid is null then
+    raise exception 'not authenticated'
+      using errcode = '28000';
+  end if;
+
+  with
   p as (
     select id, title
     from projects
-    where id = "projectId" and "userId" = (select uid from me) 
+    where id = "projectId" and "userId" = uid
   ),
   s as (
     select "dailyGoal"
     from settings
-    where "userId" = (select uid from me)
+    where "userId" = uid
   ),
   t as (
     select id, title
     from tasks
-    where "projectId" = "projectId" and completed = false and "userId" = (select uid from me) 
+    where "projectId" = "projectId"
+      and completed = false
+      and "userId" = uid
     order by "createdAt" desc
     limit 50
   ),
   w as (
     select note
     from widgets
-    where "userId" = (select uid from me)
+    where "userId" = uid
   )
   select jsonb_build_object(
     'project',  (select to_jsonb(p.*) from p),
     'settings', (select to_jsonb(s.*) from s),
     'tasks',    (select coalesce(jsonb_agg(t.*), '[]'::jsonb) from t),
-    'widgets',  (select to_jsonb(w.*) from w)
-    -- any computed stats can be added here
-  );
+    'widgets',  (select to_jsonb(w.*) from w) 
+    -- any computed stats/fields can go here too
+  )
+  into payload;
+
+  return payload;
+end;
 $$;
 -- Function that returns dashboard data (END)
 
