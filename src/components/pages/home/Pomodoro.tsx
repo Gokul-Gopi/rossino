@@ -19,6 +19,8 @@ const formatTime = (totalSeconds: number) => {
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const { userId } = useUserStore();
+
   const {
     sessionId,
     status,
@@ -34,12 +36,13 @@ const Pomodoro = () => {
     focusSessionCompleted,
   } = useSessionStore();
 
-  const { userId } = useUserStore();
   const {
     pomoDuration,
     shortBreakDuration,
     longBreakDuration,
     longBreakInterval,
+    autoStartPomo,
+    autoStartBreak,
   } = useSettingsStore();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
@@ -190,6 +193,14 @@ const Pomodoro = () => {
   }, [sessionId, startedAt, totalPausedDuration]);
 
   useEffect(() => {
+    if (status === "IDLE") {
+      if (
+        (autoStartPomo && type === "FOCUS") ||
+        (autoStartBreak && type !== "FOCUS")
+      )
+        onStart();
+    }
+
     if (status === "RUNNING") {
       intervalRef.current = setInterval(updateTimer, 500);
     }
@@ -203,7 +214,7 @@ const Pomodoro = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [status, updateTimer]);
+  }, [status]);
 
   return (
     <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow max-2xl:order-first">
