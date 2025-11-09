@@ -4,7 +4,12 @@ import Tasks from "@/components/pages/home/Tasks";
 import Widgets from "@/components/pages/home/Widgets";
 import withAuth from "@/utils/withAuth";
 import { useDashboard } from "@/query/dashboard.queries";
-import { useWidgetsStore, useTaskStore, useSettingsStore } from "@/store";
+import {
+  useWidgetsStore,
+  useTaskStore,
+  useSettingsStore,
+  useSessionStore,
+} from "@/store";
 import { createClient } from "@/utils/helpers";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
@@ -45,11 +50,13 @@ const Page = () => {
 
   const { setNote } = useWidgetsStore();
   const { setSettings } = useSettingsStore();
+  const { setSession } = useSessionStore();
 
   const { data } = useDashboard(router.query.project as string);
 
   useEffect(() => {
     if (data) {
+      setSession({ projectName: data.project.title });
       setSettings(data.settings);
       setNote(data.widgets.note ?? "");
     }

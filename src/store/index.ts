@@ -66,6 +66,7 @@ export const useSessionStore = () =>
   useStore(
     useShallow((state) => ({
       projectId: state.projectId,
+      projectName: state.projectName,
       startedAt: state.startedAt,
       endedAt: state.endedAt,
       lastPausedAt: state.lastPausedAt,

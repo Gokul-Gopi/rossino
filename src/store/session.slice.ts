@@ -7,11 +7,12 @@ type SessionStore = Omit<
   "userId" | "createdAt" | "updatedAt" | "id"
 > & {
   elapsedTime: number;
+  projectName: string | null;
+  focusSessionCompleted: number;
+  unSyncedSessions: SessionStore[];
 };
 
 export type SessionSlice = SessionStore & {
-  focusSessionCompleted: number;
-  unSyncedSessions: SessionStore[];
   setSession: (session: Partial<SessionStore>) => void;
   nextSession: () => void;
   resetSession: () => void;
@@ -23,6 +24,7 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   store,
 ) => ({
   projectId: null,
+  projectName: null,
   startedAt: null,
   endedAt: null,
   lastPausedAt: null,

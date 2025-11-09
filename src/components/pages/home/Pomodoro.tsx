@@ -27,6 +27,7 @@ const Pomodoro = () => {
     setSession,
     nextSession,
     intendedDuration,
+    projectName,
   } = useSessionStore();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
@@ -120,7 +121,7 @@ const Pomodoro = () => {
         }
       />
 
-      <p className="mt-4 text-center font-medium">Project Name</p>
+      <p className="mt-4 text-center font-medium">{projectName}</p>
 
       <MoreOptions />
     </div>
