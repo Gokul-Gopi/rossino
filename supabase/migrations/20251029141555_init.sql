@@ -158,6 +158,14 @@ begin
     where id = project_id and "userId" = uid
   ),
   s as (
+    select *
+    from sessions
+    where "projectId" = project_id
+      and "userId" = uid
+    order by "startedAt" desc
+    limit 1
+  ),
+  d as (
     select "dailyGoal"
     from settings
     where "userId" = uid
@@ -178,9 +186,10 @@ begin
   )
   select jsonb_build_object(
     'project',  (select to_jsonb(p.*) from p),
-    'settings', (select to_jsonb(s.*) from s),
+    'sessions', (select to_jsonb(s.*) from s),
     'tasks',    (select coalesce(jsonb_agg(t.*), '[]'::jsonb) from t),
-    'widgets',  (select to_jsonb(w.*) from w) 
+    'settings', (select to_jsonb(d.*) from d),
+    'widgets',  (select to_jsonb(w.*) from w)
     -- any computed stats/fields can go here too
   )
   into payload;

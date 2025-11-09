@@ -187,7 +187,7 @@ const Pomodoro = () => {
     setSession({
       elapsedTime,
     });
-  }, [sessionId, startedAt]);
+  }, [sessionId, startedAt, totalPausedDuration]);
 
   useEffect(() => {
     if (status === "RUNNING") {

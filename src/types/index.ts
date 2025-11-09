@@ -13,6 +13,7 @@ export type Dashboard = {
   settings: Settings;
   tasks: Task[];
   widgets: Widget;
+  sessions: Session;
 };
 
 export type Project = Database["public"]["Tables"]["projects"]["Row"];

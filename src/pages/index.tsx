@@ -57,6 +57,7 @@ const Page = () => {
   useEffect(() => {
     if (data) {
       setSession({
+        ...data.sessions,
         projectId: data.project.id,
         projectName: data.project.title,
       });
