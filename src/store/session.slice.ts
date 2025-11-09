@@ -29,7 +29,7 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   endedAt: null,
   lastPausedAt: null,
   elapsedTime: 0,
-  intendedDuration: 1500,
+  intendedDuration: 10,
   totalPausedDuration: 0,
   interruptionCount: 0,
   status: "IDLE",

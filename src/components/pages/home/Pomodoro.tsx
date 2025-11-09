@@ -1,5 +1,5 @@
 import { RingProgress } from "@/components/ui/RingProgress";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { cn } from "@/utils/helpers";
 import { useSessionStore, useUserStore } from "@/store";
 import dayjs from "dayjs";
@@ -7,7 +7,6 @@ import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
 import { useSession } from "@/query/session.queries";
 import { SessionStore } from "@/store/session.slice";
-import { toast } from "sonner";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -70,7 +69,6 @@ const Pomodoro = () => {
     setSession(updatedState);
 
     if (userId) {
-      console.log(userId);
       session.mutate(
         { ...updatedState, id: sessionId, projectId, userId },
         {
@@ -84,16 +82,14 @@ const Pomodoro = () => {
               startedAt,
               totalPausedDuration,
             };
-
             setSession(prevState);
-            toast.error("Failed to update session. Please try again later");
           },
         },
       );
     }
   };
 
-  const updateTimer = () => {
+  const updateTimer = useCallback(() => {
     const elapsedTime =
       dayjs().diff(dayjs(startedAt), "second") - totalPausedDuration;
 
@@ -103,6 +99,28 @@ const Pomodoro = () => {
         elapsedTime: intendedDuration,
         endedAt: dayjs().toISOString(),
       });
+
+      if (userId) {
+        session.mutate(
+          {
+            id: sessionId,
+            userId: userId,
+            projectId,
+            intendedDuration,
+            endedAt: dayjs().toISOString(),
+            status: "COMPLETED",
+          },
+          {
+            onError: () => {
+              setSession({
+                status: "PAUSED",
+                endedAt: null,
+              });
+            },
+          },
+        );
+      }
+
       nextSession();
 
       clearInterval(intervalRef.current!);
@@ -113,7 +131,7 @@ const Pomodoro = () => {
     setSession({
       elapsedTime,
     });
-  };
+  }, [sessionId]);
 
   useEffect(() => {
     if (status === "RUNNING") {
@@ -125,7 +143,7 @@ const Pomodoro = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [status]);
+  }, [status, updateTimer]);
 
   return (
     <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow max-2xl:order-first">

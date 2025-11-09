@@ -17,9 +17,9 @@ const createSettingsSlice: StateCreator<SettingsSlice> = (
 ) => ({
   autoStartBreak: false,
   autoStartPomo: false,
-  pomoDuration: 1500,
-  shortBreakDuration: 300,
-  longBreakDuration: 900,
+  pomoDuration: 10,
+  shortBreakDuration: 4,
+  longBreakDuration: 7,
   longBreakInterval: 3,
   breakEndReminder: 300,
   timeLeftReminder: 300,
