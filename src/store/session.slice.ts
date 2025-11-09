@@ -14,7 +14,6 @@ export type SessionStore = Omit<
 
 export type SessionSlice = SessionStore & {
   setSession: (session: Partial<SessionStore>) => void;
-  nextSession: () => void;
   resetSession: () => void;
 };
 
@@ -36,36 +35,6 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   type: "FOCUS",
   focusSessionCompleted: 0,
   setSession: (session) => set((state) => ({ ...state, ...session })),
-  nextSession: () =>
-    set((state) => {
-      const updatedState: SessionSlice = {
-        ...store.getInitialState(),
-        projectId: state.projectId,
-        focusSessionCompleted: state.focusSessionCompleted,
-      };
-
-      const prevSessionType = state.type;
-
-      if (prevSessionType === "FOCUS") {
-        updatedState.focusSessionCompleted =
-          updatedState.focusSessionCompleted + 1;
-        if (
-          updatedState.focusSessionCompleted % get().longBreakInterval ===
-          0
-        ) {
-          updatedState.type = "LONGBREAK";
-          updatedState.intendedDuration = get().longBreakDuration;
-        } else {
-          updatedState.type = "SHORTBREAK";
-          updatedState.intendedDuration = get().shortBreakDuration;
-        }
-      } else {
-        updatedState.type = "FOCUS";
-        updatedState.intendedDuration = get().pomoDuration;
-      }
-
-      return updatedState;
-    }),
   resetSession: () => set(store.getInitialState()),
 });
 

@@ -81,7 +81,6 @@ export const useSessionStore = () =>
       status: state.status,
       type: state.type,
       setSession: state.setSession,
-      nextSession: state.nextSession,
     })),
   );
 

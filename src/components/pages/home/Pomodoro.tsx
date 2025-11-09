@@ -1,7 +1,7 @@
 import { RingProgress } from "@/components/ui/RingProgress";
 import { useCallback, useEffect, useRef } from "react";
 import { cn } from "@/utils/helpers";
-import { useSessionStore, useUserStore } from "@/store";
+import { useSessionStore, useSettingsStore, useUserStore } from "@/store";
 import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
@@ -19,8 +19,6 @@ const formatTime = (totalSeconds: number) => {
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { userId } = useUserStore();
-
   const {
     sessionId,
     status,
@@ -30,11 +28,19 @@ const Pomodoro = () => {
     elapsedTime,
     totalPausedDuration,
     setSession,
-    nextSession,
     intendedDuration,
     projectId,
     projectName,
+    focusSessionCompleted,
   } = useSessionStore();
+
+  const { userId } = useUserStore();
+  const {
+    pomoDuration,
+    shortBreakDuration,
+    longBreakDuration,
+    longBreakInterval,
+  } = useSettingsStore();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
 
@@ -89,6 +95,59 @@ const Pomodoro = () => {
     }
   };
 
+  const onAfterCompletion = () => {
+    const updatedState: Partial<SessionStore> = {};
+
+    if (type === "FOCUS") {
+      const focusSessionCompletedCount = focusSessionCompleted + 1;
+      updatedState.focusSessionCompleted = focusSessionCompletedCount;
+
+      if (focusSessionCompletedCount % longBreakInterval === 0) {
+        updatedState.type = "LONGBREAK";
+        updatedState.intendedDuration = longBreakDuration;
+      } else {
+        updatedState.type = "SHORTBREAK";
+        updatedState.intendedDuration = shortBreakDuration;
+      }
+    } else {
+      updatedState.type = "FOCUS";
+      updatedState.intendedDuration = pomoDuration;
+    }
+
+    setSession({
+      ...updatedState,
+      status: "IDLE",
+      startedAt: null,
+      endedAt: null,
+      lastPausedAt: null,
+      elapsedTime: 0,
+      totalPausedDuration: 0,
+      interruptionCount: 0,
+    });
+
+    if (userId) {
+      session.mutate(
+        {
+          userId,
+          projectId,
+          type: updatedState.type,
+          intendedDuration: updatedState.intendedDuration,
+        },
+        {
+          onSuccess: (response) => {
+            setSession({ sessionId: response.id, ...response });
+          },
+          onError: () => {
+            setSession({
+              status: "PAUSED",
+              endedAt: null,
+            });
+          },
+        },
+      );
+    }
+  };
+
   const updateTimer = useCallback(() => {
     const elapsedTime =
       dayjs().diff(dayjs(startedAt), "second") - totalPausedDuration;
@@ -96,7 +155,6 @@ const Pomodoro = () => {
     if (elapsedTime >= intendedDuration) {
       setSession({
         status: "COMPLETED",
-        elapsedTime: intendedDuration,
         endedAt: dayjs().toISOString(),
       });
 
@@ -121,8 +179,6 @@ const Pomodoro = () => {
         );
       }
 
-      nextSession();
-
       clearInterval(intervalRef.current!);
 
       return;
@@ -131,11 +187,15 @@ const Pomodoro = () => {
     setSession({
       elapsedTime,
     });
-  }, [sessionId]);
+  }, [sessionId, startedAt]);
 
   useEffect(() => {
     if (status === "RUNNING") {
       intervalRef.current = setInterval(updateTimer, 500);
+    }
+
+    if (status === "COMPLETED") {
+      onAfterCompletion();
     }
 
     return () => {

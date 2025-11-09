@@ -32,7 +32,7 @@ create table public.sessions (
   "userId" uuid not null references auth.users(id) on delete cascade,
   "projectId" uuid references public.projects(id) on delete set null,
   "type" public."sessionType" not null default 'FOCUS',
-  "status" public."sessionStatus" not null default 'PAUSED',
+  "status" public."sessionStatus" not null default 'IDLE',
   "startedAt" timestamptz,
   "endedAt" timestamptz,
   "lastPausedAt" timestamptz,

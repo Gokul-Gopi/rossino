@@ -63,7 +63,7 @@ const Page = () => {
       setSettings(data.settings);
       setNote(data.widgets.note ?? "");
     }
-  }, [data, setSettings, setNote]);
+  }, [data, setSettings, setNote, setSession]);
 
   return (
     <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
