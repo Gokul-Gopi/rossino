@@ -29,7 +29,7 @@ const useStore = create<Store>()(
     {
       name: LOCAL_STORAGE_KEY,
       partialize: (state) => {
-        const { id, email, name, setUser, ...rest } = state;
+        const { userId, email, name, setUser, ...rest } = state;
         return rest;
       },
     },
@@ -39,7 +39,7 @@ const useStore = create<Store>()(
 export const useUserStore = () =>
   useStore(
     useShallow((state) => ({
-      id: state.id,
+      userId: state.userId,
       email: state.email,
       name: state.name,
       setUser: state.setUser,
@@ -65,6 +65,7 @@ export const useSettingsStore = () =>
 export const useSessionStore = () =>
   useStore(
     useShallow((state) => ({
+      sessionId: state.sessionId,
       projectId: state.projectId,
       projectName: state.projectName,
       startedAt: state.startedAt,
@@ -77,7 +78,6 @@ export const useSessionStore = () =>
       focusSessionCompleted: state.focusSessionCompleted,
       status: state.status,
       type: state.type,
-      unSyncedSessions: state.unSyncedSessions,
       setSession: state.setSession,
       nextSession: state.nextSession,
     })),

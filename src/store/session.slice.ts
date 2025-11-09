@@ -2,14 +2,14 @@ import { Session } from "@/types";
 import { StateCreator } from "zustand/vanilla";
 import { Store } from ".";
 
-type SessionStore = Omit<
+export type SessionStore = Omit<
   Session,
   "userId" | "createdAt" | "updatedAt" | "id"
 > & {
+  sessionId?: string;
   elapsedTime: number;
   projectName: string | null;
   focusSessionCompleted: number;
-  unSyncedSessions: SessionStore[];
 };
 
 export type SessionSlice = SessionStore & {
@@ -35,14 +35,12 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   status: "IDLE",
   type: "FOCUS",
   focusSessionCompleted: 0,
-  unSyncedSessions: [],
   setSession: (session) => set((state) => ({ ...state, ...session })),
   nextSession: () =>
     set((state) => {
       const updatedState: SessionSlice = {
         ...store.getInitialState(),
         projectId: state.projectId,
-        unSyncedSessions: state.unSyncedSessions,
         focusSessionCompleted: state.focusSessionCompleted,
       };
 

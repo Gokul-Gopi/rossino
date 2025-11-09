@@ -1,10 +1,13 @@
 import { RingProgress } from "@/components/ui/RingProgress";
 import { useEffect, useRef } from "react";
 import { cn } from "@/utils/helpers";
-import { useSessionStore } from "@/store";
+import { useSessionStore, useUserStore } from "@/store";
 import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
+import { useSession } from "@/query/session.queries";
+import { SessionStore } from "@/store/session.slice";
+import { toast } from "sonner";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -17,7 +20,10 @@ const formatTime = (totalSeconds: number) => {
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const { userId } = useUserStore();
+
   const {
+    sessionId,
     status,
     type,
     startedAt,
@@ -27,34 +33,63 @@ const Pomodoro = () => {
     setSession,
     nextSession,
     intendedDuration,
+    projectId,
     projectName,
   } = useSessionStore();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
 
+  const session = useSession();
+
   const onStart = () => {
+    const updatedState: Partial<SessionStore> = {
+      type,
+      startedAt,
+      projectId,
+      intendedDuration,
+    };
+
     if (status === "IDLE") {
       const startedAt = dayjs().toISOString();
 
-      setSession({
-        startedAt,
-        status: "RUNNING",
-      });
+      updatedState.startedAt = startedAt;
+      updatedState.status = "RUNNING";
     } else if (status === "RUNNING") {
-      const lastPausedAt = dayjs().toISOString();
+      const pausedAt = dayjs().toISOString();
 
-      setSession({
-        lastPausedAt,
-        status: "PAUSED",
-      });
+      updatedState.lastPausedAt = pausedAt;
+      updatedState.status = "PAUSED";
     } else if (status === "PAUSED") {
       const pausedDuration =
         dayjs().diff(dayjs(lastPausedAt), "second") + totalPausedDuration;
 
-      setSession({
-        totalPausedDuration: pausedDuration,
-        status: "RUNNING",
-      });
+      updatedState.totalPausedDuration = pausedDuration;
+      updatedState.status = "RUNNING";
+    }
+
+    setSession(updatedState);
+
+    if (userId) {
+      console.log(userId);
+      session.mutate(
+        { ...updatedState, id: sessionId, projectId, userId },
+        {
+          onSuccess: (response) => {
+            setSession({ sessionId: response.id, ...response });
+          },
+          onError: () => {
+            const prevState = {
+              status,
+              lastPausedAt,
+              startedAt,
+              totalPausedDuration,
+            };
+
+            setSession(prevState);
+            toast.error("Failed to update session. Please try again later");
+          },
+        },
+      );
     }
   };
 

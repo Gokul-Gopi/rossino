@@ -14,7 +14,7 @@ const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
 });
 
 const Header = () => {
-  const { id } = useUserStore();
+  const { userId } = useUserStore();
 
   return (
     <header className="flex items-center justify-between gap-2 px-4 py-4 lg:px-8">
@@ -22,7 +22,7 @@ const Header = () => {
 
       <div className="ml-auto flex gap-2">
         <DarkMode />
-        {!id ? (
+        {!userId ? (
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/signin">

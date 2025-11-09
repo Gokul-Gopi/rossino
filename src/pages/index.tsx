@@ -56,7 +56,10 @@ const Page = () => {
 
   useEffect(() => {
     if (data) {
-      setSession({ projectName: data.project.title });
+      setSession({
+        projectId: data.project.id,
+        projectName: data.project.title,
+      });
       setSettings(data.settings);
       setNote(data.widgets.note ?? "");
     }

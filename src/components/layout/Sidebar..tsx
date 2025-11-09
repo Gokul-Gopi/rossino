@@ -63,7 +63,7 @@ const Sidebar = () => {
   const router = useRouter();
 
   const { open, openMobile, toggleSidebar } = useSidebar();
-  const { id } = useUserStore();
+  const { userId } = useUserStore();
 
   const [confirmLogout, setConfirmLogout] = useState(false);
 
@@ -82,18 +82,18 @@ const Sidebar = () => {
   return (
     <nav>
       <SidebarRoot collapsible="icon">
-        <SidebarHeader className="px-3 mb-6 mt-2">
+        <SidebarHeader className="mt-2 mb-6 px-3">
           <Link
             href="/"
-            className="text-nowrap text-lg flex gap-1.5 overflow-hidden"
+            className="flex gap-1.5 overflow-hidden text-lg text-nowrap"
           >
             🍅
             <span
               className={cn(
-                "inline transition-opacity duration-300 text-nowrap overflow-hidden ",
+                "inline overflow-hidden text-nowrap transition-opacity duration-300",
                 {
                   "opacity-0": !open && !openMobile,
-                }
+                },
               )}
             >
               Rossino
@@ -118,7 +118,7 @@ const Sidebar = () => {
           </SidebarMenu>
         </SidebarContent>
 
-        <SidebarFooter className="pb-4 flex flex-col gap-4">
+        <SidebarFooter className="flex flex-col gap-4 pb-4">
           <SidebarMenuButton
             onClick={toggleSidebar}
             className="transition-all duration-200"
@@ -127,7 +127,7 @@ const Sidebar = () => {
             <span>Collapse</span>
           </SidebarMenuButton>
 
-          {id && (
+          {userId && (
             <SidebarMenuButton
               onClick={() => setConfirmLogout(true)}
               className="transition-[background] duration-200"

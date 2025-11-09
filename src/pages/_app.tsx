@@ -24,12 +24,12 @@ export default function App({ Component, pageProps }: AppProps) {
             refetchOnWindowFocus: false,
           },
         },
-      })
+      }),
   );
 
   useEffect(() => {
     if (pageProps.user) {
-      setUser(pageProps.user);
+      setUser({ userId: pageProps.user.id, ...pageProps.user });
     }
   }, [pageProps.user, setUser]);
 

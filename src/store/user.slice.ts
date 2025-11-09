@@ -2,7 +2,7 @@ import { User } from "@/types";
 import { StateCreator } from "zustand";
 
 export type UserSlice = {
-  id: string | null;
+  userId: string | null;
   email: string | null;
   name: string | null;
   setUser: (user: User) => void;
@@ -10,7 +10,7 @@ export type UserSlice = {
 };
 
 const createUserSlice: StateCreator<UserSlice> = (set, _get, state) => ({
-  id: null,
+  userId: null,
   email: null,
   name: null,
   setUser: (user) => set(() => user),
