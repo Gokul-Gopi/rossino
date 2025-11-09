@@ -162,7 +162,7 @@ begin
     from sessions
     where "projectId" = project_id
       and "userId" = uid
-    order by "startedAt" desc
+    order by "createdAt" desc
     limit 1
   ),
   d as (

@@ -8,28 +8,69 @@ import {
 } from "@/components/ui/Popover";
 import { Switch } from "@/components/ui/Switch";
 import { useMobile } from "@/hooks/useMobile";
-import { useWidgetsStore, useTaskStore, useSessionStore } from "@/store";
+import { useUpdateSession } from "@/query/session.queries";
+import {
+  useWidgetsStore,
+  useTaskStore,
+  useSessionStore,
+  useUserStore,
+} from "@/store";
+import { SessionStore } from "@/store/session.slice";
 import { ChevronDown, EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 
 const MoreOptions = () => {
+  const isMobile = useMobile();
   const [confirmReset, setConfirmReset] = useState(false);
 
-  const { setSession } = useSessionStore();
+  const { userId } = useUserStore();
+
+  const {
+    sessionId,
+    projectId,
+    startedAt,
+    endedAt,
+    lastPausedAt,
+    totalPausedDuration,
+    elapsedTime,
+    status,
+    setSession,
+  } = useSessionStore();
+
   const { showWidgets, toggleWidgets } = useWidgetsStore();
   const { showTasks, toggleTasksVisibility } = useTaskStore();
 
-  const isMobile = useMobile();
+  const updateSession = useUpdateSession();
 
   const onResetTimer = () => {
-    setSession({
+    const resetState: Partial<SessionStore> = {
       startedAt: null,
       endedAt: null,
       lastPausedAt: null,
       totalPausedDuration: 0,
-      elapsedTime: 0,
       status: "IDLE",
-    });
+    };
+    setSession({ ...resetState, elapsedTime: 0 });
+
+    if (userId) {
+      updateSession.mutate(
+        { id: sessionId, projectId, userId, ...resetState },
+        {
+          onError: () => {
+            const prevState = {
+              startedAt,
+              endedAt,
+              lastPausedAt,
+              totalPausedDuration,
+              elapsedTime,
+              status,
+            };
+            setSession(prevState);
+          },
+        },
+      );
+    }
+
     setConfirmReset(false);
   };
 

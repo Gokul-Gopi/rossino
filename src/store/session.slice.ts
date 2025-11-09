@@ -19,7 +19,7 @@ export type SessionSlice = SessionStore & {
 
 const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   set,
-  get,
+  _get,
   store,
 ) => ({
   projectId: null,

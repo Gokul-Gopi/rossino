@@ -162,7 +162,7 @@ const Pomodoro = () => {
         session.mutate(
           {
             id: sessionId,
-            userId: userId,
+            userId,
             projectId,
             intendedDuration,
             endedAt: dayjs().toISOString(),

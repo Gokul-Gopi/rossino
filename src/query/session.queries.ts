@@ -22,3 +22,24 @@ export const useSession = () => {
     },
   });
 };
+
+export const useUpdateSession = () => {
+  return useMutation<Session, Error, Partial<Session>>({
+    mutationFn: async ({ id, ...rest }: Partial<Session>) => {
+      const { data, error } = await supabase
+        .from("sessions")
+        .update(rest)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return data;
+    },
+
+    onError: () => {
+      return toast.error("Failed to update session. Please try again later");
+    },
+  });
+};
