@@ -1,33 +1,38 @@
+import { Task as TaskDataType } from "@/types";
 import { StateCreator } from "zustand";
 
-type Task = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
+export type Task = Omit<TaskDataType, "createdAt" | "updatedAt" | "userId">;
 
-export type TaskSlice = {
+type TaskStore = {
   tasks: Task[];
   showTasks: boolean;
+};
+
+export type TaskSlice = TaskStore & {
   toggleTasksVisibility: () => void;
-  addTask: (data: Omit<Task, "completed" | "id">) => void;
-  deleteTask: (id: number) => void;
+  addTask: (data: Task) => void;
+  deleteTask: (id: string) => void;
   editTask: (data: Omit<Task, "completed">) => void;
-  toggleCompletion: (id: number) => void;
+  toggleCompletion: (id: string) => void;
   resetTasks: () => void;
 };
 
-const createTaskSlice: StateCreator<TaskSlice> = (set, _get, state) => ({
+export const taskInitialState: TaskStore = {
   tasks: [],
-
   showTasks: false,
+};
 
+const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
+  ...taskInitialState,
   toggleTasksVisibility: () =>
     set((state) => ({ showTasks: !state.showTasks })),
 
-  addTask: ({ title }) =>
+  addTask: (taskData) =>
     set((state) => ({
-      tasks: [...state.tasks, { id: Date.now(), title, completed: false }],
+      tasks: [
+        ...state.tasks,
+        { ...taskData, id: Date.now().toString(), completed: false },
+      ],
     })),
 
   editTask: ({ title, id }) =>
@@ -49,7 +54,7 @@ const createTaskSlice: StateCreator<TaskSlice> = (set, _get, state) => ({
       ),
     })),
 
-  resetTasks: () => set(state.getInitialState()),
+  resetTasks: () => set(taskInitialState),
 });
 
 export default createTaskSlice;

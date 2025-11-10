@@ -1,24 +1,28 @@
 import { StateCreator } from "zustand/vanilla";
 
-export type WidgetsSlice = {
-  showWidgets: boolean;
-  toggleWidgets: () => void;
+export type WidgetStore = {
   note: string;
-  setNote: (note: string) => void;
+  showWidgets: boolean;
   dailyGoalProgress: number;
-  setDailyGoalProgress: (progress: number) => void;
 };
 
-const createWidgetsSlice: StateCreator<WidgetsSlice> = (set) => ({
-  showWidgets: false,
-  toggleWidgets: () => set((state) => ({ showWidgets: !state.showWidgets })),
+export type WidgetSlice = WidgetStore & {
+  setNote: (note: string) => void;
+  toggleWidgets: () => void;
+  resetWidgets: () => void;
+};
 
+export const widgetsInitialState: WidgetStore = {
   note: "",
-  setNote: (note) => set(() => ({ note })),
-
+  showWidgets: false,
   dailyGoalProgress: 0,
-  setDailyGoalProgress: (progress) =>
-    set(() => ({ dailyGoalProgress: progress })),
+};
+
+const createWidgetsSlice: StateCreator<WidgetSlice> = (set) => ({
+  ...widgetsInitialState,
+  toggleWidgets: () => set((state) => ({ showWidgets: !state.showWidgets })),
+  setNote: (note) => set(() => ({ note })),
+  resetWidgets: () => set(widgetsInitialState),
 });
 
 export default createWidgetsSlice;

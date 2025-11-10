@@ -14,6 +14,7 @@ const createResetSlice: StateCreator<Store, [], [], ResetSlice> = (
     get().resetSettings();
     get().resetUser();
     get().resetTasks();
+    get().resetWidgets();
   },
 });
 

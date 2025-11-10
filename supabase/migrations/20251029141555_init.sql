@@ -83,7 +83,7 @@ create table public.settings (
   "autoStartPomo" boolean not null default false,
   "nextSessionReminder" smallInt not null default 0,
     CHECK ("nextSessionReminder" IN (0, 120, 300, 600)),
-  "timeLeftReminder" smallInt not null default 5,
+  "timeLeftReminder" smallInt not null default 300,
     CHECK ("timeLeftReminder" IN (0, 120, 300, 600)),
   "dailyGoal" int,
   "createdAt" timestamptz not null default now(),

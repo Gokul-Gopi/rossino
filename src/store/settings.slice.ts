@@ -8,11 +8,7 @@ export type SettingsSlice = SettingsStore & {
   resetSettings: () => void;
 };
 
-const createSettingsSlice: StateCreator<SettingsSlice> = (
-  set,
-  _get,
-  state,
-) => ({
+export const settingsInitialState: SettingsStore = {
   autoStartBreak: false,
   autoStartPomo: false,
   pomoDuration: 120,
@@ -24,8 +20,12 @@ const createSettingsSlice: StateCreator<SettingsSlice> = (
   timeLeftReminder: 30,
   silentNotifications: true,
   dailyGoal: null,
+};
+
+const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({
+  ...settingsInitialState,
   setSettings: (settings) => set((state) => ({ ...state, ...settings })),
-  resetSettings: () => set(state.getInitialState()),
+  resetSettings: () => set(settingsInitialState),
 });
 
 export default createSettingsSlice;

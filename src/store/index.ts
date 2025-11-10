@@ -7,14 +7,14 @@ import createSettingsSlice, { SettingsSlice } from "./settings.slice";
 import createSessionSlice, { SessionSlice } from "./session.slice";
 import createResetSlice, { ResetSlice } from "./reset.slice";
 import createTaskSlice, { TaskSlice } from "./task.slice";
-import createWidgetsSlice, { WidgetsSlice } from "./widgets.slice";
+import createWidgetsSlice, { WidgetSlice } from "./widgets.slice";
 
 export type Store = UserSlice &
   SettingsSlice &
   SessionSlice &
   ResetSlice &
   TaskSlice &
-  WidgetsSlice;
+  WidgetSlice;
 
 const useStore = create<Store>()(
   persist(
@@ -112,7 +112,6 @@ export const useWidgetsStore = () =>
       note: state.note,
       setNote: state.setNote,
       dailyGoalProgress: state.dailyGoalProgress,
-      setDailyGoalProgress: state.setDailyGoalProgress,
     })),
   );
 

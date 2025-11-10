@@ -1,20 +1,27 @@
 import { User } from "@/types";
 import { StateCreator } from "zustand";
 
-export type UserSlice = {
+export type UserStore = {
   userId: string | null;
   email: string | null;
   name: string | null;
+};
+
+export type UserSlice = UserStore & {
   setUser: (user: User) => void;
   resetUser: () => void;
 };
 
-const createUserSlice: StateCreator<UserSlice> = (set, _get, state) => ({
+export const userInitialState: UserStore = {
   userId: null,
   email: null,
   name: null,
-  setUser: (user) => set(() => user),
-  resetUser: () => set(state.getInitialState()),
+};
+
+const createUserSlice: StateCreator<UserSlice> = (set) => ({
+  ...userInitialState,
+  setUser: (user) => set(user),
+  resetUser: () => set(userInitialState),
 });
 
 export default createUserSlice;
