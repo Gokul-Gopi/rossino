@@ -84,8 +84,9 @@ export const useSessionStore = () =>
       type: state.type,
       notifiedForTimeLeft: state.notifiedForTimeLeft,
       notifiedForNextSession: state.notifiedForNextSession,
-      setSession: state.setSession,
       setNotifiedUser: state.setNotifiedUser,
+      setSession: state.setSession,
+      resetSession: state.resetSession,
     })),
   );
 

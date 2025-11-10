@@ -38,6 +38,7 @@ const MoreOptions = () => {
     elapsedTime,
     status,
     setSession,
+    resetSession,
   } = useSessionStore();
 
   const { showWidgets, toggleWidgets } = useWidgetsStore();
@@ -156,7 +157,14 @@ const MoreOptions = () => {
           <hr className="w-full" />
         </div>
 
-        <Button>Continue without project</Button>
+        <Button
+          onClick={() => {
+            resetSession();
+            setCreateNewOpen(false);
+          }}
+        >
+          Continue without project
+        </Button>
       </Dialog>
     </>
   );
