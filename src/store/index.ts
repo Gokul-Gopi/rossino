@@ -57,7 +57,7 @@ export const useSettingsStore = () =>
       shortBreakDuration: state.shortBreakDuration,
       longBreakDuration: state.longBreakDuration,
       longBreakInterval: state.longBreakInterval,
-      breakEndReminder: state.breakEndReminder,
+      sessionEndedReminder: state.sessionEndedReminder,
       timeLeftReminder: state.timeLeftReminder,
       notificationsEnabled: state.notificationsEnabled,
       setSettings: state.setSettings,

@@ -15,6 +15,7 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import NotificationPermission from "@/components/pages/home/NotificationPermission";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -77,6 +78,8 @@ const Page = () => {
       <AnimatePresence initial={false}>
         {showWidgets && <Widgets />}
       </AnimatePresence>
+
+      <NotificationPermission />
     </AppLayout>
   );
 };

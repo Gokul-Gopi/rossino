@@ -80,8 +80,10 @@ create table public.settings (
   "notificationsEnabled" boolean not null default true,
   "autoStartBreak" boolean not null default false,
   "autoStartPomo" boolean not null default false,
-  "breakEndReminder" smallint,
-  "timeLeftReminder" smallint,
+  "sessionEndedReminder" smallInt not null default 0,
+    CHECK ("sessionEndedReminder" IN (0, 120, 300, 600)),
+  "timeLeftReminder" smallInt not null default 5,
+    CHECK ("timeLeftReminder" IN (0, 120, 300, 600)),
   "dailyGoal" int,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now()
@@ -162,7 +164,7 @@ begin
     from sessions
     where "projectId" = project_id
       and "userId" = uid
-    order by "createdAt" desc
+    order by "startedAt" desc
     limit 1
   ),
   d as (
