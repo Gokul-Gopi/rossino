@@ -7,6 +7,7 @@ import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
 import { useSession } from "@/query/session.queries";
 import { SessionStore } from "@/store/session.slice";
+import { Session } from "@/types";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -189,6 +190,21 @@ const Pomodoro = () => {
         endedAt: dayjs().toISOString(),
       });
 
+      if (notificationsEnabled) {
+        const nextSessionType: Session["type"] =
+          type === "FOCUS"
+            ? (focusSessionCompleted + 1) % longBreakInterval === 0
+              ? "LONGBREAK"
+              : "SHORTBREAK"
+            : "FOCUS";
+
+        notification({
+          title: "Session Completed",
+          body: `${nextSessionType === "FOCUS" ? "Time to focus!" : nextSessionType === "SHORTBREAK" ? "Take a short break!" : "Take a long break, you deserve it!"}`,
+          silent: silentNotifications,
+        });
+      }
+
       if (userId && sessionId) {
         session.mutate(
           {
@@ -221,7 +237,6 @@ const Pomodoro = () => {
   }, [sessionId, startedAt, totalPausedDuration, type, notifiedForTimeLeft]);
 
   useEffect(() => {
-    console.log("effect");
     if (status === "IDLE") {
       if (
         (autoStartPomo && type === "FOCUS") ||
