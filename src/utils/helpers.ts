@@ -32,12 +32,22 @@ export const createClient = ({ req, res }: GetServerSidePropsContext) => {
           res.setHeader(
             "Set-Cookie",
             cookiesToSet.map(({ name, value, options }) =>
-              serializeCookieHeader(name, value, options)
-            )
+              serializeCookieHeader(name, value, options),
+            ),
           );
         },
       },
-    }
+    },
   );
   return supabase;
+};
+
+type Options = NotificationOptions & {
+  title: string;
+};
+
+export const notification = ({ title, ...data }: Options) => {
+  return new Notification(title, {
+    ...data,
+  });
 };

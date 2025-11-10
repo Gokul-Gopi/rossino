@@ -60,6 +60,8 @@ export const useSettingsStore = () =>
       sessionEndedReminder: state.sessionEndedReminder,
       timeLeftReminder: state.timeLeftReminder,
       notificationsEnabled: state.notificationsEnabled,
+      silentNotifications: state.silentNotifications,
+      dailyGoal: state.dailyGoal,
       setSettings: state.setSettings,
     })),
   );
@@ -80,7 +82,10 @@ export const useSessionStore = () =>
       focusSessionCompleted: state.focusSessionCompleted,
       status: state.status,
       type: state.type,
+      notifiedForTimeLeft: state.notifiedForTimeLeft,
+      notifiedForSessionEnded: state.notifiedForSessionEnded,
       setSession: state.setSession,
+      setNotifiedUser: state.setNotifiedUser,
     })),
   );
 

@@ -1,11 +1,8 @@
 import { Button } from "@/components/ui/Button";
-import { useSettingsStore } from "@/store";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
 const NotificationPermission = () => {
-  const { notificationsEnabled } = useSettingsStore();
-
   const requestPermission = async () => {
     try {
       const permission = await Notification.requestPermission();
@@ -19,11 +16,9 @@ const NotificationPermission = () => {
   };
 
   useEffect(() => {
-    if (
-      "Notification" in window &&
-      Notification.permission === "default" &&
-      notificationsEnabled
-    ) {
+    if ("Notification" in window) {
+      if (Notification.permission !== "default") return;
+
       setTimeout(() => {
         toast.info("Enable alerts so you don't miss a session end", {
           id: "notification-permission",

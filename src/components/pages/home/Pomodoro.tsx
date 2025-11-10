@@ -1,6 +1,6 @@
 import { RingProgress } from "@/components/ui/RingProgress";
 import { useCallback, useEffect, useRef } from "react";
-import { cn } from "@/utils/helpers";
+import { cn, notification } from "@/utils/helpers";
 import { useSessionStore, useSettingsStore, useUserStore } from "@/store";
 import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
@@ -34,6 +34,9 @@ const Pomodoro = () => {
     projectId,
     projectName,
     focusSessionCompleted,
+    notifiedForTimeLeft,
+    notifiedForSessionEnded,
+    setNotifiedUser,
   } = useSessionStore();
 
   const {
@@ -43,6 +46,10 @@ const Pomodoro = () => {
     longBreakInterval,
     autoStartPomo,
     autoStartBreak,
+    sessionEndedReminder,
+    timeLeftReminder,
+    notificationsEnabled,
+    silentNotifications,
   } = useSettingsStore();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
@@ -50,6 +57,11 @@ const Pomodoro = () => {
   const session = useSession();
 
   const onStart = () => {
+    setNotifiedUser({
+      notifiedForSessionEnded: false,
+      notifiedForTimeLeft: false,
+    });
+
     const updatedState: Partial<SessionStore> = {
       type,
       startedAt,
@@ -155,13 +167,29 @@ const Pomodoro = () => {
     const elapsedTime =
       dayjs().diff(dayjs(startedAt), "second") - totalPausedDuration;
 
-    if (elapsedTime >= intendedDuration) {
+    const timeLeft = intendedDuration - elapsedTime;
+
+    if (
+      timeLeftReminder &&
+      !notifiedForTimeLeft &&
+      type === "FOCUS" &&
+      timeLeft <= timeLeftReminder
+    ) {
+      notification({
+        title: "Time Left Reminder",
+        body: `Only ${timeLeftReminder} minutes left in your focus session!`,
+        silent: silentNotifications,
+      });
+      setNotifiedUser({ notifiedForTimeLeft: true });
+    }
+
+    if (timeLeft <= 0) {
       setSession({
         status: "COMPLETED",
         endedAt: dayjs().toISOString(),
       });
 
-      if (userId) {
+      if (userId && sessionId) {
         session.mutate(
           {
             id: sessionId,
@@ -190,9 +218,10 @@ const Pomodoro = () => {
     setSession({
       elapsedTime,
     });
-  }, [sessionId, startedAt, totalPausedDuration]);
+  }, [sessionId, startedAt, totalPausedDuration, type, notifiedForTimeLeft]);
 
   useEffect(() => {
+    console.log("effect");
     if (status === "IDLE") {
       if (
         (autoStartPomo && type === "FOCUS") ||
@@ -214,7 +243,7 @@ const Pomodoro = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [status]);
+  }, [status, updateTimer]);
 
   return (
     <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow max-2xl:order-first">

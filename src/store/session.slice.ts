@@ -6,10 +6,19 @@ export type SessionStore = Omit<
   Session,
   "userId" | "createdAt" | "updatedAt" | "id"
 > & {
-  sessionId?: string;
+  sessionId?: string | null;
+  projectName?: string | null;
   elapsedTime: number;
-  projectName: string | null;
   focusSessionCompleted: number;
+  notifiedForTimeLeft: boolean;
+  notifiedForSessionEnded: boolean;
+  setNotifiedUser: ({
+    notifiedForTimeLeft,
+    notifiedForSessionEnded,
+  }: {
+    notifiedForTimeLeft?: boolean;
+    notifiedForSessionEnded?: boolean;
+  }) => void;
 };
 
 export type SessionSlice = SessionStore & {
@@ -28,13 +37,20 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   endedAt: null,
   lastPausedAt: null,
   elapsedTime: 0,
-  intendedDuration: 10,
+  intendedDuration: 30,
   totalPausedDuration: 0,
   interruptionCount: 0,
   status: "IDLE",
   type: "FOCUS",
   focusSessionCompleted: 0,
+  notifiedForTimeLeft: false,
+  notifiedForSessionEnded: false,
   setSession: (session) => set((state) => ({ ...state, ...session })),
+  setNotifiedUser: (updatedState) =>
+    set((state) => ({
+      ...state,
+      ...updatedState,
+    })),
   resetSession: () => set(store.getInitialState()),
 });
 
