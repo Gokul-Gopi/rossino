@@ -89,7 +89,7 @@ const Pomodoro = () => {
 
     setSession(updatedState);
 
-    if (userId) {
+    if (userId && sessionId) {
       session.mutate(
         { ...updatedState, id: sessionId, projectId, userId },
         {
