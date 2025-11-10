@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/Button";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { Dialog } from "@/components/ui/Dialog";
 import { Label } from "@/components/ui/Label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/Popover";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 import { Switch } from "@/components/ui/Switch";
 import { useMobile } from "@/hooks/useMobile";
 import { useUpdateSession } from "@/query/session.queries";
@@ -22,6 +24,7 @@ import { useState } from "react";
 const MoreOptions = () => {
   const isMobile = useMobile();
   const [confirmReset, setConfirmReset] = useState(false);
+  const [createNewOpen, setCreateNewOpen] = useState(false);
 
   const { userId } = useUserStore();
 
@@ -52,7 +55,7 @@ const MoreOptions = () => {
     };
     setSession({ ...resetState, elapsedTime: 0 });
 
-    if (userId) {
+    if (userId && sessionId) {
       updateSession.mutate(
         { id: sessionId, projectId, userId, ...resetState },
         {
@@ -119,6 +122,14 @@ const MoreOptions = () => {
           >
             Reset Timer
           </Button>
+
+          <Button
+            onClick={() => setCreateNewOpen(true)}
+            size="sm"
+            className="text-sm"
+          >
+            Create new
+          </Button>
         </PopoverContent>
       </Popover>
 
@@ -128,6 +139,25 @@ const MoreOptions = () => {
         title="This will reset the current session's timer. Continue?"
         onConfirm={onResetTimer}
       />
+
+      <Dialog
+        open={createNewOpen}
+        onOpenChange={() => setCreateNewOpen((pre) => !pre)}
+      >
+        <SearchableSelect
+          data={[{ value: "project-1", label: "Project 1" }]}
+          placeholder="Select a project.."
+          notFoundText="No projects found.."
+        />
+
+        <div className="flex items-center gap-2">
+          <hr className="w-full" />
+          <span className="text-muted-foreground text-sm font-medium">OR</span>
+          <hr className="w-full" />
+        </div>
+
+        <Button>Continue without project</Button>
+      </Dialog>
     </>
   );
 };
