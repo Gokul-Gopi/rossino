@@ -134,9 +134,9 @@ export type Database = {
           dailyGoal: number | null
           longBreakDuration: number
           longBreakInterval: number
+          nextSessionReminder: number
           notificationsEnabled: boolean
           pomoDuration: number
-          sessionEndedReminder: number
           shortBreakDuration: number
           silentNotifications: boolean
           timeLeftReminder: number
@@ -150,9 +150,9 @@ export type Database = {
           dailyGoal?: number | null
           longBreakDuration?: number
           longBreakInterval?: number
+          nextSessionReminder?: number
           notificationsEnabled?: boolean
           pomoDuration?: number
-          sessionEndedReminder?: number
           shortBreakDuration?: number
           silentNotifications?: boolean
           timeLeftReminder?: number
@@ -166,9 +166,9 @@ export type Database = {
           dailyGoal?: number | null
           longBreakDuration?: number
           longBreakInterval?: number
+          nextSessionReminder?: number
           notificationsEnabled?: boolean
           pomoDuration?: number
-          sessionEndedReminder?: number
           shortBreakDuration?: number
           silentNotifications?: boolean
           timeLeftReminder?: number

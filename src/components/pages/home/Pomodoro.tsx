@@ -19,6 +19,9 @@ const formatTime = (totalSeconds: number) => {
 
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const nextSessionReminderTimeout = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
 
   const { userId } = useUserStore();
 
@@ -36,7 +39,7 @@ const Pomodoro = () => {
     projectName,
     focusSessionCompleted,
     notifiedForTimeLeft,
-    notifiedForSessionEnded,
+    notifiedForNextSession,
     setNotifiedUser,
   } = useSessionStore();
 
@@ -47,7 +50,7 @@ const Pomodoro = () => {
     longBreakInterval,
     autoStartPomo,
     autoStartBreak,
-    sessionEndedReminder,
+    nextSessionReminder,
     timeLeftReminder,
     notificationsEnabled,
     silentNotifications,
@@ -57,11 +60,91 @@ const Pomodoro = () => {
 
   const session = useSession();
 
-  const onStart = () => {
+  const cleanup = () => {
     setNotifiedUser({
-      notifiedForSessionEnded: false,
+      notifiedForNextSession: false,
       notifiedForTimeLeft: false,
     });
+
+    if (nextSessionReminderTimeout.current) {
+      clearTimeout(nextSessionReminderTimeout.current);
+    }
+  };
+
+  const updateTimer = useCallback(() => {
+    const elapsedTime =
+      dayjs().diff(dayjs(startedAt), "second") - totalPausedDuration;
+
+    const timeLeft = intendedDuration - elapsedTime;
+
+    if (
+      timeLeftReminder &&
+      !notifiedForTimeLeft &&
+      type === "FOCUS" &&
+      timeLeft <= timeLeftReminder
+    ) {
+      notification({
+        title: "Time Left Reminder",
+        body: `Only ${timeLeftReminder} minutes left in your focus session!`,
+        silent: silentNotifications,
+      });
+      setNotifiedUser({ notifiedForTimeLeft: true });
+    }
+
+    if (timeLeft <= 0) {
+      setSession({
+        status: "COMPLETED",
+        endedAt: dayjs().toISOString(),
+      });
+
+      if (notificationsEnabled) {
+        const nextSessionType: Session["type"] =
+          type === "FOCUS"
+            ? (focusSessionCompleted + 1) % longBreakInterval === 0
+              ? "LONGBREAK"
+              : "SHORTBREAK"
+            : "FOCUS";
+
+        notification({
+          title: "Session Completed",
+          body: `${nextSessionType === "FOCUS" ? "Time to focus!" : nextSessionType === "SHORTBREAK" ? "Take a short break!" : "Take a long break, you deserve it!"}`,
+          silent: silentNotifications,
+        });
+      }
+
+      if (userId && sessionId) {
+        session.mutate(
+          {
+            id: sessionId,
+            userId,
+            projectId,
+            intendedDuration,
+            endedAt: dayjs().toISOString(),
+            status: "COMPLETED",
+          },
+          {
+            onError: () => {
+              setSession({
+                status: "PAUSED",
+                endedAt: null,
+              });
+            },
+          },
+        );
+      }
+
+      clearInterval(intervalRef.current!);
+
+      return;
+    }
+
+    setSession({
+      elapsedTime,
+    });
+  }, [sessionId, startedAt, totalPausedDuration, type, notifiedForTimeLeft]);
+
+  const onStart = () => {
+    cleanup();
 
     const updatedState: Partial<SessionStore> = {
       type,
@@ -164,85 +247,31 @@ const Pomodoro = () => {
     }
   };
 
-  const updateTimer = useCallback(() => {
-    const elapsedTime =
-      dayjs().diff(dayjs(startedAt), "second") - totalPausedDuration;
+  const onNextSessionReminder = () => {
+    if (!nextSessionReminder || notifiedForNextSession) return;
 
-    const timeLeft = intendedDuration - elapsedTime;
-
-    if (
-      timeLeftReminder &&
-      !notifiedForTimeLeft &&
-      type === "FOCUS" &&
-      timeLeft <= timeLeftReminder
-    ) {
+    nextSessionReminderTimeout.current = setTimeout(() => {
       notification({
-        title: "Time Left Reminder",
-        body: `Only ${timeLeftReminder} minutes left in your focus session!`,
+        title: "Next Session Reminder",
+        body: "When you're ready, you can start your next session!",
         silent: silentNotifications,
       });
-      setNotifiedUser({ notifiedForTimeLeft: true });
-    }
+      setNotifiedUser({ notifiedForNextSession: true });
 
-    if (timeLeft <= 0) {
-      setSession({
-        status: "COMPLETED",
-        endedAt: dayjs().toISOString(),
-      });
-
-      if (notificationsEnabled) {
-        const nextSessionType: Session["type"] =
-          type === "FOCUS"
-            ? (focusSessionCompleted + 1) % longBreakInterval === 0
-              ? "LONGBREAK"
-              : "SHORTBREAK"
-            : "FOCUS";
-
-        notification({
-          title: "Session Completed",
-          body: `${nextSessionType === "FOCUS" ? "Time to focus!" : nextSessionType === "SHORTBREAK" ? "Take a short break!" : "Take a long break, you deserve it!"}`,
-          silent: silentNotifications,
-        });
-      }
-
-      if (userId && sessionId) {
-        session.mutate(
-          {
-            id: sessionId,
-            userId,
-            projectId,
-            intendedDuration,
-            endedAt: dayjs().toISOString(),
-            status: "COMPLETED",
-          },
-          {
-            onError: () => {
-              setSession({
-                status: "PAUSED",
-                endedAt: null,
-              });
-            },
-          },
-        );
-      }
-
-      clearInterval(intervalRef.current!);
-
-      return;
-    }
-
-    setSession({
-      elapsedTime,
-    });
-  }, [sessionId, startedAt, totalPausedDuration, type, notifiedForTimeLeft]);
+      clearTimeout(nextSessionReminderTimeout.current!);
+    }, nextSessionReminder * 1000);
+  };
 
   useEffect(() => {
     if (status === "IDLE") {
       if (
         (autoStartPomo && type === "FOCUS") ||
         (autoStartBreak && type !== "FOCUS")
-      )
+      ) {
         onStart();
+      } else {
+        onNextSessionReminder();
+      }
     }
 
     if (status === "RUNNING") {
@@ -256,6 +285,9 @@ const Pomodoro = () => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+      }
+      if (nextSessionReminderTimeout.current) {
+        clearTimeout(nextSessionReminderTimeout.current);
       }
     };
   }, [status, updateTimer]);

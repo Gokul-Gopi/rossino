@@ -11,13 +11,13 @@ export type SessionStore = Omit<
   elapsedTime: number;
   focusSessionCompleted: number;
   notifiedForTimeLeft: boolean;
-  notifiedForSessionEnded: boolean;
+  notifiedForNextSession: boolean;
   setNotifiedUser: ({
     notifiedForTimeLeft,
-    notifiedForSessionEnded,
+    notifiedForNextSession,
   }: {
     notifiedForTimeLeft?: boolean;
-    notifiedForSessionEnded?: boolean;
+    notifiedForNextSession?: boolean;
   }) => void;
 };
 
@@ -37,14 +37,14 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   endedAt: null,
   lastPausedAt: null,
   elapsedTime: 0,
-  intendedDuration: 30,
+  intendedDuration: 120,
   totalPausedDuration: 0,
   interruptionCount: 0,
   status: "IDLE",
   type: "FOCUS",
   focusSessionCompleted: 0,
   notifiedForTimeLeft: false,
-  notifiedForSessionEnded: false,
+  notifiedForNextSession: false,
   setSession: (session) => set((state) => ({ ...state, ...session })),
   setNotifiedUser: (updatedState) =>
     set((state) => ({
