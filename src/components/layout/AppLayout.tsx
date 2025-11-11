@@ -1,20 +1,27 @@
 import { SidebarProvider } from "@/components/ui/Sidebar";
 import Sidebar from "./Sidebar.";
 import Header from "./Header";
+import { cn } from "@/utils/helpers";
+
+import { Chart, ArcElement } from "chart.js";
+Chart.register(ArcElement);
 
 interface IAppLayoutProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-const AppLayout = ({ children }: IAppLayoutProps) => {
+const AppLayout = ({ children, className }: IAppLayoutProps) => {
   return (
     <SidebarProvider defaultOpen={false}>
       <Sidebar />
 
-      <section className="w-full min-h-dvh">
+      <section className="min-h-dvh w-full">
         <Header />
 
-        <main className="p-4">{children}</main>
+        <main className={cn("flex justify-center p-4", className)}>
+          {children}
+        </main>
       </section>
     </SidebarProvider>
   );

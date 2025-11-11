@@ -1,31 +1,28 @@
 import { GetServerSideProps, type GetServerSidePropsContext } from "next";
-import { IUser } from "./types";
-import { createServerClient, serializeCookieHeader } from "@supabase/ssr";
+import { createClient } from "./helpers";
+import { UserStore } from "@/store/user.slice";
 
 const withAuth = (
   handler: (
     context: GetServerSidePropsContext,
-    user: IUser | null
-  ) => ReturnType<GetServerSideProps>
+    user: UserStore | null,
+  ) => ReturnType<GetServerSideProps>,
 ) => {
   return async (ctx: GetServerSidePropsContext) => {
     try {
       const supabase = createClient(ctx);
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getUser();
 
-      if (!user) {
-        return {
-          redirect: {
-            destination: "/signin",
-            permanent: false,
-          },
-        };
-      }
+      const user = !data.user
+        ? null
+        : ({
+            userId: data.user.id,
+            email: data.user.email,
+            name: data.user?.user_metadata?.name ?? "",
+          } as UserStore);
 
-      return handler(ctx, { id: user.id, ...user.user_metadata } as IUser);
+      return handler(ctx, user);
     } catch {
       return {
         redirect: {
@@ -35,32 +32,6 @@ const withAuth = (
       };
     }
   };
-};
-
-export const createClient = ({ req, res }: GetServerSidePropsContext) => {
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return Object.keys(req.cookies).map((name) => ({
-            name,
-            value: req.cookies[name] || "",
-          }));
-        },
-        setAll(cookiesToSet) {
-          res.setHeader(
-            "Set-Cookie",
-            cookiesToSet.map(({ name, value, options }) =>
-              serializeCookieHeader(name, value, options)
-            )
-          );
-        },
-      },
-    }
-  );
-  return supabase;
 };
 
 export default withAuth;

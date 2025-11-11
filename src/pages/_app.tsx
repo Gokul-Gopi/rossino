@@ -2,7 +2,7 @@ import ThemeProvider from "@/components/ui/ThemeProvider";
 import "@/styles/globals.css";
 import toasterOptions from "@/utils/toaster";
 import type { AppProps } from "next/app";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import {
   HydrationBoundary,
@@ -10,19 +10,27 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { PagesTopLoader } from "nextjs-toploader/pages";
+import { useUserStore } from "@/store";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { setUser } = useUserStore();
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000,
             refetchOnWindowFocus: false,
           },
         },
-      })
+      }),
   );
+
+  useEffect(() => {
+    if (pageProps.user) {
+      setUser(pageProps.user);
+    }
+  }, [pageProps.user, setUser]);
 
   return (
     <QueryClientProvider client={queryClient}>

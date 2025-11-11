@@ -24,6 +24,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { LOCAL_STORAGE_KEY } from "@/utils/constants";
+import { useUserStore } from "@/store";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
   className: "size-5! -translate-x-[2.5px]",
@@ -59,7 +61,9 @@ const navLinks = [
 
 const Sidebar = () => {
   const router = useRouter();
+
   const { open, openMobile, toggleSidebar } = useSidebar();
+  const { userId } = useUserStore();
 
   const [confirmLogout, setConfirmLogout] = useState(false);
 
@@ -69,6 +73,7 @@ const Sidebar = () => {
     logout.mutate(undefined, {
       onSuccess: () => {
         router.push("/signin");
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
         toast.success("Logged out");
       },
     });
@@ -77,18 +82,18 @@ const Sidebar = () => {
   return (
     <nav>
       <SidebarRoot collapsible="icon">
-        <SidebarHeader className="px-3 mb-6 mt-2">
+        <SidebarHeader className="mt-2 mb-6 px-3">
           <Link
             href="/"
-            className="text-nowrap text-lg flex gap-1.5 overflow-hidden"
+            className="flex gap-1.5 overflow-hidden text-lg text-nowrap"
           >
             🍅
             <span
               className={cn(
-                "inline transition-opacity duration-300 text-nowrap overflow-hidden ",
+                "inline overflow-hidden text-nowrap transition-opacity duration-300",
                 {
                   "opacity-0": !open && !openMobile,
-                }
+                },
               )}
             >
               Rossino
@@ -113,7 +118,7 @@ const Sidebar = () => {
           </SidebarMenu>
         </SidebarContent>
 
-        <SidebarFooter className="pb-4 flex flex-col gap-4">
+        <SidebarFooter className="flex flex-col gap-4 pb-4">
           <SidebarMenuButton
             onClick={toggleSidebar}
             className="transition-all duration-200"
@@ -122,13 +127,15 @@ const Sidebar = () => {
             <span>Collapse</span>
           </SidebarMenuButton>
 
-          <SidebarMenuButton
-            onClick={() => setConfirmLogout(true)}
-            className="transition-[background] duration-200"
-          >
-            <LogOut {...iconProps} />
-            <span>Logout</span>
-          </SidebarMenuButton>
+          {userId && (
+            <SidebarMenuButton
+              onClick={() => setConfirmLogout(true)}
+              className="transition-[background] duration-200"
+            >
+              <LogOut {...iconProps} />
+              <span>Logout</span>
+            </SidebarMenuButton>
+          )}
         </SidebarFooter>
       </SidebarRoot>
 

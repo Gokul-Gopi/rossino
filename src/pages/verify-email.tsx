@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const code = ctx.query?.code;
-  console.log("Verification code:", code);
 
   if (!code) {
     return {

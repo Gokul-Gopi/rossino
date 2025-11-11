@@ -3,8 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
-  devIndicators: {
-    position: "bottom-right",
+  devIndicators: false,
+  images: {
+    domains: ["www.google.com", "open.spotify.com", "www.youtube.com"],
   },
 };
 

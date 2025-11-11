@@ -39,15 +39,20 @@
   --shadow-color: 0 0 0;
   --shadow-2xs: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.05);
   --shadow-xs: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.05);
-  --shadow-sm: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
+  --shadow-sm:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
     0rem 1px 2px -1px hsl(0 0 0 / 0.1);
-  --shadow: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
+  --shadow:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
     0rem 1px 2px -1px hsl(0 0 0 / 0.1);
-  --shadow-md: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
+  --shadow-md:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
     0rem 2px 4px -1px hsl(0 0 0 / 0.1);
-  --shadow-lg: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
+  --shadow-lg:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
     0rem 4px 6px -1px hsl(0 0 0 / 0.1);
-  --shadow-xl: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
+  --shadow-xl:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.1),
     0rem 8px 10px -1px hsl(0 0 0 / 0.1);
   --shadow-2xl: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25);
   --tracking-normal: 0em;
@@ -89,15 +94,20 @@
   --shadow-color: 0 0 0;
   --shadow-2xs: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.13);
   --shadow-xs: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.13);
-  --shadow-sm: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
+  --shadow-sm:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
     0rem 1px 2px -1px hsl(0 0 0 / 0.25);
-  --shadow: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
+  --shadow:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
     0rem 1px 2px -1px hsl(0 0 0 / 0.25);
-  --shadow-md: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
+  --shadow-md:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
     0rem 2px 4px -1px hsl(0 0 0 / 0.25);
-  --shadow-lg: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
+  --shadow-lg:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
     0rem 4px 6px -1px hsl(0 0 0 / 0.25);
-  --shadow-xl: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
+  --shadow-xl:
+    0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.25),
     0rem 8px 10px -1px hsl(0 0 0 / 0.25);
   --shadow-2xl: 0rem 0.125rem 0.5rem 0rem hsl(0 0 0 / 0.63);
 }
@@ -151,6 +161,44 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* * {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(0 0% 80%) transparent;
+}
+
+.dark * {
+  scrollbar-color: hsl(0 0% 40%) hsl(0 0% 14.9%);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: hsl(0 0% 96.1%);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: hsl(0 0% 80%);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: hsl(0 0% 70%);
+}
+
+.dark *::-webkit-scrollbar-track {
+  background: hsl(0 0% 14.9%);
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background: hsl(0 0% 40%);
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background: hsl(0 0% 50%);
+} */
 
 @layer base {
   * {

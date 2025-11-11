@@ -13,12 +13,14 @@ const toasterOptions: ToasterProps = {
   },
   toastOptions: {
     classNames: {
-      toast: "gap-2.5! w-[18.75rem]!",
+      toast: "gap-2.5!",
+      description: "text-xs dark:text-gray-400!",
       content: "font-sans! text-sm! line-clamp-5!",
       default:
         "bg-gradient-to-r! from-seondary! text-gray-800! dark:bg-gradient-to-br! dark:from-secondary! dark:from-50%! dark:text-foreground!",
       success:
         "to-green-400/40! dark:to-green-400! border-green-400! *:data-icon:text-green-500!",
+      info: "to-blue-400/40! dark:to-blue-400! border-blue-400! *:data-icon:text-blue-500!",
       error:
         "to-red-400/40! dark:to-red-400! border-red-400! *:data-icon:text-red-500!",
       closeButton:

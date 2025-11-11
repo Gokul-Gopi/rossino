@@ -7,32 +7,38 @@ import {
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
 import Link from "next/link";
+import { useUserStore } from "@/store";
 
 const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
   ssr: false,
 });
 
 const Header = () => {
+  const { userId } = useUserStore();
+
   return (
-    <header className="px-4 py-4 flex items-center justify-between gap-2">
+    <header className="flex items-center justify-between gap-2 px-4 py-4 lg:px-8">
       <SidebarTrigger />
 
-      <div className="flex gap-2 ml-auto">
+      <div className="ml-auto flex gap-2">
         <DarkMode />
+        {!userId ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="/signin">
+                <Button>Signin</Button>
+              </Link>
+            </TooltipTrigger>
 
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link href="/signin">
-              <Button>Signin</Button>
-            </Link>
-          </TooltipTrigger>
-
-          <TooltipContent>
-            <p className="font-medium text-balance w-24">
-              Sign in to use all the features
-            </p>
-          </TooltipContent>
-        </Tooltip>
+            <TooltipContent>
+              <p className="w-24 font-medium text-balance">
+                Sign in to use all the features
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <Button>Zen mode</Button>
+        )}
       </div>
     </header>
   );
