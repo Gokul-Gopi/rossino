@@ -1,4 +1,3 @@
-import { User } from "@/types";
 import { StateCreator } from "zustand";
 
 export type UserStore = {
@@ -8,7 +7,7 @@ export type UserStore = {
 };
 
 export type UserSlice = UserStore & {
-  setUser: (user: User) => void;
+  setUser: (user: UserStore) => void;
   resetUser: () => void;
 };
 

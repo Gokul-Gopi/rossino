@@ -16,6 +16,8 @@ import { AnimatePresence } from "motion/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import NotificationPermission from "@/components/pages/home/NotificationPermission";
+import dayjs from "dayjs";
+import { SessionStore } from "@/store/session.slice";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -55,17 +57,39 @@ const Page = () => {
 
   const { data } = useDashboard(router.query.project as string);
 
-  useEffect(() => {
-    if (data) {
-      setSession({
-        ...data.sessions,
-        projectId: data.project.id,
-        projectName: data.project.title,
-      });
-      setSettings(data.settings);
-      setNote(data.widgets.note ?? "");
+  const populateDashboard = () => {
+    if (!data) return;
+
+    setSettings(data.settings);
+    setNote(data.widgets.note ?? "");
+
+    let currentSesion = {
+      projectId: data.project.id,
+      projectName: data.project.title,
+    } as SessionStore;
+
+    //check for existing session
+    if (data.sessions) {
+      const elapsedTime =
+        dayjs(data?.sessions?.lastPausedAt).diff(
+          dayjs(data?.sessions?.startedAt),
+          "second",
+        ) - data.sessions.totalPausedDuration;
+
+      const { id, createdAt, updatedAt, ...rest } = data.sessions;
+      currentSesion = {
+        ...rest,
+        ...currentSesion,
+        elapsedTime,
+        sessionId: id,
+      };
     }
-  }, [data, setSettings, setNote, setSession]);
+    setSession(currentSesion);
+  };
+
+  useEffect(() => {
+    populateDashboard();
+  }, []);
 
   return (
     <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">

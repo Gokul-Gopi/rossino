@@ -30,7 +30,6 @@ const useStore = create<Store>()(
       name: LOCAL_STORAGE_KEY,
       partialize: (state) => {
         // Exclude user info from persistence
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { userId, email, name, setUser, ...rest } = state;
         return rest;
       },

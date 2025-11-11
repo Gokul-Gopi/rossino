@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import { useTaskStore } from "@/store";
+import { useSessionStore, useTaskStore } from "@/store";
 import { cn } from "@/utils/helpers";
 import { addTaskSchema } from "@/utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,20 +15,22 @@ import { motion } from "motion/react";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 type ITaskProps = {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
 };
 
 const Task = ({ id, title, completed }: ITaskProps) => {
-  const [taskIdToEdit, setEditingTaskId] = useState<number | null>(null);
+  const [taskIdToEdit, setEditingTaskId] = useState<string | null>(null);
   const [value, setValue] = useState(title);
   const debounedValue = useDebouncedValue(value, 500);
 
   const { editTask, deleteTask, toggleCompletion } = useTaskStore();
 
+  const { projectId } = useSessionStore();
+
   useEffect(() => {
-    editTask({ id, title: debounedValue });
+    editTask({ id, title: debounedValue, projectId });
   }, [debounedValue, editTask, id]);
 
   return (
@@ -84,8 +86,15 @@ const Tasks = () => {
 
   const { tasks, addTask } = useTaskStore();
 
+  const { projectId } = useSessionStore();
+
   const onSubmit = form.handleSubmit((data) => {
-    addTask(data);
+    addTask({
+      id: Date.now.toString(),
+      title: data.title,
+      completed: false,
+      projectId,
+    });
     form.reset({ title: "" });
   });
 

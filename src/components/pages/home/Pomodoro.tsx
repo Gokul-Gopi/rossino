@@ -6,8 +6,9 @@ import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
 import { useSession } from "@/query/session.queries";
-import { SessionStore } from "@/store/session.slice";
+import { sessionIntitialState, SessionStore } from "@/store/session.slice";
 import { Session } from "@/types";
+import { useRouter } from "next/router";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -18,6 +19,8 @@ const formatTime = (totalSeconds: number) => {
 };
 
 const Pomodoro = () => {
+  const router = useRouter();
+
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const nextSessionReminderTimeout = useRef<ReturnType<
     typeof setTimeout
@@ -41,6 +44,7 @@ const Pomodoro = () => {
     notifiedForTimeLeft,
     notifiedForNextSession,
     setNotifiedUser,
+    resetSession,
   } = useSessionStore();
 
   const {
@@ -177,8 +181,8 @@ const Pomodoro = () => {
       session.mutate(
         { ...updatedState, id: sessionId!, projectId, userId },
         {
-          onSuccess: (response) => {
-            setSession({ sessionId: response.id, ...response });
+          onSuccess: ({ id, createdAt, updatedAt, ...rest }) => {
+            setSession({ sessionId: id, ...rest });
           },
           onError: () => {
             const prevState = {
@@ -233,8 +237,8 @@ const Pomodoro = () => {
           intendedDuration: updatedState.intendedDuration,
         },
         {
-          onSuccess: (response) => {
-            setSession({ sessionId: response.id, ...response });
+          onSuccess: ({ id, createdAt, updatedAt, ...rest }) => {
+            setSession({ sessionId: id, ...rest });
           },
           onError: () => {
             setSession({

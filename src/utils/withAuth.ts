@@ -1,12 +1,12 @@
 import { GetServerSideProps, type GetServerSidePropsContext } from "next";
-import { User } from "@/types";
 import { createClient } from "./helpers";
+import { UserStore } from "@/store/user.slice";
 
 const withAuth = (
   handler: (
     context: GetServerSidePropsContext,
-    user: User | null
-  ) => ReturnType<GetServerSideProps>
+    user: UserStore | null,
+  ) => ReturnType<GetServerSideProps>,
 ) => {
   return async (ctx: GetServerSidePropsContext) => {
     try {
@@ -16,7 +16,11 @@ const withAuth = (
 
       const user = !data.user
         ? null
-        : ({ id: data.user.id, ...data.user.user_metadata } as User);
+        : ({
+            userId: data.user.id,
+            email: data.user.email,
+            name: data.user?.user_metadata?.name ?? "",
+          } as UserStore);
 
       return handler(ctx, user);
     } catch {

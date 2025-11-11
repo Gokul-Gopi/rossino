@@ -19,9 +19,11 @@ import {
 } from "@/store";
 import { SessionStore } from "@/store/session.slice";
 import { ChevronDown, EllipsisVertical } from "lucide-react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const MoreOptions = () => {
+  const router = useRouter();
   const isMobile = useMobile();
   const [confirmReset, setConfirmReset] = useState(false);
   const [createNewOpen, setCreateNewOpen] = useState(false);
@@ -76,6 +78,15 @@ const MoreOptions = () => {
     }
 
     setConfirmReset(false);
+  };
+
+  const onContWithoutProject = () => {
+    resetSession();
+    setCreateNewOpen(false);
+
+    if (router.query.project) {
+      router.replace(router.pathname, undefined, { shallow: true });
+    }
   };
 
   return (
@@ -157,14 +168,7 @@ const MoreOptions = () => {
           <hr className="w-full" />
         </div>
 
-        <Button
-          onClick={() => {
-            resetSession();
-            setCreateNewOpen(false);
-          }}
-        >
-          Continue without project
-        </Button>
+        <Button onClick={onContWithoutProject}>Continue without project</Button>
       </Dialog>
     </>
   );

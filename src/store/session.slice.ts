@@ -27,6 +27,7 @@ export type SessionSlice = SessionStore & {
 };
 
 export const sessionIntitialState: SessionStore = {
+  sessionId: undefined, //helps during UPSERTs
   projectId: null,
   projectName: null,
   startedAt: null,
@@ -45,6 +46,8 @@ export const sessionIntitialState: SessionStore = {
 
 const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   set,
+  _get,
+  store,
 ) => ({
   ...sessionIntitialState,
   setSession: (session) => set((state) => ({ ...state, ...session })),

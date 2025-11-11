@@ -10,9 +10,9 @@ type TaskStore = {
 
 export type TaskSlice = TaskStore & {
   toggleTasksVisibility: () => void;
-  addTask: (data: Task) => void;
+  addTask: (task: Task) => void;
   deleteTask: (id: string) => void;
-  editTask: (data: Omit<Task, "completed">) => void;
+  editTask: (task: Omit<Task, "completed">) => void;
   toggleCompletion: (id: string) => void;
   resetTasks: () => void;
 };
@@ -27,12 +27,9 @@ const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
   toggleTasksVisibility: () =>
     set((state) => ({ showTasks: !state.showTasks })),
 
-  addTask: (taskData) =>
+  addTask: (task) =>
     set((state) => ({
-      tasks: [
-        ...state.tasks,
-        { ...taskData, id: Date.now().toString(), completed: false },
-      ],
+      tasks: [...state.tasks, task],
     })),
 
   editTask: ({ title, id }) =>

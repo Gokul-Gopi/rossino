@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     if (pageProps.user) {
-      setUser({ userId: pageProps.user.id, ...pageProps.user });
+      setUser(pageProps.user);
     }
   }, [pageProps.user, setUser]);
 
