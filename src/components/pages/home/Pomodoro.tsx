@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { RingProgress } from "@/components/ui/RingProgress";
 import { useCallback, useEffect, useRef } from "react";
 import { cn, notification } from "@/utils/helpers";
@@ -6,9 +8,8 @@ import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
 import { useSession } from "@/query/session.queries";
-import { sessionIntitialState, SessionStore } from "@/store/session.slice";
+import { SessionStore } from "@/store/session.slice";
 import { Session } from "@/types";
-import { useRouter } from "next/router";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -19,8 +20,6 @@ const formatTime = (totalSeconds: number) => {
 };
 
 const Pomodoro = () => {
-  const router = useRouter();
-
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const nextSessionReminderTimeout = useRef<ReturnType<
     typeof setTimeout
@@ -44,7 +43,6 @@ const Pomodoro = () => {
     notifiedForTimeLeft,
     notifiedForNextSession,
     setNotifiedUser,
-    resetSession,
   } = useSessionStore();
 
   const {
@@ -58,6 +56,7 @@ const Pomodoro = () => {
     timeLeftReminder,
     notificationsEnabled,
     silentNotifications,
+    dailyGoal,
   } = useSettingsStore();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));

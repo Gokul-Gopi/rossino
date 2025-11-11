@@ -68,15 +68,17 @@ const Page = () => {
       projectName: data.project.title,
     } as SessionStore;
 
-    //check for existing session
     if (data.sessions) {
+      // Reason for disable: omitting certain fields
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, createdAt, updatedAt, ...rest } = data.sessions;
+
       const elapsedTime =
         dayjs(data?.sessions?.lastPausedAt).diff(
           dayjs(data?.sessions?.startedAt),
           "second",
         ) - data.sessions.totalPausedDuration;
 
-      const { id, createdAt, updatedAt, ...rest } = data.sessions;
       currentSesion = {
         ...rest,
         ...currentSesion,

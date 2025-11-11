@@ -31,7 +31,7 @@ const Task = ({ id, title, completed }: ITaskProps) => {
 
   useEffect(() => {
     editTask({ id, title: debounedValue, projectId });
-  }, [debounedValue, editTask, id]);
+  }, [debounedValue, editTask, id, projectId]);
 
   return (
     <div className="group flex items-center gap-2">

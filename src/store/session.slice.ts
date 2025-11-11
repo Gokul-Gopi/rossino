@@ -46,8 +46,6 @@ export const sessionIntitialState: SessionStore = {
 
 const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   set,
-  _get,
-  store,
 ) => ({
   ...sessionIntitialState,
   setSession: (session) => set((state) => ({ ...state, ...session })),
