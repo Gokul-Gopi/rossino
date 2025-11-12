@@ -13,7 +13,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import ClearTasksButton from "./ClearTasksButton";
 import { motion } from "motion/react";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { useCreateTask, useDeleteTask } from "@/query/task.queries";
+import {
+  useCreateTask,
+  useDeleteTask,
+  useUpdateTask,
+} from "@/query/task.queries";
 
 type ITaskProps = {
   id: string;
@@ -28,9 +32,23 @@ const Task = ({ id, title, completed }: ITaskProps) => {
 
   const { updateTask, deleteTask, toggleCompletion } = useTaskStore();
 
+  const updateQuery = useUpdateTask();
   const deleteQuery = useDeleteTask();
 
   const { projectId } = useSessionStore();
+
+  const onComplete = () => {
+    toggleCompletion(id);
+
+    updateQuery.mutate(
+      { id, completed: !completed },
+      {
+        onError: () => {
+          toggleCompletion(id);
+        },
+      },
+    );
+  };
 
   const onDelete = (id: string) => {
     deleteTask(id);
@@ -52,7 +70,7 @@ const Task = ({ id, title, completed }: ITaskProps) => {
   return (
     <div className="group flex items-center gap-2">
       <Checkbox
-        onCheckedChange={() => toggleCompletion(id)}
+        onCheckedChange={onComplete}
         checked={completed}
         className={cn("size-5", {
           "opacity-50 transition-opacity duration-300": completed,
