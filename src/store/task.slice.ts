@@ -9,11 +9,12 @@ type TaskStore = {
 };
 
 export type TaskSlice = TaskStore & {
-  toggleTasksVisibility: () => void;
   addTask: (task: Task) => void;
   deleteTask: (id: string) => void;
-  editTask: (task: Omit<Task, "completed">) => void;
+  updateTask: (id: string, updatedTask: Task) => void;
+  setTasks: (tasks: Task[]) => void;
   toggleCompletion: (id: string) => void;
+  toggleTasks: () => void;
   resetTasks: () => void;
 };
 
@@ -24,19 +25,15 @@ export const taskInitialState: TaskStore = {
 
 const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
   ...taskInitialState,
-  toggleTasksVisibility: () =>
-    set((state) => ({ showTasks: !state.showTasks })),
 
   addTask: (task) =>
     set((state) => ({
       tasks: [...state.tasks, task],
     })),
 
-  editTask: ({ title, id }) =>
+  updateTask: (id, updatedTask) =>
     set((state) => ({
-      tasks: state.tasks.map((task) =>
-        task.id === id ? { ...task, title } : task,
-      ),
+      tasks: state.tasks.map((el) => (el.id === id ? updatedTask : el)),
     })),
 
   deleteTask: (id) =>
@@ -44,12 +41,16 @@ const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
       tasks: state.tasks.filter((task) => task.id !== id),
     })),
 
+  setTasks: (tasks) => set(() => ({ tasks })),
+
   toggleCompletion: (id) =>
     set((state) => ({
       tasks: state.tasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task,
       ),
     })),
+
+  toggleTasks: () => set((state) => ({ showTasks: !state.showTasks })),
 
   resetTasks: () => set(taskInitialState),
 });

@@ -95,10 +95,11 @@ export const useTaskStore = () =>
     useShallow((state) => ({
       tasks: state.tasks,
       showTasks: state.showTasks,
-      toggleTasksVisibility: state.toggleTasksVisibility,
+      toggleTasks: state.toggleTasks,
       addTask: state.addTask,
       deleteTask: state.deleteTask,
-      editTask: state.editTask,
+      updateTask: state.updateTask,
+      setTasks: state.setTasks,
       toggleCompletion: state.toggleCompletion,
       resetTasks: state.resetTasks,
     })),

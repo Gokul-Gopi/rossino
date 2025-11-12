@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import { useSessionStore, useTaskStore } from "@/store";
+import { useSessionStore, useTaskStore, useUserStore } from "@/store";
 import { cn } from "@/utils/helpers";
 import { addTaskSchema } from "@/utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import ClearTasksButton from "./ClearTasksButton";
 import { motion } from "motion/react";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { useCreateTask, useDeleteTask } from "@/query/task.queries";
 
 type ITaskProps = {
   id: string;
@@ -25,13 +26,28 @@ const Task = ({ id, title, completed }: ITaskProps) => {
   const [value, setValue] = useState(title);
   const debounedValue = useDebouncedValue(value, 500);
 
-  const { editTask, deleteTask, toggleCompletion } = useTaskStore();
+  const { updateTask, deleteTask, toggleCompletion } = useTaskStore();
+
+  const deleteQuery = useDeleteTask();
 
   const { projectId } = useSessionStore();
 
-  useEffect(() => {
-    editTask({ id, title: debounedValue, projectId });
-  }, [debounedValue, editTask, id, projectId]);
+  const onDelete = (id: string) => {
+    deleteTask(id);
+
+    deleteQuery.mutate(
+      { id },
+      {
+        onError: () => {
+          updateTask(id, { id, title, completed, projectId });
+        },
+      },
+    );
+  };
+
+  // useEffect(() => {
+  //   editTask({ id, title: debounedValue, projectId });
+  // }, [debounedValue, editTask, id, projectId]);
 
   return (
     <div className="group flex items-center gap-2">
@@ -70,7 +86,7 @@ const Task = ({ id, title, completed }: ITaskProps) => {
 
       <Button
         size="icon"
-        onClick={() => deleteTask(id)}
+        onClick={() => onDelete(id)}
         className="text-primary mr-4 w-fit! bg-transparent transition-opacity duration-300 group-hover:opacity-100 hover:bg-transparent lg:opacity-0"
       >
         <X />
@@ -84,17 +100,36 @@ const Tasks = () => {
     resolver: zodResolver(addTaskSchema),
   });
 
-  const { tasks, addTask } = useTaskStore();
-
+  const { userId } = useUserStore();
+  const { tasks, addTask, deleteTask, updateTask } = useTaskStore();
   const { projectId } = useSessionStore();
 
+  const createTask = useCreateTask();
+
   const onSubmit = form.handleSubmit((data) => {
+    const tempId = Date.now().toString();
+
     addTask({
-      id: Date.now.toString(),
+      id: tempId,
       title: data.title,
       completed: false,
       projectId,
     });
+
+    if (userId) {
+      createTask.mutate(
+        { title: data.title, projectId, userId },
+        {
+          onSuccess: (task) => {
+            updateTask(tempId, task);
+          },
+          onError: () => {
+            deleteTask(tempId);
+          },
+        },
+      );
+    }
+
     form.reset({ title: "" });
   });
 

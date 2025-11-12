@@ -48,7 +48,7 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
 
 const Page = () => {
   const router = useRouter();
-  const { showTasks } = useTaskStore();
+  const { showTasks, setTasks } = useTaskStore();
   const { showWidgets } = useWidgetsStore();
 
   const { setNote } = useWidgetsStore();
@@ -60,6 +60,7 @@ const Page = () => {
   const populateDashboard = () => {
     if (!data) return;
 
+    setTasks(data.tasks);
     setSettings(data.settings);
     setNote(data.widgets.note ?? "");
 

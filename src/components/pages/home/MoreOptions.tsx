@@ -44,7 +44,7 @@ const MoreOptions = () => {
   } = useSessionStore();
 
   const { showWidgets, toggleWidgets } = useWidgetsStore();
-  const { showTasks, toggleTasksVisibility } = useTaskStore();
+  const { showTasks, toggleTasks } = useTaskStore();
 
   const updateSession = useUpdateSession();
 
@@ -114,7 +114,7 @@ const MoreOptions = () => {
             <Switch
               id="tasks"
               checked={showTasks}
-              onCheckedChange={toggleTasksVisibility}
+              onCheckedChange={toggleTasks}
             />
           </div>
           <div className="flex items-center justify-between">

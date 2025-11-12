@@ -174,7 +174,7 @@ begin
     where "userId" = uid
   ),
   t as (
-    select id, title
+    select id, title, completed
     from tasks
     where "projectId" = project_id
       and completed = false
