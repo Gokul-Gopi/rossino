@@ -11,7 +11,7 @@ type TaskStore = {
 export type TaskSlice = TaskStore & {
   addTask: (task: Task) => void;
   deleteTask: (id: string) => void;
-  updateTask: (id: string, updatedTask: Task) => void;
+  updateTask: (id: string, updatedTask: Partial<Task>) => void;
   setTasks: (tasks: Task[]) => void;
   toggleCompletion: (id: string) => void;
   toggleTasks: () => void;
@@ -33,7 +33,9 @@ const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
 
   updateTask: (id, updatedTask) =>
     set((state) => ({
-      tasks: state.tasks.map((el) => (el.id === id ? updatedTask : el)),
+      tasks: state.tasks.map((el) =>
+        el.id === id ? { ...el, ...updatedTask } : el,
+      ),
     })),
 
   deleteTask: (id) =>

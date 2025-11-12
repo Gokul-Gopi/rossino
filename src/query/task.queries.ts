@@ -7,7 +7,7 @@ type CreateTask = Omit<Task, "id" | "completed"> & { userId: string };
 type UpdateTask = Partial<Omit<Task, "projectId">>;
 
 export const useCreateTask = () => {
-  return useMutation({
+  return useMutation<Task, Error, CreateTask>({
     mutationFn: async ({ title, projectId, userId }: CreateTask) => {
       const { data, error } = await supabase
         .from("tasks")
@@ -24,8 +24,8 @@ export const useCreateTask = () => {
 };
 
 export const useUpdateTask = () => {
-  return useMutation({
-    mutationFn: async ({ id, title, completed }: UpdateTask) => {
+  return useMutation<Task, Error, UpdateTask>({
+    mutationFn: async ({ id, title, completed }) => {
       const { data, error } = await supabase
         .from("tasks")
         .update({ title, completed })
@@ -42,9 +42,12 @@ export const useUpdateTask = () => {
 };
 
 export const useDeleteTask = () => {
-  return useMutation({
-    mutationFn: async ({ id }: { id: string }) => {
-      const { data, error } = await supabase.from("tasks").delete();
+  return useMutation<null, Error, { id: string }>({
+    mutationFn: async ({ id }) => {
+      const { data, error } = await supabase
+        .from("tasks")
+        .delete()
+        .eq("id", id);
 
       if (error) throw error;
 
@@ -55,8 +58,8 @@ export const useDeleteTask = () => {
 };
 
 export const useDeleteProjectTasks = () => {
-  return useMutation({
-    mutationFn: async ({ projectId }: { projectId: string }) => {
+  return useMutation<null, Error, { projectId: string }>({
+    mutationFn: async ({ projectId }) => {
       const { data, error } = await supabase
         .from("tasks")
         .delete()
@@ -71,8 +74,8 @@ export const useDeleteProjectTasks = () => {
 };
 
 export const useDeleteUserTasks = () => {
-  return useMutation({
-    mutationFn: async ({ userId }: { userId: string }) => {
+  return useMutation<null, Error, { userId: string }>({
+    mutationFn: async ({ userId }) => {
       const { data, error } = await supabase
         .from("tasks")
         .delete()
