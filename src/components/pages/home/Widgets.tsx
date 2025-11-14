@@ -1,7 +1,7 @@
 import { cn } from "@/utils/helpers";
 import { type HTMLMotionProps, motion, type MotionProps } from "motion/react";
 import QuickNotes from "./QuickNotes";
-import Interuptions from "./Interuptions";
+import Interruptions from "./Interruptions";
 
 const commonMotionProps: MotionProps = {
   initial: { opacity: 0, scale: 0 },
@@ -45,6 +45,8 @@ const WidgetCard = ({
   );
 };
 
+console.log("Widgets component rendered");
+
 const Widgets = () => {
   return (
     <div className="flex grid-cols-2 grid-rows-3 flex-col gap-4 md:grid md:gap-6">
@@ -63,7 +65,7 @@ const Widgets = () => {
         heading="Interruptions"
         className="col-start-1 row-start-3 justify-between"
       >
-        <Interuptions />
+        <Interruptions />
       </WidgetCard>
 
       <WidgetCard

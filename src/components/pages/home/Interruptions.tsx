@@ -1,8 +1,9 @@
 import { useWidgetsStore } from "@/store";
 
-const Interuptions = () => {
+const Interruptions = () => {
   const { pausedCount, pausedDuration } = useWidgetsStore();
-  console.log({ pausedDuration });
+
+  console.log("Interruptions component rendered");
 
   return (
     <ul className="mt-4 flex flex-col gap-2">
@@ -23,4 +24,4 @@ const Interuptions = () => {
   );
 };
 
-export default Interuptions;
+export default Interruptions;
