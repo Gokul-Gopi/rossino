@@ -27,7 +27,7 @@ export type SessionSlice = SessionStore & {
 };
 
 export const sessionIntitialState: SessionStore = {
-  sessionId: undefined, //helps during UPSERTs
+  sessionId: undefined, //helps in reseting state and during UPSERT
   projectId: null,
   projectName: null,
   startedAt: null,

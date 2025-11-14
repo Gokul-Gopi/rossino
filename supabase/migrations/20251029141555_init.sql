@@ -38,7 +38,6 @@ create table public.sessions (
   "lastPausedAt" timestamptz,
   "intendedDuration" int not null,
   "totalPausedDuration" int not null default 0,
-  "interruptionCount" int not null default 0,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now()
 );

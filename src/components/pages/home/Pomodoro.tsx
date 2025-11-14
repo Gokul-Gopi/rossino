@@ -3,7 +3,12 @@
 import { RingProgress } from "@/components/ui/RingProgress";
 import { useCallback, useEffect, useRef } from "react";
 import { cn, notification } from "@/utils/helpers";
-import { useSessionStore, useSettingsStore, useUserStore } from "@/store";
+import {
+  useSessionStore,
+  useSettingsStore,
+  useUserStore,
+  useWidgetsStore,
+} from "@/store";
 import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
@@ -26,6 +31,7 @@ const Pomodoro = () => {
   > | null>(null);
 
   const { userId } = useUserStore();
+  const { setInterruptionsData } = useWidgetsStore();
 
   const {
     sessionId,
@@ -61,6 +67,13 @@ const Pomodoro = () => {
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
 
   const session = useSession();
+
+  const updatePausedData = (count = 0, duration = 0) => {
+    setInterruptionsData({
+      count,
+      duration,
+    });
+  };
 
   const cleanup = () => {
     setNotifiedUser({
@@ -165,12 +178,16 @@ const Pomodoro = () => {
 
       updatedState.lastPausedAt = pausedAt;
       updatedState.status = "PAUSED";
+
+      updatePausedData(1);
     } else if (status === "PAUSED") {
       const pausedDuration =
         dayjs().diff(dayjs(lastPausedAt), "second") + totalPausedDuration;
 
       updatedState.totalPausedDuration = pausedDuration;
       updatedState.status = "RUNNING";
+
+      updatePausedData(0, pausedDuration);
     }
 
     setSession(updatedState);

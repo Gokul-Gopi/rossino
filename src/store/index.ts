@@ -108,10 +108,13 @@ export const useTaskStore = () =>
 export const useWidgetsStore = () =>
   useStore(
     useShallow((state) => ({
-      showWidgets: state.showWidgets,
-      toggleWidgets: state.toggleWidgets,
       note: state.note,
       setNote: state.setNote,
+      showWidgets: state.showWidgets,
+      toggleWidgets: state.toggleWidgets,
+      pausedCount: state.pausedCount,
+      pausedDuration: state.pausedDuration,
+      setInterruptionsData: state.setInterruptionsData,
       dailyGoalProgress: state.dailyGoalProgress,
     })),
   );
