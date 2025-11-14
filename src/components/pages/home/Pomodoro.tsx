@@ -56,7 +56,6 @@ const Pomodoro = () => {
     timeLeftReminder,
     notificationsEnabled,
     silentNotifications,
-    dailyGoal,
   } = useSettingsStore();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));

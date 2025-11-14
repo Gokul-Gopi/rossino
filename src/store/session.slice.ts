@@ -46,6 +46,7 @@ export const sessionIntitialState: SessionStore = {
 
 const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   set,
+  get,
 ) => ({
   ...sessionIntitialState,
   setSession: (session) => set((state) => ({ ...state, ...session })),
@@ -54,7 +55,13 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
       ...state,
       ...updatedState,
     })),
-  resetSession: () => set(sessionIntitialState),
+  resetSession: () => {
+    const { pomoDuration } = get();
+    return set({
+      ...sessionIntitialState,
+      intendedDuration: pomoDuration,
+    });
+  },
 });
 
 export default createSessionSlice;

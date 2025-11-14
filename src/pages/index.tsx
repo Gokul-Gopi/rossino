@@ -14,17 +14,17 @@ import { createClient } from "@/utils/helpers";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import NotificationPermission from "@/components/pages/home/NotificationPermission";
 import dayjs from "dayjs";
-import { SessionStore } from "@/store/session.slice";
+import { sessionIntitialState } from "@/store/session.slice";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
 
-  const projectId = ctx.query.project as string;
+  const projectId = ctx.query.project ?? null;
 
-  if (projectId) {
+  if (user) {
     const supabase = createClient(ctx);
 
     await queryClient.prefetchQuery({
@@ -55,23 +55,27 @@ const Page = () => {
   const { setSettings } = useSettingsStore();
   const { setSession } = useSessionStore();
 
-  const { data } = useDashboard(router.query.project as string);
+  const { data } = useDashboard((router.query.project as string) ?? null);
 
-  const populateDashboard = () => {
+  const populateDashboard = useCallback(() => {
     if (!data) return;
 
     setTasks(data.tasks);
     setSettings(data.settings);
     setNote(data.widgets.note ?? "");
 
-    let currentSesion = {
-      projectId: data.project.id,
-      projectName: data.project.title,
-    } as SessionStore;
+    let currentSesion = sessionIntitialState;
+
+    if (data.project) {
+      currentSesion = {
+        ...currentSesion,
+        projectId: data.project.id,
+        projectName: data.project.title,
+      };
+    }
 
     if (data.sessions) {
-      // Reason for disable: omitting certain fields
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      //Omitting unwanted fields
       const { id, createdAt, updatedAt, ...rest } = data.sessions;
 
       const elapsedTime =
@@ -87,12 +91,13 @@ const Page = () => {
         sessionId: id,
       };
     }
+
     setSession(currentSesion);
-  };
+  }, [data]);
 
   useEffect(() => {
     populateDashboard();
-  }, []);
+  }, [populateDashboard]);
 
   return (
     <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">

@@ -25,6 +25,7 @@ import { useState } from "react";
 const MoreOptions = () => {
   const router = useRouter();
   const isMobile = useMobile();
+
   const [confirmReset, setConfirmReset] = useState(false);
   const [createNewOpen, setCreateNewOpen] = useState(false);
 
@@ -81,12 +82,14 @@ const MoreOptions = () => {
   };
 
   const onContWithoutProject = () => {
+    if (userId) {
+      if (router.query.project) {
+        router.replace(router.pathname, undefined, { shallow: true });
+      }
+    }
+
     resetSession();
     setCreateNewOpen(false);
-
-    if (router.query.project) {
-      router.replace(router.pathname, undefined, { shallow: true });
-    }
   };
 
   return (

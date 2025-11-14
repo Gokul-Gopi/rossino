@@ -29,7 +29,7 @@ const Task = ({ id, title, completed }: ITaskProps) => {
   const [value, setValue] = useState(title);
   const [editMode, setEditMode] = useState(false);
 
-  const debounedValue = useDebouncedValue(value, 700);
+  const debounedValue = useDebouncedValue(value, 500);
 
   const { updateTask, deleteTask, toggleCompletion } = useTaskStore();
 
