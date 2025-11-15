@@ -25,7 +25,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { LOCAL_STORAGE_KEY } from "@/utils/constants";
-import { useUserStore } from "@/store";
+import useStore from "@/store";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
   className: "size-5! -translate-x-[2.5px]",
@@ -63,7 +63,7 @@ const Sidebar = () => {
   const router = useRouter();
 
   const { open, openMobile, toggleSidebar } = useSidebar();
-  const { userId } = useUserStore();
+  const userId = useStore((state) => state.userId);
 
   const [confirmLogout, setConfirmLogout] = useState(false);
 

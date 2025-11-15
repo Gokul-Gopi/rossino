@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import { useSessionStore, useTaskStore, useUserStore } from "@/store";
+import useStore, { useStoreActions } from "@/store";
 import { cn } from "@/utils/helpers";
 import { addTaskSchema } from "@/utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,17 +27,17 @@ type ITaskProps = {
 
 const Task = ({ id, title, completed }: ITaskProps) => {
   const [value, setValue] = useState(title);
-  const [editMode, setEditMode] = useState(false);
-
   const debounedValue = useDebouncedValue(value, 500);
 
-  const { updateTask, deleteTask, toggleCompletion } = useTaskStore();
+  const [editMode, setEditMode] = useState(false);
+
+  const userId = useStore((state) => state.userId);
+  const projectId = useStore((state) => state.projectId);
+
+  const { updateTask, deleteTask, toggleCompletion } = useStoreActions();
 
   const updateQuery = useUpdateTask();
   const deleteQuery = useDeleteTask();
-
-  const { userId } = useUserStore();
-  const { projectId } = useSessionStore();
 
   const onComplete = () => {
     toggleCompletion(id);
@@ -154,9 +154,11 @@ const Tasks = () => {
     resolver: zodResolver(addTaskSchema),
   });
 
-  const { userId } = useUserStore();
-  const { tasks, addTask, deleteTask, updateTask } = useTaskStore();
-  const { projectId } = useSessionStore();
+  const userId = useStore((state) => state.userId);
+  const tasks = useStore((state) => state.tasks);
+  const projectId = useStore((state) => state.projectId);
+
+  const { addTask, deleteTask, updateTask } = useStoreActions();
 
   const createTask = useCreateTask();
 

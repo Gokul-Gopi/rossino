@@ -4,12 +4,7 @@ import Tasks from "@/components/pages/home/Tasks";
 import Widgets from "@/components/pages/home/Widgets";
 import withAuth from "@/utils/withAuth";
 import { useDashboard } from "@/query/dashboard.queries";
-import {
-  useWidgetsStore,
-  useTaskStore,
-  useSettingsStore,
-  useSessionStore,
-} from "@/store";
+import useStore, { useStoreActions } from "@/store";
 import { createClient } from "@/utils/helpers";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
@@ -17,7 +12,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import NotificationPermission from "@/components/pages/home/NotificationPermission";
 import dayjs from "dayjs";
-import { sessionIntitialState } from "@/store/session.slice";
+import { SessionStore } from "@/store/session.slice";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -48,12 +43,11 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
 
 const Page = () => {
   const router = useRouter();
-  const { showTasks, setTasks } = useTaskStore();
-  const { showWidgets } = useWidgetsStore();
 
-  const { setNote } = useWidgetsStore();
-  const { setSettings } = useSettingsStore();
-  const { setSession } = useSessionStore();
+  const showWidgets = useStore((state) => state.showWidgets);
+  const showTasks = useStore((state) => state.showTasks);
+
+  const { setNote, setTasks, setSettings, setSession } = useStoreActions();
 
   const { data } = useDashboard((router.query.project as string) ?? null);
 
@@ -64,7 +58,7 @@ const Page = () => {
     setSettings(data.settings);
     setNote(data.widgets.note ?? "");
 
-    let currentSesion = sessionIntitialState;
+    let currentSesion: SessionStore | {} = {};
 
     if (data.project) {
       currentSesion = {

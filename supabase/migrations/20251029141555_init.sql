@@ -162,7 +162,7 @@ begin
   s as (
     select *
     from sessions
-    where "projectId" = project_id
+    where "projectId" IS NOT DISTINCT FROM project_id
     and "userId" = uid
     order by "startedAt" desc
     limit 1

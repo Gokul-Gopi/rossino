@@ -7,14 +7,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
 import Link from "next/link";
-import { useUserStore } from "@/store";
+import useStore from "@/store";
 
 const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
   ssr: false,
 });
 
 const Header = () => {
-  const { userId } = useUserStore();
+  const userId = useStore((state) => state.userId);
 
   return (
     <header className="flex items-center justify-between gap-2 px-4 py-4 lg:px-8">

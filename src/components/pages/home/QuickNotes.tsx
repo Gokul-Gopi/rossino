@@ -2,14 +2,16 @@ import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Textarea } from "@/components/ui/Textarea";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useWidget } from "@/query/widget.queries";
-import { useUserStore, useWidgetsStore } from "@/store";
+import useStore, { useStoreActions } from "@/store";
 import { useEffect, useState } from "react";
 
 const QuickNotes = () => {
-  const { userId } = useUserStore();
-  const { note, setNote } = useWidgetsStore();
-  const [value, setValue] = useState(note);
+  const userId = useStore((state) => state.userId);
+  const note = useStore((state) => state.note);
 
+  const { setNote } = useStoreActions();
+
+  const [value, setValue] = useState(note);
   const debouncedNote = useDebouncedValue(value, 500);
 
   const noteQuery = useWidget();
