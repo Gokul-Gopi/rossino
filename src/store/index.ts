@@ -39,7 +39,7 @@ const useStore = create<Store>()(
 
 // This was created purely for better readability in components
 // and to reduce the number of times useStore is called, hence reducing
-// the verbalosity.
+// the verbalosity. All the methods are also available via useStore.
 export const useStoreActions = () =>
   useStore(
     useShallow((state) => ({
@@ -61,7 +61,10 @@ export const useStoreActions = () =>
 
       setNote: state.setNote,
       toggleWidgets: state.toggleWidgets,
+      setTimerStyle: state.setTimerStyle,
       setInterruptionsData: state.setInterruptionsData,
+      resetWidgets: state.resetWidgets,
+
       resetAll: state.resetAll,
     })),
   );

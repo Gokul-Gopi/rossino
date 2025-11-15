@@ -2,6 +2,7 @@ import { cn } from "@/utils/helpers";
 import { type HTMLMotionProps, motion, type MotionProps } from "motion/react";
 import QuickNotes from "./QuickNotes";
 import Interruptions from "./Interruptions";
+import TimerStyle from "./TimerStyle";
 
 const commonMotionProps: MotionProps = {
   initial: { opacity: 0, scale: 0 },
@@ -70,9 +71,9 @@ const Widgets = () => {
         {...commonMotionProps}
         transition={{ delay: 0.1 }}
         heading="Timer style"
-        className="col-start-2 row-start-1 justify-between"
+        className="col-start-2 row-start-1"
       >
-        Clock style
+        <TimerStyle />
       </WidgetCard>
 
       <WidgetCard

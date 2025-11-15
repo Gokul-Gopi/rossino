@@ -284,7 +284,7 @@ const Pomodoro = () => {
     }
 
     if (status === "RUNNING") {
-      intervalRef.current = setInterval(updateTimer, 500);
+      intervalRef.current = setInterval(updateTimer, 1000);
     }
 
     if (status === "COMPLETED") {

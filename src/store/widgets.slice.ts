@@ -8,12 +8,13 @@ export type WidgetStore = {
   pausedCount: number;
   pausedDuration: number;
   resetDate: Dayjs | null;
+  timerStyle: "RING" | "BAR";
 };
 
 export type WidgetSlice = WidgetStore & {
   setNote: (note: string) => void;
   toggleWidgets: () => void;
-  resetWidgets: () => void;
+  setTimerStyle: (style: "RING" | "BAR") => void;
   setInterruptionsData: ({
     count,
     duration,
@@ -21,6 +22,7 @@ export type WidgetSlice = WidgetStore & {
     count: number;
     duration: number;
   }) => void;
+  resetWidgets: () => void;
 };
 
 export const widgetsInitialState: WidgetStore = {
@@ -30,6 +32,7 @@ export const widgetsInitialState: WidgetStore = {
   pausedCount: 0,
   pausedDuration: 0,
   resetDate: null,
+  timerStyle: "RING",
 };
 
 const createWidgetsSlice: StateCreator<WidgetSlice> = (set) => ({
@@ -38,7 +41,7 @@ const createWidgetsSlice: StateCreator<WidgetSlice> = (set) => ({
 
   setNote: (note) => set(() => ({ note })),
 
-  resetWidgets: () => set(widgetsInitialState),
+  setTimerStyle: (style) => set(() => ({ timerStyle: style })),
 
   setInterruptionsData: ({ count, duration }) => {
     set((state) => {
@@ -51,6 +54,8 @@ const createWidgetsSlice: StateCreator<WidgetSlice> = (set) => ({
       };
     });
   },
+
+  resetWidgets: () => set(widgetsInitialState),
 });
 
 export default createWidgetsSlice;
