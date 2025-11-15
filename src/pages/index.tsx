@@ -51,8 +51,6 @@ const Page = () => {
 
   const { data } = useDashboard((router.query.project as string) ?? null);
 
-  console.log(data?.sessions);
-
   const populateDashboard = useCallback(() => {
     if (!data) return;
 
