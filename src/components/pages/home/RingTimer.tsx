@@ -21,7 +21,7 @@ const RingTimer = ({
   return (
     <RingProgress
       value={progress}
-      className="size-50 md:size-80 lg:size-100"
+      className="animate-in fade-in size-50 md:size-80 lg:size-100"
       circleProps={{
         strokeWidth: 6,
         className: cn("stroke-primary/20", {
