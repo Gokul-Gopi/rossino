@@ -3,14 +3,16 @@ import {
   useDeleteProjectTasks,
   useDeleteUserTasks,
 } from "@/query/task.queries";
-import { useSessionStore, useTaskStore, useUserStore } from "@/store";
+import useStore, { useStoreActions } from "@/store";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
 
 const ClearTasksButton = () => {
-  const { userId } = useUserStore();
-  const { projectId } = useSessionStore();
-  const { tasks, setTasks, resetTasks } = useTaskStore();
+  const userId = useStore((state) => state.userId);
+  const projectId = useStore((state) => state.projectId);
+  const tasks = useStore((state) => state.tasks);
+
+  const { setTasks, resetTasks } = useStoreActions();
 
   const deleteProjectTasks = useDeleteProjectTasks();
   const deleteUserTasks = useDeleteUserTasks();

@@ -11,17 +11,13 @@ import SearchableSelect from "@/components/ui/SearchableSelect";
 import { Switch } from "@/components/ui/Switch";
 import { useMobile } from "@/hooks/useMobile";
 import { useUpdateSession } from "@/query/session.queries";
-import {
-  useWidgetsStore,
-  useTaskStore,
-  useSessionStore,
-  useUserStore,
-} from "@/store";
+import useStore, { useStoreActions } from "@/store";
 import { SessionStore } from "@/store/session.slice";
 import { ChevronDown, EllipsisVertical } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+// TODO: Modularize this component more
 const MoreOptions = () => {
   const router = useRouter();
   const isMobile = useMobile();
@@ -29,23 +25,20 @@ const MoreOptions = () => {
   const [confirmReset, setConfirmReset] = useState(false);
   const [createNewOpen, setCreateNewOpen] = useState(false);
 
-  const { userId } = useUserStore();
+  const userId = useStore((state) => state.userId);
+  const sessionId = useStore((state) => state.sessionId);
+  const projectId = useStore((state) => state.projectId);
+  const startedAt = useStore((state) => state.startedAt);
+  const endedAt = useStore((state) => state.endedAt);
+  const lastPausedAt = useStore((state) => state.lastPausedAt);
+  const totalPausedDuration = useStore((state) => state.totalPausedDuration);
+  const elapsedTime = useStore((state) => state.elapsedTime);
+  const status = useStore((state) => state.status);
+  const showWidgets = useStore((state) => state.showWidgets);
+  const showTasks = useStore((state) => state.showTasks);
 
-  const {
-    sessionId,
-    projectId,
-    startedAt,
-    endedAt,
-    lastPausedAt,
-    totalPausedDuration,
-    elapsedTime,
-    status,
-    setSession,
-    resetSession,
-  } = useSessionStore();
-
-  const { showWidgets, toggleWidgets } = useWidgetsStore();
-  const { showTasks, toggleTasks } = useTaskStore();
+  const { setSession, resetSession, toggleTasks, toggleWidgets } =
+    useStoreActions();
 
   const updateSession = useUpdateSession();
 

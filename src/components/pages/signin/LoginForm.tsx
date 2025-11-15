@@ -9,7 +9,7 @@ import { motion } from "motion/react";
 import { useRouter } from "next/router";
 import { useLogin } from "@/query/auth.queries";
 import { toast } from "sonner";
-import { useResetStore } from "@/store";
+import { useStoreActions } from "@/store";
 
 interface ILoginFormProps {
   switchForm: () => void;
@@ -22,7 +22,7 @@ const LoginForm = ({ switchForm }: ILoginFormProps) => {
   });
 
   const login = useLogin();
-  const { resetAll } = useResetStore();
+  const { resetAll } = useStoreActions();
 
   const onSubmit = form.handleSubmit((data) => {
     login.mutate(data, {
@@ -52,14 +52,14 @@ const LoginForm = ({ switchForm }: ILoginFormProps) => {
           Sign in
         </LoaderButton>
 
-        <div className="text-sm flex gap-1 justify-center items-center">
+        <div className="flex items-center justify-center gap-1 text-sm">
           <p>Don&apos;t have an account? </p>
           <Button
             type="button"
             onClick={switchForm}
             variant="link"
             size="sm"
-            className="text-sm size-fit px-0 bg-transparent font-medium"
+            className="size-fit bg-transparent px-0 text-sm font-medium"
           >
             Sign up
           </Button>

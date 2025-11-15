@@ -3,18 +3,14 @@
 import { RingProgress } from "@/components/ui/RingProgress";
 import { useCallback, useEffect, useRef } from "react";
 import { cn, notification } from "@/utils/helpers";
-import {
-  useSessionStore,
-  useSettingsStore,
-  useUserStore,
-  useWidgetsStore,
-} from "@/store";
+import useStore, { useStoreActions } from "@/store";
 import dayjs from "dayjs";
 import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
 import { useSession } from "@/query/session.queries";
 import { SessionStore } from "@/store/session.slice";
 import { Session } from "@/types";
+import { usePomodoro } from "@/hooks/usePomodoro";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -26,12 +22,9 @@ const formatTime = (totalSeconds: number) => {
 
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const nextSessionReminderTimeout = useRef<ReturnType<
-    typeof setTimeout
-  > | null>(null);
+  const reminderTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { userId } = useUserStore();
-  const { setInterruptionsData } = useWidgetsStore();
+  const userId = useStore((state) => state.userId);
 
   const {
     sessionId,
@@ -41,17 +34,12 @@ const Pomodoro = () => {
     lastPausedAt,
     elapsedTime,
     totalPausedDuration,
-    setSession,
     intendedDuration,
     projectId,
     projectName,
     focusSessionCompleted,
     notifiedForTimeLeft,
     notifiedForNextSession,
-    setNotifiedUser,
-  } = useSessionStore();
-
-  const {
     pomoDuration,
     shortBreakDuration,
     longBreakDuration,
@@ -62,7 +50,10 @@ const Pomodoro = () => {
     timeLeftReminder,
     notificationsEnabled,
     silentNotifications,
-  } = useSettingsStore();
+  } = usePomodoro();
+
+  const { setSession, setNotifiedUser, setInterruptionsData } =
+    useStoreActions();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
 
@@ -81,8 +72,8 @@ const Pomodoro = () => {
       notifiedForTimeLeft: false,
     });
 
-    if (nextSessionReminderTimeout.current) {
-      clearTimeout(nextSessionReminderTimeout.current);
+    if (reminderTimeout.current) {
+      clearTimeout(reminderTimeout.current);
     }
   };
 
@@ -269,7 +260,7 @@ const Pomodoro = () => {
   const onNextSessionReminder = () => {
     if (!nextSessionReminder || notifiedForNextSession) return;
 
-    nextSessionReminderTimeout.current = setTimeout(() => {
+    reminderTimeout.current = setTimeout(() => {
       notification({
         title: "Next Session Reminder",
         body: "When you're ready, you can start your next session!",
@@ -277,7 +268,7 @@ const Pomodoro = () => {
       });
       setNotifiedUser({ notifiedForNextSession: true });
 
-      clearTimeout(nextSessionReminderTimeout.current!);
+      clearTimeout(reminderTimeout.current!);
     }, nextSessionReminder * 1000);
   };
 
@@ -305,8 +296,8 @@ const Pomodoro = () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-      if (nextSessionReminderTimeout.current) {
-        clearTimeout(nextSessionReminderTimeout.current);
+      if (reminderTimeout.current) {
+        clearTimeout(reminderTimeout.current);
       }
     };
   }, [status, updateTimer]);

@@ -1,7 +1,8 @@
-import { useWidgetsStore } from "@/store";
+import useStore from "@/store";
 
 const Interruptions = () => {
-  const { pausedCount, pausedDuration } = useWidgetsStore();
+  const pausedCount = useStore((state) => state.pausedCount);
+  const pausedDuration = useStore((state) => state.pausedDuration);
 
   console.log("Interruptions component rendered");
 

@@ -1,8 +1,9 @@
 import { RingProgress } from "@/components/ui/RingProgress";
-import { useWidgetsStore } from "@/store";
+
+//TODO: delete this component, not needed anymore
 
 const DailyGoal = () => {
-  const { dailyGoalProgress } = useWidgetsStore();
+  const dailyGoalProgress = 75; // Example progress percentage
 
   return (
     <div className="flex items-center gap-4">

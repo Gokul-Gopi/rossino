@@ -21,11 +21,12 @@ const SignupForm = ({ switchForm }: ISignupFormProps) => {
   const signup = useSignup();
 
   const onSubmit = form.handleSubmit((data) => {
+    //TODO: reset local state
     signup.mutate(data, {
       onSuccess: () => {
         form.reset();
         toast.success(
-          "Please check your inbox. Kindly verify your email to continue"
+          "Please check your inbox. Kindly verify your email to continue",
         );
       },
     });
@@ -54,14 +55,14 @@ const SignupForm = ({ switchForm }: ISignupFormProps) => {
           Sign up
         </LoaderButton>
 
-        <div className="text-sm flex gap-1 justify-center items-center">
+        <div className="flex items-center justify-center gap-1 text-sm">
           <p>Already have an account?</p>
           <Button
             type="button"
             onClick={switchForm}
             variant="link"
             size="sm"
-            className="text-sm size-fit px-0 bg-transparent font-medium"
+            className="size-fit bg-transparent px-0 text-sm font-medium"
           >
             Sign in
           </Button>

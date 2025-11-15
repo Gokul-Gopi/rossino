@@ -4,12 +4,7 @@ import Tasks from "@/components/pages/home/Tasks";
 import Widgets from "@/components/pages/home/Widgets";
 import withAuth from "@/utils/withAuth";
 import { useDashboard } from "@/query/dashboard.queries";
-import {
-  useWidgetsStore,
-  useTaskStore,
-  useSettingsStore,
-  useSessionStore,
-} from "@/store";
+import useStore, { useStoreActions } from "@/store";
 import { createClient } from "@/utils/helpers";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
@@ -48,12 +43,11 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
 
 const Page = () => {
   const router = useRouter();
-  const { showTasks, setTasks } = useTaskStore();
-  const { showWidgets } = useWidgetsStore();
 
-  const { setNote } = useWidgetsStore();
-  const { setSettings } = useSettingsStore();
-  const { setSession } = useSessionStore();
+  const showWidgets = useStore((state) => state.showWidgets);
+  const showTasks = useStore((state) => state.showTasks);
+
+  const { setNote, setTasks, setSettings, setSession } = useStoreActions();
 
   const { data } = useDashboard((router.query.project as string) ?? null);
 
@@ -98,6 +92,8 @@ const Page = () => {
   useEffect(() => {
     populateDashboard();
   }, [populateDashboard]);
+
+  console.log("Rendering Home Page");
 
   return (
     <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
