@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/Button";
 import { Progress } from "@/components/ui/Progress";
 import { Session } from "@/types";
 import { cn } from "@/utils/helpers";
@@ -20,8 +19,8 @@ const BarTimer = ({
   onStart,
 }: IBarTimerProps) => {
   return (
-    <div className="m-auto flex w-full flex-col items-center gap-10">
-      <div className="absolute top-10 w-full px-10">
+    <div className="m-auto flex min-h-[10rem] w-full flex-col items-center justify-center gap-10 md:min-h-[15rem] lg:min-h-[20rem] 2xl:min-h-auto">
+      <div className="absolute top-10 w-full px-5 lg:px-10">
         <Progress
           value={progress}
           className={cn("bg-primary/20 h-3", {
