@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { RingProgress } from "@/components/ui/RingProgress";
 import { useCallback, useEffect, useRef } from "react";
 import { cn, notification } from "@/utils/helpers";
 import useStore, { useStoreActions } from "@/store";
 import dayjs from "dayjs";
-import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
 import { useSession } from "@/query/session.queries";
 import { SessionStore } from "@/store/session.slice";
 import { Session } from "@/types";
 import { usePomodoro } from "@/hooks/usePomodoro";
+import RingTimer from "./RingTimer";
+import BarTimer from "./BarTimer";
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60)
@@ -49,6 +49,7 @@ const Pomodoro = () => {
     timeLeftReminder,
     notificationsEnabled,
     silentNotifications,
+    timerStyle,
   } = usePomodoro();
 
   const { setSession, setNotifiedUser, setInterruptionsData } =
@@ -303,33 +304,23 @@ const Pomodoro = () => {
 
   return (
     <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow max-2xl:order-first">
-      <RingProgress
-        value={(elapsedTime / intendedDuration) * 100}
-        className="size-50 md:size-80 lg:size-100"
-        circleProps={{
-          strokeWidth: 6,
-          className: cn("stroke-primary/20", {
-            "stroke-green-400/20": type === "SHORTBREAK",
-            "stroke-blue-400/20": type === "LONGBREAK",
-          }),
-        }}
-        progressCircleProps={{
-          strokeWidth: 6,
-          className: cn("stroke-primary", {
-            "stroke-green-400": type === "SHORTBREAK",
-            "stroke-blue-400": type === "LONGBREAK",
-          }),
-        }}
-        content={
-          <PomodoroInnerContent
-            remainingTime={remainingTime}
-            status={status}
-            type={type}
-            onStart={onStart}
-          />
-        }
-      />
-
+      {timerStyle === "RING" ? (
+        <RingTimer
+          progress={(elapsedTime / intendedDuration) * 100}
+          remainingTime={remainingTime}
+          status={status}
+          type={type}
+          onStart={onStart}
+        />
+      ) : (
+        <BarTimer
+          progress={(elapsedTime / intendedDuration) * 100}
+          remainingTime={remainingTime}
+          status={status}
+          type={type}
+          onStart={onStart}
+        />
+      )}
       <p className="mt-4 text-center font-medium">{projectName}</p>
 
       <MoreOptions />

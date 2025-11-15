@@ -20,7 +20,7 @@ const PomodoroInnerContent = ({
     <div className="relative flex flex-col items-center justify-center md:gap-2">
       <p
         className={cn(
-          "text-4xl font-extrabold text-black/70 md:text-6xl 2xl:text-[4rem] dark:text-white/90",
+          "text-4xl font-extrabold text-black/70 md:text-6xl 2xl:text-7xl dark:text-white/90",
           {
             "text-muted-foreground dark:text-muted-foreground":
               status === "PAUSED",
@@ -39,11 +39,7 @@ const PomodoroInnerContent = ({
           },
         )}
       >
-        {type === "FOCUS"
-          ? "🍅 FOCUS MODE"
-          : type === "SHORTBREAK"
-            ? "🍅 SHORT BREAK"
-            : "🍅 LONG BREAK"}
+        🍅 POMODORO
       </p>
 
       {status !== "COMPLETED" && (

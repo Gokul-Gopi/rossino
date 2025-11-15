@@ -32,6 +32,8 @@ export const usePomodoro = () => {
   const notificationsEnabled = useStore((state) => state.notificationsEnabled);
   const silentNotifications = useStore((state) => state.silentNotifications);
 
+  const timerStyle = useStore((state) => state.timerStyle);
+
   return {
     sessionId,
     status,
@@ -56,5 +58,6 @@ export const usePomodoro = () => {
     timeLeftReminder,
     notificationsEnabled,
     silentNotifications,
+    timerStyle,
   };
 };
