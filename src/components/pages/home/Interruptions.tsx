@@ -4,8 +4,6 @@ const Interruptions = () => {
   const pausedCount = useStore((state) => state.pausedCount);
   const pausedDuration = useStore((state) => state.pausedDuration);
 
-  console.log("Interruptions component rendered");
-
   return (
     <ul className="mt-4 flex flex-col gap-2">
       <li className="bg-muted-foreground/5 flex items-center justify-between rounded-md px-3 py-2 text-sm">

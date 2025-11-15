@@ -17,7 +17,6 @@ import { ChevronDown, EllipsisVertical } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-// TODO: Modularize this component more
 const MoreOptions = () => {
   const router = useRouter();
   const isMobile = useMobile();

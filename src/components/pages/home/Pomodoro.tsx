@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { RingProgress } from "@/components/ui/RingProgress";
 import { useCallback, useEffect, useRef } from "react";

@@ -45,8 +45,6 @@ const WidgetCard = ({
   );
 };
 
-console.log("Widgets component rendered");
-
 const Widgets = () => {
   return (
     <div className="flex grid-cols-2 grid-rows-3 flex-col gap-4 md:grid md:gap-6">

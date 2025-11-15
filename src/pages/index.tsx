@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import NotificationPermission from "@/components/pages/home/NotificationPermission";
 import dayjs from "dayjs";
-import { sessionIntitialState } from "@/store/session.slice";
+import { SessionStore } from "@/store/session.slice";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -51,6 +51,8 @@ const Page = () => {
 
   const { data } = useDashboard((router.query.project as string) ?? null);
 
+  console.log(data?.sessions);
+
   const populateDashboard = useCallback(() => {
     if (!data) return;
 
@@ -58,7 +60,7 @@ const Page = () => {
     setSettings(data.settings);
     setNote(data.widgets.note ?? "");
 
-    let currentSesion = sessionIntitialState;
+    let currentSesion: SessionStore | {} = {};
 
     if (data.project) {
       currentSesion = {
@@ -92,8 +94,6 @@ const Page = () => {
   useEffect(() => {
     populateDashboard();
   }, [populateDashboard]);
-
-  console.log("Rendering Home Page");
 
   return (
     <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
