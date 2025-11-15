@@ -72,11 +72,15 @@ const Page = () => {
       //Omitting unwanted fields
       const { id, createdAt, updatedAt, ...rest } = data.sessions;
 
-      const elapsedTime =
-        dayjs(data?.sessions?.lastPausedAt).diff(
-          dayjs(data?.sessions?.startedAt),
-          "second",
-        ) - data.sessions.totalPausedDuration;
+      let elapsedTime = 0;
+
+      if (data.sessions.status !== "IDLE") {
+        elapsedTime =
+          dayjs(data?.sessions?.lastPausedAt).diff(
+            dayjs(data?.sessions?.startedAt),
+            "second",
+          ) - data.sessions.totalPausedDuration;
+      }
 
       currentSesion = {
         ...rest,
