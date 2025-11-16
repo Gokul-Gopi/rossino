@@ -6,6 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/Select";
 import { useState } from "react";
+import MusicPlayer from "./MusicPlayer";
 
 export const tracks = [
   {
@@ -53,12 +54,14 @@ const BackgroudMusic = () => {
         </SelectContent>
       </Select>
 
-      <audio
+      <MusicPlayer />
+
+      {/* <audio
         src={selectedTrack!}
         controls
         autoPlay
         onEnded={() => setSelectedTrack(null)}
-      />
+      /> */}
     </div>
   );
 };
