@@ -1,20 +1,25 @@
-// src/components/BackgroundMusic.tsx
-
+import { Button } from "@/components/ui/Button";
+import { Slider } from "@/components/ui/Slider";
+import { cn, formatTime } from "@/utils/helpers";
+import { Pause, Play, Repeat } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const TRACK = {
-  label: "Lofi Hip Hop Radio - Beats to Relax/Study to",
-  src: "/audios/track-01.mp3",
-};
+interface IMuscicPlayerProps {
+  track: {
+    id: string;
+    label: string;
+    src: string;
+  } | null;
+}
 
-const BackgroundMusic = () => {
+const MusicPlayer = ({ track }: IMuscicPlayerProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.6); // 0–1
+  const [volume, setVolume] = useState(0.75);
 
   // Keep element’s volume in sync with state
   useEffect(() => {
@@ -41,13 +46,12 @@ const BackgroundMusic = () => {
     }
   };
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onValueChange = (value: number[]) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const newTime = Number(e.target.value);
-    audio.currentTime = newTime;
-    setCurrentTime(newTime);
+    audioRef.current!.currentTime = value[0];
+    setCurrentTime(value[0]);
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,73 +73,66 @@ const BackgroundMusic = () => {
     setCurrentTime(audio.currentTime);
   };
 
-  const formatTime = (time: number) => {
-    if (!Number.isFinite(time)) return "00:00";
-    const minutes = Math.floor(time / 60)
-      .toString()
-      .padStart(2, "0");
-    const seconds = Math.floor(time % 60)
-      .toString()
-      .padStart(2, "0");
-    return `${minutes}:${seconds}`;
-  };
-
   return (
-    <div className="flex max-w-sm flex-col gap-2 rounded-lg border bg-zinc-900/80 p-3 text-sm text-zinc-100">
-      {/* Hidden native player */}
-      <audio
-        ref={audioRef}
-        src={TRACK.src}
-        onLoadedMetadata={handleLoadedMetadata}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={() => setIsPlaying(false)}
-      />
-
-      <div className="truncate font-medium">{TRACK.label}</div>
-
-      {/* Progress + time */}
-      <div className="flex items-center gap-2">
-        <span className="w-10 text-[11px] text-zinc-400 tabular-nums">
-          {formatTime(currentTime)}
-        </span>
-        <input
-          type="range"
-          min={0}
-          max={duration || 0}
-          step={0.1}
-          value={currentTime}
-          onChange={handleTimeChange}
-          className="w-full"
+    <div className="flex max-w-sm flex-col rounded-lg text-sm">
+      {track?.src && (
+        <audio
+          ref={audioRef}
+          src={track.src}
+          onLoadedMetadata={handleLoadedMetadata}
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={() => setIsPlaying(false)}
         />
-        <span className="w-10 text-right text-[11px] text-zinc-400 tabular-nums">
+      )}
+
+      <div className="mb-3 flex items-center gap-2">
+        <span className="text-xs text-zinc-400">{formatTime(currentTime)}</span>
+
+        <Slider
+          value={[currentTime]}
+          onValueChange={onValueChange}
+          min={0}
+          max={duration}
+          step={0.1}
+          className="w-full"
+          trackClassName="bg-primary/20"
+          noThumb
+        />
+
+        <span className="text-right text-xs text-zinc-400">
           {formatTime(duration)}
         </span>
       </div>
 
-      {/* Controls */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <button
-            type="button"
+          <Button
             onClick={handlePlayPause}
-            className="rounded-full border px-3 py-1 text-xs hover:bg-zinc-800"
+            variant="outline"
+            size="sm"
+            className="hover:text-primary border-primary/20 bg-card text-sm"
           >
-            {isPlaying ? "Pause" : "Play"}
-          </button>
+            {isPlaying ? <Pause /> : <Play />}
+          </Button>
 
-          <button
-            type="button"
+          <Button
             onClick={() => setIsLooping((prev) => !prev)}
-            className={`rounded-full border px-3 py-1 text-xs ${
-              isLooping ? "bg-zinc-100 text-zinc-900" : "hover:bg-zinc-800"
-            }`}
+            variant="outline"
+            size="sm"
+            className={cn(
+              "hover:text-primary border-primary/20 bg-card text-sm",
+              {
+                "bg-primary hover:bg-initial text-white hover:text-white":
+                  isLooping,
+              },
+            )}
           >
-            Loop
-          </button>
+            <Repeat />
+          </Button>
         </div>
 
         {/* Volume */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <span className="text-[11px] text-zinc-400">🔊</span>
           <input
             type="range"
@@ -145,10 +142,10 @@ const BackgroundMusic = () => {
             value={volume}
             onChange={handleVolumeChange}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
 
-export default BackgroundMusic;
+export default MusicPlayer;

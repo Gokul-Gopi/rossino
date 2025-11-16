@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useRef } from "react";
-import { cn, notification } from "@/utils/helpers";
+import { cn, formatTime, notification } from "@/utils/helpers";
 import useStore, { useStoreActions } from "@/store";
 import dayjs from "dayjs";
 import MoreOptions from "./MoreOptions";
@@ -10,14 +10,6 @@ import { Session } from "@/types";
 import { usePomodoro } from "@/hooks/usePomodoro";
 import RingTimer from "./RingTimer";
 import BarTimer from "./BarTimer";
-
-const formatTime = (totalSeconds: number) => {
-  const minutes = Math.floor(totalSeconds / 60)
-    .toString()
-    .padStart(2, "0");
-  const seconds = (totalSeconds % 60).toString().padStart(2, "0");
-  return `${minutes}:${seconds}`;
-};
 
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
