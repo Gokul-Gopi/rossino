@@ -3,6 +3,7 @@ import { type HTMLMotionProps, motion, type MotionProps } from "motion/react";
 import QuickNotes from "./QuickNotes";
 import Interruptions from "./Interruptions";
 import TimerStyle from "./TimerStyle";
+import BackgroudMusic from "./BackgroudMusic";
 
 const commonMotionProps: MotionProps = {
   initial: { opacity: 0, scale: 0 },
@@ -82,7 +83,7 @@ const Widgets = () => {
         heading="Bacground music"
         className="col-start-2 row-span-2 row-start-2"
       >
-        Music
+        <BackgroudMusic />
       </WidgetCard>
     </div>
   );
