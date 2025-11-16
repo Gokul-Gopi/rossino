@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/Button";
 import { Slider } from "@/components/ui/Slider";
+import useStore from "@/store";
 import { Track } from "@/types";
 import { cn, formatTime } from "@/utils/helpers";
 import { Pause, Play, Repeat, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 interface IMusicPlayerProps {
   track: Track | null;
@@ -18,6 +20,8 @@ const MusicPlayer = ({ track }: IMusicPlayerProps) => {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.75);
 
+  const userId = useStore((state) => state.userId);
+
   // Keeps element’s volume in sync with state
   useEffect(() => {
     if (audioRef.current) {
@@ -27,6 +31,11 @@ const MusicPlayer = ({ track }: IMusicPlayerProps) => {
   }, [volume, isLooping]);
 
   const onPlay = () => {
+    if (!userId) {
+      toast.info("You need to sign in to use this feature");
+      return;
+    }
+
     const audio = audioRef.current;
     if (!audio) return;
 

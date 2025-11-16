@@ -24,8 +24,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-import { LOCAL_STORAGE_KEY } from "@/utils/constants";
-import useStore from "@/store";
+import useStore, { useStoreActions } from "@/store";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
   className: "size-5! -translate-x-[2.5px]",
@@ -68,12 +67,13 @@ const Sidebar = () => {
   const [confirmLogout, setConfirmLogout] = useState(false);
 
   const logout = useLogout();
+  const { resetAll } = useStoreActions();
 
   const onLogout = () => {
     logout.mutate(undefined, {
       onSuccess: () => {
         router.push("/signin");
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        resetAll();
         toast.success("Logged out");
       },
     });

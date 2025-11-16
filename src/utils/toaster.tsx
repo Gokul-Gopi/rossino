@@ -1,4 +1,4 @@
-import { CircleAlert, CircleCheck } from "lucide-react";
+import { CircleAlert, CircleCheck, Info } from "lucide-react";
 import type { ToasterProps } from "sonner";
 
 const toasterOptions: ToasterProps = {
@@ -10,6 +10,7 @@ const toasterOptions: ToasterProps = {
   icons: {
     success: <CircleCheck />,
     error: <CircleAlert />,
+    info: <Info />,
   },
   toastOptions: {
     classNames: {

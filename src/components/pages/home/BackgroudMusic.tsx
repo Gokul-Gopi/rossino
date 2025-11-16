@@ -43,7 +43,7 @@ export const tracks = [
 ];
 
 const BackgroudMusic = () => {
-  const [selectedTrack, setSelectedTrack] = useState<Track | null>(tracks[0]);
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
 
   const onTrackSelect = (id: string) => {
     const track = tracks.find((t) => t.id === id);
