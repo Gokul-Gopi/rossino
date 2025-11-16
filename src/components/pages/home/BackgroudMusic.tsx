@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/Select";
 import { useState } from "react";
 import MusicPlayer from "./MusicPlayer";
+import { Track } from "@/types";
 
 export const tracks = [
   {
@@ -40,8 +41,6 @@ export const tracks = [
     src: "/audios/track-06.mp3",
   },
 ];
-
-type Track = (typeof tracks)[number];
 
 const BackgroudMusic = () => {
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(tracks[0]);

@@ -1,18 +1,15 @@
 import { Button } from "@/components/ui/Button";
 import { Slider } from "@/components/ui/Slider";
+import { Track } from "@/types";
 import { cn, formatTime } from "@/utils/helpers";
-import { Pause, Play, Repeat } from "lucide-react";
+import { Pause, Play, Repeat, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-interface IMuscicPlayerProps {
-  track: {
-    id: string;
-    label: string;
-    src: string;
-  } | null;
+interface IMusicPlayerProps {
+  track: Track | null;
 }
 
-const MusicPlayer = ({ track }: IMuscicPlayerProps) => {
+const MusicPlayer = ({ track }: IMusicPlayerProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -21,7 +18,7 @@ const MusicPlayer = ({ track }: IMuscicPlayerProps) => {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.75);
 
-  // Keep element’s volume in sync with state
+  // Keeps element’s volume in sync with state
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
@@ -29,7 +26,7 @@ const MusicPlayer = ({ track }: IMuscicPlayerProps) => {
     }
   }, [volume, isLooping]);
 
-  const handlePlayPause = () => {
+  const onPlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -54,19 +51,14 @@ const MusicPlayer = ({ track }: IMuscicPlayerProps) => {
     setCurrentTime(value[0]);
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = Number(e.target.value);
-    setVolume(newVolume);
-  };
-
-  const handleLoadedMetadata = () => {
+  const onLoadedMetadata = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
     setDuration(audio.duration || 0);
   };
 
-  const handleTimeUpdate = () => {
+  const onTimeUpdate = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -74,13 +66,13 @@ const MusicPlayer = ({ track }: IMuscicPlayerProps) => {
   };
 
   return (
-    <div className="flex max-w-sm flex-col rounded-lg text-sm">
+    <div className="flex flex-col rounded-lg text-sm">
       {track?.src && (
         <audio
           ref={audioRef}
           src={track.src}
-          onLoadedMetadata={handleLoadedMetadata}
-          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={onLoadedMetadata}
+          onTimeUpdate={onTimeUpdate}
           onEnded={() => setIsPlaying(false)}
         />
       )}
@@ -104,10 +96,10 @@ const MusicPlayer = ({ track }: IMuscicPlayerProps) => {
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Button
-            onClick={handlePlayPause}
+            onClick={onPlay}
             variant="outline"
             size="sm"
             className="hover:text-primary border-primary/20 bg-card text-sm"
@@ -131,18 +123,18 @@ const MusicPlayer = ({ track }: IMuscicPlayerProps) => {
           </Button>
         </div>
 
-        {/* Volume */}
-        {/* <div className="flex items-center gap-2">
-          <span className="text-[11px] text-zinc-400">🔊</span>
-          <input
-            type="range"
+        <div className="flex items-center gap-2">
+          <Volume2 size={18} className="stroke-primary/80" />
+          <Slider
+            value={[volume]}
+            onValueChange={(value) => setVolume(value[0])}
             min={0}
             max={1}
             step={0.01}
-            value={volume}
-            onChange={handleVolumeChange}
+            className="w-24"
+            trackClassName="bg-primary/20"
           />
-        </div> */}
+        </div>
       </div>
     </div>
   );
