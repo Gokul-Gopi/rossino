@@ -10,6 +10,7 @@ import { Session } from "@/types";
 import { usePomodoro } from "@/hooks/usePomodoro";
 import RingTimer from "./RingTimer";
 import BarTimer from "./BarTimer";
+import SwitchSession from "./SwitchSession";
 
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -295,7 +296,7 @@ const Pomodoro = () => {
   }, [status, updateTimer]);
 
   return (
-    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow max-2xl:order-first">
+    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border px-4 pt-10 shadow max-2xl:order-first">
       {timerStyle === "RING" ? (
         <RingTimer
           progress={(elapsedTime / intendedDuration) * 100}
@@ -313,7 +314,9 @@ const Pomodoro = () => {
           onStart={onStart}
         />
       )}
-      <p className="mt-4 text-center font-medium">{projectName}</p>
+      {/* <p className="mt-4 text-center font-medium">{projectName}</p> */}
+
+      <SwitchSession />
 
       <MoreOptions />
     </div>
