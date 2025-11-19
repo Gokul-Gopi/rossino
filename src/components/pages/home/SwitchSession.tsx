@@ -34,7 +34,7 @@ const SwitchSession = () => {
   };
 
   return (
-    <div className="mt-4 pb-4">
+    <div className="mt-3 mb-4">
       <SegmentedControl
         value={type}
         onChange={(value) => onSwitchSession(value as Session["type"])}

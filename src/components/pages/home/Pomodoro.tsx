@@ -296,7 +296,7 @@ const Pomodoro = () => {
   }, [status, updateTimer]);
 
   return (
-    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border px-4 pt-10 shadow max-2xl:order-first">
+    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border px-4 pt-9 shadow max-2xl:order-first">
       <DynamicDocTitle
         status={status}
         type={type}

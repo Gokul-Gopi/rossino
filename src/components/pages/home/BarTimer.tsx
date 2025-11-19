@@ -19,7 +19,7 @@ const BarTimer = ({
   onStart,
 }: IBarTimerProps) => {
   return (
-    <div className="animate-in fade-in m-auto flex min-h-[10rem] w-full flex-col items-center justify-center gap-10 md:min-h-[15rem] lg:min-h-[20rem] 2xl:min-h-auto">
+    <div className="animate-in fade-in m-auto flex min-h-[10rem] w-full flex-col items-center justify-center gap-10 md:min-h-[15rem] lg:min-h-[20rem] 2xl:min-h-[25rem]">
       <div className="absolute top-10 w-full px-5 lg:px-10">
         <Progress
           value={progress}

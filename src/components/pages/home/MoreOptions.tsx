@@ -140,8 +140,6 @@ const MoreOptions = () => {
         </PopoverContent>
       </Popover>
 
-      <p className="mt-4 text-center font-medium">Project</p>
-
       <CreateNew
         open={createNewOpen}
         onOpenChange={() => setCreateNewOpen((pre) => !pre)}
