@@ -11,6 +11,7 @@ interface ISegmentedControlProps {
   value: string;
   onChange: (value: string) => void;
   segments: ISegment[];
+  className?: string;
   highlightClassName?: string;
 }
 
@@ -18,6 +19,7 @@ const SegmentedControl = ({
   value,
   onChange,
   segments,
+  className,
   highlightClassName,
 }: ISegmentedControlProps) => {
   const componentReady = useRef(false);
@@ -53,7 +55,12 @@ const SegmentedControl = ({
   }, []);
 
   return (
-    <div className="bg-card relative flex items-center overflow-hidden rounded-full border border-gray-100 p-1.5 shadow-inner select-none dark:border-gray-700">
+    <div
+      className={cn(
+        "bg-card relative flex items-center overflow-hidden rounded-full border border-gray-200 p-1.5 shadow-inner select-none dark:border-gray-700",
+        className,
+      )}
+    >
       <div
         className={cn(
           "bg-primary pointer-events-none absolute top-1.5 bottom-1.5 z-0 rounded-full shadow-md",

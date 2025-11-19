@@ -69,6 +69,7 @@ const SwitchSession = () => {
             icon: <Cloud size={20} />,
           },
         ]}
+        className="border-none shadow-none"
         highlightClassName={cn({
           "bg-primary/40": type === "FOCUS",
           "bg-green-400/40": type === "SHORTBREAK",

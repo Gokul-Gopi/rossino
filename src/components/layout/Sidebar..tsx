@@ -25,6 +25,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import useStore, { useStoreActions } from "@/store";
+import Image from "next/image";
+import logo from "../../../public/assets/logo.svg";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
   className: "size-5! -translate-x-[2.5px]",
@@ -85,12 +87,12 @@ const Sidebar = () => {
         <SidebarHeader className="mt-2 mb-6 px-3">
           <Link
             href="/"
-            className="flex gap-1.5 overflow-hidden text-lg text-nowrap"
+            className="flex items-start gap-1.5 overflow-hidden text-lg text-nowrap"
           >
-            🍅
+            <Image src={logo} alt="rossino" width={24} className="min-w-6" />
             <span
               className={cn(
-                "inline overflow-hidden text-nowrap transition-opacity duration-300",
+                "inline overflow-hidden font-medium text-nowrap transition-opacity duration-300",
                 {
                   "opacity-0": !open && !openMobile,
                 },
