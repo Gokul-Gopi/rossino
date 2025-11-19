@@ -39,7 +39,12 @@ const PomodoroInnerContent = ({
           },
         )}
       >
-        🍅 POMODORO
+        🍅{" "}
+        {type === "FOCUS"
+          ? "FOCUS MODE"
+          : type === "SHORTBREAK"
+            ? "SHORT BREAK"
+            : "LONG BREAK"}
       </p>
 
       {status !== "COMPLETED" && (

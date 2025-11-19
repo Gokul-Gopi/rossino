@@ -221,7 +221,7 @@ body {
   animation-name: fade-in;
 }
 .animate-in {
-  animation-duration: var(--transition-length, 500ms);
+  animation-duration: var(--transition-length, 400ms);
   animation-timing-function: ease-out;
   animation-fill-mode: both;
 }

@@ -28,6 +28,7 @@ const SwitchSession = () => {
       lastPausedAt: null,
       elapsedTime: 0,
       status: "IDLE",
+      totalPausedDuration: 0,
       intendedDuration:
         value === "FOCUS"
           ? pomoDuration
