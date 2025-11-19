@@ -36,8 +36,6 @@ export const sessionIntitialState: SessionStore = {
   elapsedTime: 0,
   intendedDuration: 120,
   totalPausedDuration: 0,
-  //TODO: remove interruptionCount, if not used
-  interruptionCount: 0,
   status: "IDLE",
   type: "FOCUS",
   focusSessionCompleted: 0,

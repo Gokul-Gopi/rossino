@@ -225,7 +225,6 @@ const Pomodoro = () => {
       lastPausedAt: null,
       elapsedTime: 0,
       totalPausedDuration: 0,
-      interruptionCount: 0,
     });
 
     if (userId) {
