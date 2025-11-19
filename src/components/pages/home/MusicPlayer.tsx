@@ -18,7 +18,7 @@ const MusicPlayer = ({ track }: IMusicPlayerProps) => {
   const [isLooping, setIsLooping] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.75);
+  const [volume, setVolume] = useState(0.5);
 
   const userId = useStore((state) => state.userId);
 
