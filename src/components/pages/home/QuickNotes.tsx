@@ -22,12 +22,14 @@ const QuickNotes = () => {
     setNote(debouncedNote);
 
     if (userId) {
-      (noteQuery.mutate({ id: userId, note: debouncedNote }),
+      noteQuery.mutate(
+        { id: userId, note: debouncedNote },
         {
           onError: () => {
             setNote(note);
           },
-        });
+        },
+      );
     }
   }, [debouncedNote, setNote]);
 

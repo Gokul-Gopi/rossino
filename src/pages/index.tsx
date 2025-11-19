@@ -60,7 +60,7 @@ const Page = () => {
     setSettings(data.settings);
     setNote(data.widgets.note ?? "");
 
-    let currentSesion: SessionStore | {} = {};
+    let currentSesion: SessionStore | object = {};
 
     if (data.project) {
       currentSesion = {
