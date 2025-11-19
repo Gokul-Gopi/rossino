@@ -322,7 +322,6 @@ const Pomodoro = () => {
       )}
 
       {/* TODO: add project name somewhere */}
-      {/* <p className="mt-4 text-center font-medium">{projectName}</p> */}
 
       <SwitchSession />
 
