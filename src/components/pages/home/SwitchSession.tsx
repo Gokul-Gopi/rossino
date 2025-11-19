@@ -7,22 +7,22 @@ const SwitchSession = () => {
   const [_activeTab, setActiveTab] = useState<Session["type"]>("FOCUS");
 
   return (
-    <div className="mt-5 gap-2">
+    <div className="mt-4 pb-4">
       <SegmentedControl
         onChange={(val) => setActiveTab(val as Session["type"])}
         defaultIndex={1}
         segments={[
           {
             value: "SHORTBREAK",
-            icon: <Coffee />,
+            icon: <Coffee size={20} />,
           },
           {
             value: "FOCUS",
-            icon: <Brain />,
+            icon: <Brain size={20} />,
           },
           {
             value: "LONGBREAK",
-            icon: <Cloud />,
+            icon: <Cloud size={20} />,
           },
         ]}
       />

@@ -52,7 +52,7 @@ const SegmentedControl = ({
   };
 
   return (
-    <div className="relative flex items-center overflow-hidden rounded-full border border-gray-100 bg-white p-1.5 shadow-inner select-none">
+    <div className="bg-card relative flex items-center overflow-hidden rounded-full border border-gray-100 p-1.5 shadow-inner select-none">
       <div
         className={cn(
           "bg-primary pointer-events-none absolute top-1.5 bottom-1.5 z-0 rounded-full shadow-md",
@@ -87,9 +87,9 @@ const SegmentedControl = ({
 
           <div
             className={cn(
-              "flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold transition-colors duration-200",
+              "flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold transition-all duration-200",
               {
-                "text-white": index === activeIndex,
+                "scale-125 text-white": index === activeIndex,
                 "text-gray-500 hover:text-gray-700": index !== activeIndex,
               },
             )}

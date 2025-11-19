@@ -32,7 +32,7 @@ const PomodoroInnerContent = ({
 
       <p
         className={cn(
-          "text-primary text-[10px] font-semibold tracking-widest md:text-sm md:font-medium lg:text-base",
+          "text-primary text-[10px] tracking-widest md:text-sm md:font-medium lg:text-base",
           {
             "text-green-400": type === "SHORTBREAK",
             "text-blue-400": type === "LONGBREAK",
