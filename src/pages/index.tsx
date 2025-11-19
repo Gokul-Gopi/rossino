@@ -49,6 +49,7 @@ const Page = () => {
 
   const { setNote, setTasks, setSettings, setSession } = useStoreActions();
 
+  //TODO: enable this for only auth users
   const { data } = useDashboard((router.query.project as string) ?? null);
 
   const populateDashboard = useCallback(() => {

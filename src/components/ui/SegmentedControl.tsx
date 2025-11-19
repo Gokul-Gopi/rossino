@@ -1,7 +1,8 @@
+import { cn } from "@/utils/helpers";
 import { useState, useRef, useEffect } from "react";
 
 interface ISegment {
-  label: string;
+  label?: string;
   value: string;
   icon?: React.ReactNode;
 }
@@ -22,10 +23,9 @@ const SegmentedControl = ({
   const componentReady = useRef(false);
   const itemsRef = useRef<HTMLLabelElement[]>([]);
 
-  // Initialize refs array
   useEffect(() => {
     itemsRef.current = itemsRef.current.slice(0, segments.length);
-  }, [segments]);
+  }, [segments.length]);
 
   // Update the highlight position when activeIndex changes
   useEffect(() => {
@@ -36,7 +36,7 @@ const SegmentedControl = ({
         width: activeElement.offsetWidth,
       });
     }
-  }, [activeIndex, segments]);
+  }, [activeIndex]);
 
   // Handle component mount animation prevention
   useEffect(() => {
@@ -46,15 +46,21 @@ const SegmentedControl = ({
     return () => clearTimeout(timeout);
   }, []);
 
-  const onInputChange = (value: string, index: number) => {
+  const onSegementChange = (value: string, index: number) => {
     setActiveIndex(index);
     onChange(value, index);
   };
 
   return (
-    <div className="relative flex overflow-hidden rounded-full border border-gray-100 bg-white p-1.5 shadow-inner select-none">
+    <div className="relative flex items-center overflow-hidden rounded-full border border-gray-100 bg-white p-1.5 shadow-inner select-none">
       <div
-        className={`pointer-events-none absolute top-1.5 bottom-1.5 z-0 rounded-full bg-[#FF6B6B] shadow-md ${componentReady.current ? "transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]" : ""}`}
+        className={cn(
+          "bg-primary pointer-events-none absolute top-1.5 bottom-1.5 z-0 rounded-full shadow-md",
+          {
+            "transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]":
+              componentReady.current,
+          },
+        )}
         style={{
           left: indicatorStyle.left,
           width: indicatorStyle.width,
@@ -64,25 +70,32 @@ const SegmentedControl = ({
       {segments.map((item, index) => (
         <label
           key={item.value}
+          onClick={() => onSegementChange(item.value, index)}
           ref={(el) => {
             if (!el) return;
             itemsRef.current[index] = el;
           }}
           className="group relative z-10 flex-1 cursor-pointer"
-          onClick={() => onInputChange(item.value, index)}
         >
           <input
             value={item.value}
             checked={index === activeIndex}
             type="radio"
             className="sr-only"
+            readOnly
           />
 
           <div
-            className={`flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold transition-colors duration-200 ${index === activeIndex ? "text-white" : "text-gray-500 hover:text-gray-700"} `}
+            className={cn(
+              "flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold transition-colors duration-200",
+              {
+                "text-white": index === activeIndex,
+                "text-gray-500 hover:text-gray-700": index !== activeIndex,
+              },
+            )}
           >
             {item.icon}
-            <span>{item.label}</span>
+            {item.label && <span>{item.label}</span>}
           </div>
         </label>
       ))}

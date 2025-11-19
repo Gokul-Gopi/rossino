@@ -1,29 +1,27 @@
 import SegmentedControl from "@/components/ui/SegmentedControl";
+import { Session } from "@/types";
 import { Brain, Cloud, Coffee } from "lucide-react";
 import { useState } from "react";
 
 const SwitchSession = () => {
-  const [_activeTab, setActiveTab] = useState("focus");
+  const [_activeTab, setActiveTab] = useState<Session["type"]>("FOCUS");
 
   return (
-    <div className="mt-5 flex w-full items-center justify-between gap-2">
+    <div className="mt-5 gap-2">
       <SegmentedControl
-        onChange={(val) => setActiveTab(val)}
+        onChange={(val) => setActiveTab(val as Session["type"])}
         defaultIndex={1}
         segments={[
           {
-            label: "Focus",
-            value: "focus",
-            icon: <Brain />,
-          },
-          {
-            label: "Short Break",
-            value: "short",
+            value: "SHORTBREAK",
             icon: <Coffee />,
           },
           {
-            label: "Long Break",
-            value: "long",
+            value: "FOCUS",
+            icon: <Brain />,
+          },
+          {
+            value: "LONGBREAK",
             icon: <Cloud />,
           },
         ]}
