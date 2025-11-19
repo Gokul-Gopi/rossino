@@ -8,26 +8,32 @@ interface ISegment {
 }
 
 interface ISegmentedControlProps {
+  value: string;
+  onChange: (value: string) => void;
   segments: ISegment[];
-  onChange: (value: string, index: number) => void;
-  defaultIndex?: number;
+  highlightClassName?: string;
 }
 
 const SegmentedControl = ({
-  segments,
+  value,
   onChange,
-  defaultIndex = 0,
+  segments,
+  highlightClassName,
 }: ISegmentedControlProps) => {
-  const [activeIndex, setActiveIndex] = useState(defaultIndex);
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const componentReady = useRef(false);
   const itemsRef = useRef<HTMLLabelElement[]>([]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+
+  useEffect(() => {
+    setActiveIndex(segments.findIndex((s) => s.value === value));
+  }, [value]);
 
   useEffect(() => {
     itemsRef.current = itemsRef.current.slice(0, segments.length);
   }, [segments.length]);
 
-  // Update the highlight position when activeIndex changes
   useEffect(() => {
     if (itemsRef.current[activeIndex]) {
       const activeElement = itemsRef.current[activeIndex] as HTMLElement;
@@ -38,21 +44,21 @@ const SegmentedControl = ({
     }
   }, [activeIndex]);
 
-  // Handle component mount animation prevention
   useEffect(() => {
+    // Small delay to ensure DOM is painted
     const timeout = setTimeout(() => {
       componentReady.current = true;
-    }, 100); // Small delay to ensure DOM is painted
+    }, 100);
     return () => clearTimeout(timeout);
   }, []);
 
   const onSegementChange = (value: string, index: number) => {
     setActiveIndex(index);
-    onChange(value, index);
+    onChange(value);
   };
 
   return (
-    <div className="bg-card relative flex items-center overflow-hidden rounded-full border border-gray-100 p-1.5 shadow-inner select-none">
+    <div className="bg-card relative flex items-center overflow-hidden rounded-full border border-gray-100 p-1.5 shadow-inner select-none dark:border-gray-700">
       <div
         className={cn(
           "bg-primary pointer-events-none absolute top-1.5 bottom-1.5 z-0 rounded-full shadow-md",
@@ -60,6 +66,7 @@ const SegmentedControl = ({
             "transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]":
               componentReady.current,
           },
+          highlightClassName,
         )}
         style={{
           left: indicatorStyle.left,
@@ -90,7 +97,7 @@ const SegmentedControl = ({
               "flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold transition-all duration-200",
               {
                 "scale-125 text-white": index === activeIndex,
-                "text-gray-500 hover:text-gray-700": index !== activeIndex,
+                "text-gray-500": index !== activeIndex,
               },
             )}
           >

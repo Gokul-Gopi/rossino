@@ -1,16 +1,39 @@
 import SegmentedControl from "@/components/ui/SegmentedControl";
+import useStore, { useStoreActions } from "@/store";
 import { Session } from "@/types";
+import { cn } from "@/utils/helpers";
 import { Brain, Cloud, Coffee } from "lucide-react";
-import { useState } from "react";
 
 const SwitchSession = () => {
-  const [_activeTab, setActiveTab] = useState<Session["type"]>("FOCUS");
+  const { setSession } = useStoreActions();
+
+  const type = useStore((state) => state.type);
+  const pomoDuration = useStore((state) => state.pomoDuration);
+  const shortBreakDuration = useStore((state) => state.shortBreakDuration);
+  const longBreakDuration = useStore((state) => state.longBreakDuration);
+
+  const onSwitchSession = (value: Session["type"]) => {
+    setSession({
+      type: value,
+      startedAt: null,
+      endedAt: null,
+      lastPausedAt: null,
+      elapsedTime: 0,
+      status: "IDLE",
+      intendedDuration:
+        value === "FOCUS"
+          ? pomoDuration
+          : value === "SHORTBREAK"
+            ? shortBreakDuration
+            : longBreakDuration,
+    });
+  };
 
   return (
     <div className="mt-4 pb-4">
       <SegmentedControl
-        onChange={(val) => setActiveTab(val as Session["type"])}
-        defaultIndex={1}
+        value={type}
+        onChange={(value) => onSwitchSession(value as Session["type"])}
         segments={[
           {
             value: "SHORTBREAK",
@@ -25,6 +48,11 @@ const SwitchSession = () => {
             icon: <Cloud size={20} />,
           },
         ]}
+        highlightClassName={cn({
+          "bg-primary/40": type === "FOCUS",
+          "bg-green-400/40": type === "SHORTBREAK",
+          "bg-blue-400/40": type === "LONGBREAK",
+        })}
       />
     </div>
   );
