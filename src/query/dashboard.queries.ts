@@ -2,7 +2,7 @@ import { Dashboard } from "@/types";
 import supabase from "@/utils/supabase";
 import { useQuery } from "@tanstack/react-query";
 
-export const useDashboard = (projectId: string | null) => {
+export const useDashboard = (projectId: string | null, enabled = true) => {
   return useQuery<Dashboard>({
     queryFn: async () => {
       const { data, error } = await supabase.rpc("dashboard", {
@@ -14,5 +14,6 @@ export const useDashboard = (projectId: string | null) => {
       return data;
     },
     queryKey: ["dashboard", projectId],
+    enabled,
   });
 };

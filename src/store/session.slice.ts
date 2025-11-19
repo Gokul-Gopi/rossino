@@ -16,7 +16,7 @@ export type SessionStore = Omit<
 
 export type SessionSlice = SessionStore & {
   setSession: (session: Partial<SessionStore>) => void;
-  resetSession: () => void;
+  resetSession: (session?: Partial<SessionStore>) => void;
   setNotifiedUser: ({
     notifiedForTimeLeft,
     notifiedForNextSession,
@@ -54,10 +54,11 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
       ...state,
       ...updatedState,
     })),
-  resetSession: () => {
+  resetSession: (session) => {
     const { pomoDuration } = get();
     return set({
       ...sessionIntitialState,
+      ...session,
       intendedDuration: pomoDuration,
     });
   },

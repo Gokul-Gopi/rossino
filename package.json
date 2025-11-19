@@ -10,7 +10,9 @@
     "sb:start": "supabase start",
     "sb:stop": "supabase stop",
     "sb:status": "supabase status",
-    "sb:restart": "supabase stop && supabase start"
+    "sb:restart": "supabase stop && supabase start",
+    "sb:reset": "pnpm dlx supabase db reset",
+    "sb:types": "pnpm dlx supabase gen types typescript --local > src/types/database.types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

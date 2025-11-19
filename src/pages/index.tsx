@@ -13,7 +13,6 @@ import { useCallback, useEffect } from "react";
 import NotificationPermission from "@/components/pages/home/NotificationPermission";
 import dayjs from "dayjs";
 import { SessionStore } from "@/store/session.slice";
-import { NextSeo } from "next-seo";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -45,13 +44,16 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
 const Page = () => {
   const router = useRouter();
 
+  const userId = useStore((state) => state?.userId);
   const showWidgets = useStore((state) => state.showWidgets);
   const showTasks = useStore((state) => state.showTasks);
 
   const { setNote, setTasks, setSettings, setSession } = useStoreActions();
 
-  //TODO: enable this for only auth users
-  const { data } = useDashboard((router.query.project as string) ?? null);
+  const { data } = useDashboard(
+    (router.query.project as string) ?? null,
+    !!userId,
+  );
 
   const populateDashboard = useCallback(() => {
     if (!data) return;

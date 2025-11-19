@@ -12,34 +12,24 @@ const SwitchSession = () => {
     Session["type"] | null
   >(null);
 
-  const { setSession } = useStoreActions();
+  const { resetSession } = useStoreActions();
 
   const type = useStore((state) => state.type);
   const status = useStore((state) => state.status);
-  const pomoDuration = useStore((state) => state.pomoDuration);
-  const shortBreakDuration = useStore((state) => state.shortBreakDuration);
-  const longBreakDuration = useStore((state) => state.longBreakDuration);
+  const projectId = useStore((state) => state.projectId);
+  const projectName = useStore((state) => state.projectName);
 
   const onSwitchSession = (value: Session["type"]) => {
-    setSession({
-      type: value,
-      startedAt: null,
-      endedAt: null,
-      lastPausedAt: null,
-      elapsedTime: 0,
-      status: "IDLE",
-      totalPausedDuration: 0,
-      intendedDuration:
-        value === "FOCUS"
-          ? pomoDuration
-          : value === "SHORTBREAK"
-            ? shortBreakDuration
-            : longBreakDuration,
-    });
+    if (status === "RUNNING") {
+      setDiscardSession(true);
+      setSwitchedSession(value as Session["type"]);
+      return;
+    }
+    resetSession({ type: value, projectId, projectName });
   };
 
   const onConfirm = () => {
-    onSwitchSession(switchedSession!);
+    resetSession({ type: switchedSession!, projectId, projectName });
     setDiscardSession(false);
   };
 
@@ -47,14 +37,7 @@ const SwitchSession = () => {
     <div className="mt-4 pb-4">
       <SegmentedControl
         value={type}
-        onChange={(value) => {
-          if (status === "RUNNING") {
-            setDiscardSession(true);
-            setSwitchedSession(value as Session["type"]);
-            return;
-          }
-          onSwitchSession(value as Session["type"]);
-        }}
+        onChange={(value) => onSwitchSession(value as Session["type"])}
         segments={[
           {
             value: "SHORTBREAK",
