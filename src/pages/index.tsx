@@ -13,6 +13,7 @@ import { useCallback, useEffect } from "react";
 import NotificationPermission from "@/components/pages/home/NotificationPermission";
 import dayjs from "dayjs";
 import { SessionStore } from "@/store/session.slice";
+import { NextSeo } from "next-seo";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -99,19 +100,23 @@ const Page = () => {
   }, [populateDashboard]);
 
   return (
-    <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
-      <AnimatePresence initial={false}>
-        {showTasks && <Tasks />}
-      </AnimatePresence>
+    <>
+      <NextSeo title="Rossino" description="A Pomodoro timer app" />
 
-      <Pomodoro />
+      <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
+        <AnimatePresence initial={false}>
+          {showTasks && <Tasks />}
+        </AnimatePresence>
 
-      <AnimatePresence initial={false}>
-        {showWidgets && <Widgets />}
-      </AnimatePresence>
+        <Pomodoro />
 
-      <NotificationPermission />
-    </AppLayout>
+        <AnimatePresence initial={false}>
+          {showWidgets && <Widgets />}
+        </AnimatePresence>
+
+        <NotificationPermission />
+      </AppLayout>
+    </>
   );
 };
 

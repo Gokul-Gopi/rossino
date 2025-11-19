@@ -11,6 +11,7 @@ import { usePomodoro } from "@/hooks/usePomodoro";
 import RingTimer from "./RingTimer";
 import BarTimer from "./BarTimer";
 import SwitchSession from "./SwitchSession";
+import { NextSeo } from "next-seo";
 
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -319,6 +320,10 @@ const Pomodoro = () => {
       <SwitchSession />
 
       <MoreOptions />
+
+      <NextSeo
+        title={`${remainingTime} - ${type === "FOCUS" ? "Focus" : "Break"}`}
+      />
     </div>
   );
 };

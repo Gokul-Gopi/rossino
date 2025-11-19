@@ -8,6 +8,12 @@ const seo: DefaultSeoProps = {
     url: "https://rossino.app/",
     siteName: "Rossino",
   },
+  additionalLinkTags: [
+    {
+      rel: "icon",
+      href: "/assets/logo.svg",
+    },
+  ],
 };
 
 export default seo;
