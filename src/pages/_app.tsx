@@ -11,6 +11,8 @@ import {
 } from "@tanstack/react-query";
 import { PagesTopLoader } from "nextjs-toploader/pages";
 import { useStoreActions } from "@/store";
+import { DefaultSeo } from "next-seo";
+import seo from "@/utils/seo";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { setUser } = useStoreActions();
@@ -37,6 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <HydrationBoundary state={pageProps.dehydratedState}>
         <ThemeProvider attribute="class" enableSystem={false}>
           <PagesTopLoader color="hsl(0 84% 60%)" />
+          <DefaultSeo {...seo} />
           <Component {...pageProps} />
           <Toaster {...toasterOptions} />
         </ThemeProvider>
