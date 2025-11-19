@@ -52,11 +52,6 @@ const SegmentedControl = ({
     return () => clearTimeout(timeout);
   }, []);
 
-  const onSegementChange = (value: string, index: number) => {
-    setActiveIndex(index);
-    onChange(value);
-  };
-
   return (
     <div className="bg-card relative flex items-center overflow-hidden rounded-full border border-gray-100 p-1.5 shadow-inner select-none dark:border-gray-700">
       <div
@@ -77,7 +72,7 @@ const SegmentedControl = ({
       {segments.map((item, index) => (
         <label
           key={item.value}
-          onClick={() => onSegementChange(item.value, index)}
+          onClick={() => onChange(item.value)}
           ref={(el) => {
             if (!el) return;
             itemsRef.current[index] = el;

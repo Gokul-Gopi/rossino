@@ -1,13 +1,21 @@
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import SegmentedControl from "@/components/ui/SegmentedControl";
 import useStore, { useStoreActions } from "@/store";
 import { Session } from "@/types";
 import { cn } from "@/utils/helpers";
 import { Brain, Cloud, Coffee } from "lucide-react";
+import { useState } from "react";
 
 const SwitchSession = () => {
+  const [discardSession, setDiscardSession] = useState(false);
+  const [switchedSession, setSwitchedSession] = useState<
+    Session["type"] | null
+  >(null);
+
   const { setSession } = useStoreActions();
 
   const type = useStore((state) => state.type);
+  const status = useStore((state) => state.status);
   const pomoDuration = useStore((state) => state.pomoDuration);
   const shortBreakDuration = useStore((state) => state.shortBreakDuration);
   const longBreakDuration = useStore((state) => state.longBreakDuration);
@@ -29,11 +37,23 @@ const SwitchSession = () => {
     });
   };
 
+  const onConfirm = () => {
+    onSwitchSession(switchedSession!);
+    setDiscardSession(false);
+  };
+
   return (
     <div className="mt-4 pb-4">
       <SegmentedControl
         value={type}
-        onChange={(value) => onSwitchSession(value as Session["type"])}
+        onChange={(value) => {
+          if (status === "RUNNING") {
+            setDiscardSession(true);
+            setSwitchedSession(value as Session["type"]);
+            return;
+          }
+          onSwitchSession(value as Session["type"]);
+        }}
         segments={[
           {
             value: "SHORTBREAK",
@@ -53,6 +73,13 @@ const SwitchSession = () => {
           "bg-green-400/40": type === "SHORTBREAK",
           "bg-blue-400/40": type === "LONGBREAK",
         })}
+      />
+
+      <ConfirmDialog
+        open={discardSession}
+        onConfirm={onConfirm}
+        onOpenChange={() => setDiscardSession((pre) => !pre)}
+        title="Your current session will be discarded. Countinue?"
       />
     </div>
   );
