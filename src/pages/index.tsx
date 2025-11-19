@@ -100,23 +100,19 @@ const Page = () => {
   }, [populateDashboard]);
 
   return (
-    <>
-      <NextSeo title="Rossino" description="A Pomodoro timer app" />
+    <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
+      <AnimatePresence initial={false}>
+        {showTasks && <Tasks />}
+      </AnimatePresence>
 
-      <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
-        <AnimatePresence initial={false}>
-          {showTasks && <Tasks />}
-        </AnimatePresence>
+      <Pomodoro />
 
-        <Pomodoro />
+      <AnimatePresence initial={false}>
+        {showWidgets && <Widgets />}
+      </AnimatePresence>
 
-        <AnimatePresence initial={false}>
-          {showWidgets && <Widgets />}
-        </AnimatePresence>
-
-        <NotificationPermission />
-      </AppLayout>
-    </>
+      <NotificationPermission />
+    </AppLayout>
   );
 };
 

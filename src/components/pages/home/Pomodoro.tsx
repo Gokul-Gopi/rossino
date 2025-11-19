@@ -11,7 +11,7 @@ import { usePomodoro } from "@/hooks/usePomodoro";
 import RingTimer from "./RingTimer";
 import BarTimer from "./BarTimer";
 import SwitchSession from "./SwitchSession";
-import { NextSeo } from "next-seo";
+import DynamicDocTitle from "./DynamicDocTitle";
 
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -298,6 +298,12 @@ const Pomodoro = () => {
 
   return (
     <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border px-4 pt-10 shadow max-2xl:order-first">
+      <DynamicDocTitle
+        status={status}
+        type={type}
+        remainingTime={remainingTime}
+      />
+
       {timerStyle === "RING" ? (
         <RingTimer
           progress={(elapsedTime / intendedDuration) * 100}
@@ -315,15 +321,13 @@ const Pomodoro = () => {
           onStart={onStart}
         />
       )}
+
+      {/* TODO: add project name somewhere */}
       {/* <p className="mt-4 text-center font-medium">{projectName}</p> */}
 
       <SwitchSession />
 
       <MoreOptions />
-
-      <NextSeo
-        title={`${remainingTime} - ${type === "FOCUS" ? "Focus" : "Break"}`}
-      />
     </div>
   );
 };
