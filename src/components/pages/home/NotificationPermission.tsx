@@ -20,24 +20,25 @@ const NotificationPermission = () => {
       if (Notification.permission !== "default") return;
 
       setTimeout(() => {
-        toast.info("Enable alerts so you don't miss a session end", {
-          id: "notification-permission",
-          className: "text-balance",
+        toast("Enable alerts so you don't miss a session end", {
           description: "You can change this later in settings.",
+          id: "notification-permission",
+          className:
+            "text-balance! max-w-[25rem] p-4 border-input! to-card! dark:to-black!",
+          icon: null,
+          classNames: {
+            description: "mt-1!",
+          },
           duration: Infinity,
           action: (
-            <Button
-              onClick={requestPermission}
-              className="border-primary/30"
-              variant="outline"
-            >
+            <Button onClick={requestPermission} className="font-sans">
               Enable
             </Button>
           ),
         });
       }, 0);
     } else {
-      toast.error("This browser does not support notifications.");
+      toast.info("This browser does not support notifications.");
     }
   }, []);
 
