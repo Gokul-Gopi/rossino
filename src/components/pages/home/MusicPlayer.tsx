@@ -22,13 +22,20 @@ const MusicPlayer = ({ track }: IMusicPlayerProps) => {
 
   const userId = useStore((state) => state.userId);
 
-  // Keeps element’s volume in sync with state
+  // keeps element’s volume in sync with state
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
       audioRef.current.loop = isLooping;
     }
   }, [volume, isLooping]);
+
+  useEffect(() => {
+    if (!track?.src) return;
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
+  }, [track?.src]);
 
   const onPlay = () => {
     if (!userId) {
