@@ -11,7 +11,14 @@ import { useMobile } from "@/hooks/useMobile";
 import { useUpdateSession } from "@/query/session.queries";
 import useStore, { useStoreActions } from "@/store";
 import { SessionStore } from "@/store/session.slice";
-import { ChevronDown, EllipsisVertical, Plus, Undo2 } from "lucide-react";
+import {
+  ChevronDown,
+  EllipsisVertical,
+  Grid2x2,
+  Plus,
+  SquareCheckBig,
+  Undo2,
+} from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import CreateNew from "./CreateNew";
@@ -102,10 +109,13 @@ const MoreOptions = () => {
 
         <PopoverContent
           align="end"
-          className="bg-card flex w-[11rem] flex-col gap-3"
+          className="bg-card flex w-[11rem] flex-col gap-2.5 border-0"
         >
           <div className="flex items-center justify-between">
-            <Label htmlFor="tasks">Tasks</Label>
+            <Label htmlFor="tasks">
+              <SquareCheckBig className="size-4" />
+              Tasks
+            </Label>
             <Switch
               id="tasks"
               checked={showTasks}
@@ -113,8 +123,13 @@ const MoreOptions = () => {
             />
           </div>
 
+          <Separator className="bg-[#f7dcca]" />
+
           <div className="flex items-center justify-between">
-            <Label htmlFor="widgets">Widgets</Label>
+            <Label htmlFor="widgets">
+              <Grid2x2 className="size-4" />
+              Widgets
+            </Label>
             <Switch
               id="widgets"
               checked={showWidgets}
@@ -122,21 +137,23 @@ const MoreOptions = () => {
             />
           </div>
 
-          <Separator className="my-1" />
+          <Separator className="bg-[#f7dcca]" />
 
           <Button
             onClick={() => setCreateNewOpen(true)}
             size="sm"
-            className="h-auto justify-start bg-transparent p-0! text-sm text-black underline-offset-3 hover:bg-transparent hover:underline active:scale-100"
+            className="h-auto justify-start bg-transparent p-0! text-sm text-black hover:bg-transparent active:scale-100"
           >
             <Plus />
             Create new
           </Button>
 
+          <Separator className="bg-[#f7dcca]" />
+
           <Button
             onClick={() => setConfirmReset(true)}
             size="sm"
-            className="h-auto justify-start bg-transparent p-0! text-sm text-red-500 underline-offset-3 hover:bg-transparent hover:underline active:scale-100"
+            className="h-auto justify-start bg-transparent p-0! text-sm text-red-500 hover:bg-transparent active:scale-100"
           >
             <Undo2 />
             <span>Reset Timer</span>
