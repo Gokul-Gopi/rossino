@@ -109,7 +109,7 @@ const MoreOptions = () => {
 
         <PopoverContent
           align="end"
-          className="bg-card flex w-[11rem] flex-col gap-2.5 border-0"
+          className="bg-card flex w-[11rem] flex-col gap-2.5 rounded-lg border-0 dark:border"
         >
           <div className="flex items-center justify-between">
             <Label htmlFor="tasks">
@@ -142,7 +142,7 @@ const MoreOptions = () => {
           <Button
             onClick={() => setCreateNewOpen(true)}
             size="sm"
-            className="h-auto justify-start bg-transparent p-0! text-sm text-black hover:bg-transparent active:scale-100"
+            className="h-auto justify-start bg-transparent p-0! text-sm text-black hover:bg-transparent active:scale-100 dark:text-white"
           >
             <Plus />
             Create new
