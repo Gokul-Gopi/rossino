@@ -25,12 +25,18 @@ interface ISearchableSelectProps {
   data: IData[];
   placeholder?: string;
   notFoundText?: string;
+  icon?: React.ReactNode;
+  allowDeselect?: boolean;
+  triggerProps?: React.ComponentProps<typeof Button>;
 }
 
 const SearchableSelect = ({
   data,
   placeholder,
   notFoundText = "No results found.",
+  icon,
+  allowDeselect = true,
+  triggerProps,
 }: ISearchableSelectProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -42,18 +48,24 @@ const SearchableSelect = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="justify-between active:scale-100"
+          {...triggerProps}
         >
-          {value
-            ? data.find((el) => el.value === value)?.label
-            : "Select a project..."}
-          <ChevronsUpDown className="opacity-50" />
+          <p className="flex items-center gap-1 truncate">
+            {icon && icon}
+            <span className="truncate">
+              {value
+                ? data.find((el) => el.value === value)?.label
+                : placeholder}
+            </span>
+          </p>
+
+          <ChevronsUpDown />
         </Button>
       </PopoverTrigger>
 
       <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
-        <Command>
-          <CommandInput placeholder={placeholder} className="h-9" />
+        <Command className="bg-card">
+          <CommandInput placeholder="Search" className="h-9" />
           <CommandList>
             <CommandEmpty>{notFoundText}</CommandEmpty>
 
@@ -63,6 +75,9 @@ const SearchableSelect = ({
                   key={el.value}
                   value={el.value}
                   onSelect={(currentValue) => {
+                    if (!allowDeselect && value && value === currentValue)
+                      return;
+
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}

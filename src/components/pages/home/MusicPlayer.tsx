@@ -114,26 +114,18 @@ const MusicPlayer = ({ track }: IMusicPlayerProps) => {
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Button
-            onClick={onPlay}
-            variant="outline"
-            size="sm"
-            className="hover:text-primary border-primary/20 bg-card text-sm"
-          >
+          <Button onClick={onPlay} variant="subtle" size="sm">
             {isPlaying ? <Pause /> : <Play />}
           </Button>
 
           <Button
             onClick={() => setIsLooping((prev) => !prev)}
-            variant="outline"
+            variant="subtle"
             size="sm"
-            className={cn(
-              "hover:text-primary border-primary/20 bg-card text-sm",
-              {
-                "bg-primary hover:bg-initial text-white hover:text-white":
-                  isLooping,
-              },
-            )}
+            className={cn({
+              "bg-primary hover:bg-initial text-white hover:text-white":
+                isLooping,
+            })}
           >
             <Repeat />
           </Button>
