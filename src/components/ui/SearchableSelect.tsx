@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import { Button } from "./Button";
 import { cn } from "@/utils/helpers";
+import { Spinner } from "./Spinner";
 
 interface IData {
   value: string;
@@ -23,6 +24,11 @@ interface IData {
 
 interface ISearchableSelectProps {
   data: IData[];
+  value: string;
+  setValue: (value: string) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  loading?: boolean;
   placeholder?: string;
   notFoundText?: string;
   icon?: React.ReactNode;
@@ -32,6 +38,11 @@ interface ISearchableSelectProps {
 
 const SearchableSelect = ({
   data,
+  value,
+  setValue,
+  searchQuery,
+  setSearchQuery,
+  loading,
   placeholder,
   notFoundText = "No results found.",
   icon,
@@ -39,7 +50,6 @@ const SearchableSelect = ({
   triggerProps,
 }: ISearchableSelectProps) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,7 +60,7 @@ const SearchableSelect = ({
           aria-expanded={open}
           {...triggerProps}
         >
-          <p className="flex items-center gap-1 truncate">
+          <p className="flex items-center gap-1.5 truncate">
             {icon && icon}
             <span className="truncate">
               {value
@@ -64,10 +74,31 @@ const SearchableSelect = ({
       </PopoverTrigger>
 
       <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
-        <Command className="bg-card">
-          <CommandInput placeholder="Search" className="h-9" />
+        <Command
+          className="bg-card"
+          filter={(id, searchQuery) => {
+            const item =
+              data.find((el) => el.value === id)?.label.toLowerCase() || "";
+            const search = searchQuery.toLowerCase();
+
+            if (item.includes(search)) return 1;
+            return 0;
+          }}
+        >
+          <CommandInput
+            placeholder="Search"
+            className="h-9"
+            value={searchQuery}
+            onValueChange={setSearchQuery}
+          />
           <CommandList>
-            <CommandEmpty>{notFoundText}</CommandEmpty>
+            {loading ? (
+              <div className="h-[5rem]">
+                <Spinner className="mx-auto mt-4" />
+              </div>
+            ) : (
+              <CommandEmpty>{notFoundText}</CommandEmpty>
+            )}
 
             <CommandGroup>
               {data.map((el) => (
