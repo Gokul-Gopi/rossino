@@ -24,9 +24,11 @@ const ProjectSelect = ({ className, onAfterSwitch }: IProjectSelectProps) => {
 
   const projects = useProjects(debouncedSearch);
 
-  const userId = useStore((state) => state.name);
+  const userId = useStore((state) => state.userId);
   const projectId = useStore((state) => state.projectId);
   const projectName = useStore((state) => state.projectName);
+
+  console.log({ userId });
 
   const { resetSession } = useStore();
 
