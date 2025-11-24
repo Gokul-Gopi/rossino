@@ -2,30 +2,52 @@ import SearchableSelect from "@/components/ui/SearchableSelect";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useProjects } from "@/query/project.queries";
 import useStore from "@/store";
+import { cn } from "@/utils/helpers";
 import { FolderHeart } from "lucide-react";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-type Data = { label: string; value: string };
+type ProjectList = { label: string; value: string };
 
-const ProjectSelect = () => {
-  const projectId = useStore((state) => state.projectId);
-  const projectName = useStore((state) => state.projectName);
-  const { resetSession } = useStore();
+interface IProjectSelectProps {
+  className?: string;
+  onAfterSwitch?: () => void;
+}
 
-  const [value, setValue] = useState("");
+const ProjectSelect = ({ className, onAfterSwitch }: IProjectSelectProps) => {
+  const router = useRouter();
+
+  const [data, setData] = useState<ProjectList[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [data, setData] = useState<Data[]>([]);
 
   const debouncedSearch = useDebouncedValue(searchQuery, 500);
 
   const projects = useProjects(debouncedSearch);
 
+  const userId = useStore((state) => state.name);
+  const projectId = useStore((state) => state.projectId);
+  const projectName = useStore((state) => state.projectName);
+
+  const { resetSession } = useStore();
+
   const onSwitchProject = (projectId: string) => {
-    setValue(projectId);
     setSearchQuery("");
 
     const projectName = data.find((el) => el.value === projectId)?.label;
     resetSession({ projectId, projectName });
+
+    router.replace(
+      {
+        query: {
+          project: projectId,
+          switch: true,
+        },
+      },
+      undefined,
+      { shallow: true },
+    );
+
+    onAfterSwitch?.();
   };
 
   useEffect(() => {
@@ -46,21 +68,20 @@ const ProjectSelect = () => {
   }, [projects.data, projectId, projectName]);
 
   return (
-    <div>
+    <div className={cn("sm:w-[15rem] xl:w-[20rem]", className)}>
       <SearchableSelect
         data={data}
-        value={value}
+        value={projectId || ""}
         setValue={onSwitchProject}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         loading={projects.isLoading}
         icon={<FolderHeart />}
         placeholder="Select a project"
-        allowDeselect={false}
         triggerProps={{
+          disabled: !userId,
           variant: "subtle",
-          className:
-            "sm:w-[15rem] xl:w-[20rem] justify-between bg-card dark:bg-card border-input rounded-lg",
+          className: "justify-between w-full border-input rounded-lg",
         }}
       />
     </div>

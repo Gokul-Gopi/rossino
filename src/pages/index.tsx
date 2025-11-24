@@ -13,6 +13,7 @@ import { useCallback, useEffect } from "react";
 import NotificationPermission from "@/components/pages/home/NotificationPermission";
 import dayjs from "dayjs";
 import { SessionStore } from "@/store/session.slice";
+import ProjectSwitchOverlay from "@/components/pages/home/ProjectSwitchOverlay";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -50,7 +51,7 @@ const Page = () => {
 
   const { setNote, setTasks, setSettings, setSession } = useStoreActions();
 
-  const { data } = useDashboard(
+  const { data, isPending } = useDashboard(
     (router.query.project as string) ?? null,
     !!userId,
   );
@@ -112,6 +113,8 @@ const Page = () => {
       <AnimatePresence initial={false}>
         {showWidgets && <Widgets />}
       </AnimatePresence>
+
+      {!!router.query.switch && isPending && <ProjectSwitchOverlay />}
 
       <NotificationPermission />
     </AppLayout>

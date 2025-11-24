@@ -21,7 +21,7 @@ const Header = () => {
     <header className="flex items-center justify-between gap-2 px-4 py-4 lg:px-8">
       <SidebarTrigger />
 
-      <ProjectSelect />
+      {userId && <ProjectSelect />}
 
       <div className="ml-auto flex gap-2">
         <DarkMode />

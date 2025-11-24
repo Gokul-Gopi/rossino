@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
-import SearchableSelect from "@/components/ui/SearchableSelect";
+import ProjectSelect from "./ProjectSelect";
 
 interface ICreateNewProps {
   open: boolean;
@@ -15,11 +15,7 @@ const CreateNew = ({
 }: ICreateNewProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <SearchableSelect
-        data={[{ value: "project-1", label: "Project 1" }]}
-        placeholder="Select a project.."
-        notFoundText="No projects found.."
-      />
+      <ProjectSelect className="xl:w-full" onAfterSwitch={onOpenChange} />
 
       <div className="flex items-center gap-2">
         <hr className="w-full" />

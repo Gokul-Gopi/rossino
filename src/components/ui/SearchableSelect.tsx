@@ -32,7 +32,6 @@ interface ISearchableSelectProps {
   placeholder?: string;
   notFoundText?: string;
   icon?: React.ReactNode;
-  allowDeselect?: boolean;
   triggerProps?: React.ComponentProps<typeof Button>;
 }
 
@@ -46,7 +45,7 @@ const SearchableSelect = ({
   placeholder,
   notFoundText = "No results found.",
   icon,
-  allowDeselect = true,
+
   triggerProps,
 }: ISearchableSelectProps) => {
   const [open, setOpen] = useState(false);
@@ -106,9 +105,6 @@ const SearchableSelect = ({
                   key={el.value}
                   value={el.value}
                   onSelect={(currentValue) => {
-                    if (!allowDeselect && value && value === currentValue)
-                      return;
-
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
