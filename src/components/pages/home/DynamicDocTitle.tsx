@@ -1,16 +1,15 @@
+import useStore from "@/store";
+import { formatTime } from "@/utils/helpers";
 import { NextSeo } from "next-seo";
 
-interface IDynamicTitleProps {
-  status: string;
-  type: string;
-  remainingTime: string;
-}
+const DynamicDocTitle = () => {
+  const status = useStore((state) => state.status);
+  const type = useStore((state) => state.type);
+  const elapsedTime = useStore((state) => state.elapsedTime);
+  const intendedDuration = useStore((state) => state.intendedDuration);
 
-const DynamicDocTitle = ({
-  status,
-  type,
-  remainingTime,
-}: IDynamicTitleProps) => {
+  const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
+
   return status === "RUNNING" ? (
     <NextSeo
       title={`${remainingTime} - ${type === "FOCUS" ? "Focus" : "Break"}`}

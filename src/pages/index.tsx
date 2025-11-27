@@ -14,6 +14,7 @@ import NotificationPermission from "@/components/pages/home/NotificationPermissi
 import dayjs from "dayjs";
 import { SessionStore } from "@/store/session.slice";
 import ProjectSwitchOverlay from "@/components/pages/home/ProjectSwitchOverlay";
+import DynamicDocTitle from "@/components/pages/home/DynamicDocTitle";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -104,6 +105,8 @@ const Page = () => {
 
   return (
     <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
+      <DynamicDocTitle />
+
       <AnimatePresence initial={false}>
         {showTasks && <Tasks />}
       </AnimatePresence>
