@@ -164,6 +164,7 @@ function Sidebar({
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
+  //TODO: Remove all the secondary (eg: bg-secondary) and use card (eg: bg-card) instead.
   if (collapsible === "none") {
     return (
       <div

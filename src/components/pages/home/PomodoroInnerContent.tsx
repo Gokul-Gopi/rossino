@@ -36,7 +36,7 @@ const PomodoroInnerContent = ({
         <Image src={logo} alt="rossino" width={24} className="min-w-6" />{" "}
         <p
           className={cn(
-            "text-primary text-[10px] tracking-widest md:text-sm md:font-medium lg:text-base",
+            "text-primary text-[10px] font-medium tracking-widest md:text-sm md:font-bold lg:text-base",
             {
               "text-green-400": type === "SHORTBREAK",
               "text-blue-400": type === "LONGBREAK",
