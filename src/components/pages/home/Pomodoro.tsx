@@ -1,32 +1,23 @@
-import { RingProgress } from "@/components/ui/RingProgress";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useRef } from "react";
-import { cn, notification } from "@/utils/helpers";
-import { useSessionStore, useSettingsStore, useUserStore } from "@/store";
+import { formatTime, notification } from "@/utils/helpers";
+import useStore, { useStoreActions } from "@/store";
 import dayjs from "dayjs";
-import PomodoroInnerContent from "./PomodoroInnerContent";
 import MoreOptions from "./MoreOptions";
 import { useSession } from "@/query/session.queries";
-import { sessionIntitialState, SessionStore } from "@/store/session.slice";
+import { SessionStore } from "@/store/session.slice";
 import { Session } from "@/types";
-import { useRouter } from "next/router";
-
-const formatTime = (totalSeconds: number) => {
-  const minutes = Math.floor(totalSeconds / 60)
-    .toString()
-    .padStart(2, "0");
-  const seconds = (totalSeconds % 60).toString().padStart(2, "0");
-  return `${minutes}:${seconds}`;
-};
+import { usePomodoro } from "@/hooks/usePomodoro";
+import RingTimer from "./RingTimer";
+import BarTimer from "./BarTimer";
+import SwitchSession from "./SwitchSession";
+import DynamicDocTitle from "./DynamicDocTitle";
 
 const Pomodoro = () => {
-  const router = useRouter();
-
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const nextSessionReminderTimeout = useRef<ReturnType<
-    typeof setTimeout
-  > | null>(null);
+  const reminderTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { userId } = useUserStore();
+  const userId = useStore((state) => state.userId);
 
   const {
     sessionId,
@@ -36,18 +27,12 @@ const Pomodoro = () => {
     lastPausedAt,
     elapsedTime,
     totalPausedDuration,
-    setSession,
     intendedDuration,
     projectId,
     projectName,
     focusSessionCompleted,
     notifiedForTimeLeft,
     notifiedForNextSession,
-    setNotifiedUser,
-    resetSession,
-  } = useSessionStore();
-
-  const {
     pomoDuration,
     shortBreakDuration,
     longBreakDuration,
@@ -58,11 +43,22 @@ const Pomodoro = () => {
     timeLeftReminder,
     notificationsEnabled,
     silentNotifications,
-  } = useSettingsStore();
+    timerStyle,
+  } = usePomodoro();
+
+  const { setSession, setNotifiedUser, setInterruptionsData } =
+    useStoreActions();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
 
   const session = useSession();
+
+  const updatePausedData = (count = 0, duration = 0) => {
+    setInterruptionsData({
+      count,
+      duration,
+    });
+  };
 
   const cleanup = () => {
     setNotifiedUser({
@@ -70,8 +66,8 @@ const Pomodoro = () => {
       notifiedForTimeLeft: false,
     });
 
-    if (nextSessionReminderTimeout.current) {
-      clearTimeout(nextSessionReminderTimeout.current);
+    if (reminderTimeout.current) {
+      clearTimeout(reminderTimeout.current);
     }
   };
 
@@ -167,12 +163,16 @@ const Pomodoro = () => {
 
       updatedState.lastPausedAt = pausedAt;
       updatedState.status = "PAUSED";
+
+      updatePausedData(1);
     } else if (status === "PAUSED") {
       const pausedDuration =
         dayjs().diff(dayjs(lastPausedAt), "second") + totalPausedDuration;
 
       updatedState.totalPausedDuration = pausedDuration;
       updatedState.status = "RUNNING";
+
+      updatePausedData(0, pausedDuration);
     }
 
     setSession(updatedState);
@@ -225,7 +225,6 @@ const Pomodoro = () => {
       lastPausedAt: null,
       elapsedTime: 0,
       totalPausedDuration: 0,
-      interruptionCount: 0,
     });
 
     if (userId) {
@@ -254,7 +253,7 @@ const Pomodoro = () => {
   const onNextSessionReminder = () => {
     if (!nextSessionReminder || notifiedForNextSession) return;
 
-    nextSessionReminderTimeout.current = setTimeout(() => {
+    reminderTimeout.current = setTimeout(() => {
       notification({
         title: "Next Session Reminder",
         body: "When you're ready, you can start your next session!",
@@ -262,7 +261,7 @@ const Pomodoro = () => {
       });
       setNotifiedUser({ notifiedForNextSession: true });
 
-      clearTimeout(nextSessionReminderTimeout.current!);
+      clearTimeout(reminderTimeout.current!);
     }, nextSessionReminder * 1000);
   };
 
@@ -279,7 +278,7 @@ const Pomodoro = () => {
     }
 
     if (status === "RUNNING") {
-      intervalRef.current = setInterval(updateTimer, 500);
+      intervalRef.current = setInterval(updateTimer, 1000);
     }
 
     if (status === "COMPLETED") {
@@ -290,42 +289,41 @@ const Pomodoro = () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-      if (nextSessionReminderTimeout.current) {
-        clearTimeout(nextSessionReminderTimeout.current);
+      if (reminderTimeout.current) {
+        clearTimeout(reminderTimeout.current);
       }
     };
   }, [status, updateTimer]);
 
   return (
-    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border p-10 shadow max-2xl:order-first">
-      <RingProgress
-        value={(elapsedTime / intendedDuration) * 100}
-        className="size-50 md:size-80 lg:size-100"
-        circleProps={{
-          strokeWidth: 6,
-          className: cn("stroke-primary/20", {
-            "stroke-green-400/20": type === "SHORTBREAK",
-            "stroke-blue-400/20": type === "LONGBREAK",
-          }),
-        }}
-        progressCircleProps={{
-          strokeWidth: 6,
-          className: cn("stroke-primary", {
-            "stroke-green-400": type === "SHORTBREAK",
-            "stroke-blue-400": type === "LONGBREAK",
-          }),
-        }}
-        content={
-          <PomodoroInnerContent
-            remainingTime={remainingTime}
-            status={status}
-            type={type}
-            onStart={onStart}
-          />
-        }
+    <div className="group bg-card relative col-start-2 col-end-3 flex flex-col items-center rounded-2xl border px-4 pt-9 shadow max-2xl:order-first">
+      <DynamicDocTitle
+        status={status}
+        type={type}
+        remainingTime={remainingTime}
       />
 
-      <p className="mt-4 text-center font-medium">{projectName}</p>
+      {timerStyle === "RING" ? (
+        <RingTimer
+          progress={(elapsedTime / intendedDuration) * 100}
+          remainingTime={remainingTime}
+          status={status}
+          type={type}
+          onStart={onStart}
+        />
+      ) : (
+        <BarTimer
+          progress={(elapsedTime / intendedDuration) * 100}
+          remainingTime={remainingTime}
+          status={status}
+          type={type}
+          onStart={onStart}
+        />
+      )}
+
+      {/* TODO: add project name somewhere */}
+
+      <SwitchSession />
 
       <MoreOptions />
     </div>

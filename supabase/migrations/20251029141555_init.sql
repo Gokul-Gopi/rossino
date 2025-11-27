@@ -38,7 +38,6 @@ create table public.sessions (
   "lastPausedAt" timestamptz,
   "intendedDuration" int not null,
   "totalPausedDuration" int not null default 0,
-  "interruptionCount" int not null default 0,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now()
 );
@@ -139,7 +138,7 @@ execute function public.handle_new_user_settings_widgets();
 
 
 -- Function that returns dashboard data (START)
-create or replace function public.dashboard(project_id uuid)
+create or replace function public.dashboard(project_id uuid DEFAULT NULL)
 returns jsonb
 language plpgsql
 security definer
@@ -163,8 +162,8 @@ begin
   s as (
     select *
     from sessions
-    where "projectId" = project_id
-      and "userId" = uid
+    where "projectId" IS NOT DISTINCT FROM project_id
+    and "userId" = uid
     order by "startedAt" desc
     limit 1
   ),
@@ -174,11 +173,10 @@ begin
     where "userId" = uid
   ),
   t as (
-    select id, title
+    select id, title, completed
     from tasks
-    where "projectId" = project_id
-      and completed = false
-      and "userId" = uid
+    where "projectId" IS NOT DISTINCT FROM project_id
+    and "userId" = uid
     order by "createdAt" desc
     limit 50
   ),

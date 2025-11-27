@@ -1,9 +1,9 @@
 import { cn } from "@/utils/helpers";
 import { type HTMLMotionProps, motion, type MotionProps } from "motion/react";
 import QuickNotes from "./QuickNotes";
-import Interuptions from "./Interuptions";
-import DailyGoal from "./DailyGoal";
-import Recommendations from "./Recommendations";
+import Interruptions from "./Interruptions";
+import TimerStyle from "./TimerStyle";
+import BackgroudMusic from "./BackgroudMusic";
 
 const commonMotionProps: MotionProps = {
   initial: { opacity: 0, scale: 0 },
@@ -65,24 +65,25 @@ const Widgets = () => {
         heading="Interruptions"
         className="col-start-1 row-start-3 justify-between"
       >
-        <Interuptions />
+        <Interruptions />
       </WidgetCard>
 
       <WidgetCard
         {...commonMotionProps}
         transition={{ delay: 0.1 }}
-        className="col-start-2 row-start-1 justify-between"
+        heading="Timer style"
+        className="col-start-2 row-start-1"
       >
-        <DailyGoal />
+        <TimerStyle />
       </WidgetCard>
 
       <WidgetCard
         {...commonMotionProps}
         transition={{ delay: 0.8 }}
-        heading="Recommendations"
+        heading="Bacground music"
         className="col-start-2 row-span-2 row-start-2"
       >
-        <Recommendations />
+        <BackgroudMusic />
       </WidgetCard>
     </div>
   );

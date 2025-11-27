@@ -16,7 +16,7 @@ export type SessionStore = Omit<
 
 export type SessionSlice = SessionStore & {
   setSession: (session: Partial<SessionStore>) => void;
-  resetSession: () => void;
+  resetSession: (session?: Partial<SessionStore>) => void;
   setNotifiedUser: ({
     notifiedForTimeLeft,
     notifiedForNextSession,
@@ -27,7 +27,7 @@ export type SessionSlice = SessionStore & {
 };
 
 export const sessionIntitialState: SessionStore = {
-  sessionId: undefined, //helps during UPSERTs
+  sessionId: undefined, //helps in reseting state and during UPSERT
   projectId: null,
   projectName: null,
   startedAt: null,
@@ -36,7 +36,6 @@ export const sessionIntitialState: SessionStore = {
   elapsedTime: 0,
   intendedDuration: 120,
   totalPausedDuration: 0,
-  interruptionCount: 0,
   status: "IDLE",
   type: "FOCUS",
   focusSessionCompleted: 0,
@@ -46,8 +45,7 @@ export const sessionIntitialState: SessionStore = {
 
 const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
   set,
-  _get,
-  store,
+  get,
 ) => ({
   ...sessionIntitialState,
   setSession: (session) => set((state) => ({ ...state, ...session })),
@@ -56,7 +54,14 @@ const createSessionSlice: StateCreator<Store, [], [], SessionSlice> = (
       ...state,
       ...updatedState,
     })),
-  resetSession: () => set(sessionIntitialState),
+  resetSession: (session) => {
+    const { pomoDuration } = get();
+    return set({
+      ...sessionIntitialState,
+      ...session,
+      intendedDuration: pomoDuration,
+    });
+  },
 });
 
 export default createSessionSlice;

@@ -16,6 +16,12 @@ export type Dashboard = {
   sessions: Session;
 };
 
+export type Track = {
+  id: string;
+  label: string;
+  src: string;
+};
+
 export type Project = Database["public"]["Tables"]["projects"]["Row"];
 
 export type Session = Database["public"]["Tables"]["sessions"]["Row"];

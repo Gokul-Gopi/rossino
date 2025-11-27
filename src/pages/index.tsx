@@ -4,27 +4,23 @@ import Tasks from "@/components/pages/home/Tasks";
 import Widgets from "@/components/pages/home/Widgets";
 import withAuth from "@/utils/withAuth";
 import { useDashboard } from "@/query/dashboard.queries";
-import {
-  useWidgetsStore,
-  useTaskStore,
-  useSettingsStore,
-  useSessionStore,
-} from "@/store";
+import useStore, { useStoreActions } from "@/store";
 import { createClient } from "@/utils/helpers";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import NotificationPermission from "@/components/pages/home/NotificationPermission";
 import dayjs from "dayjs";
 import { SessionStore } from "@/store/session.slice";
+import ProjectSwitchOverlay from "@/components/pages/home/ProjectSwitchOverlay";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
 
-  const projectId = ctx.query.project as string;
+  const projectId = ctx.query.project ?? null;
 
-  if (projectId) {
+  if (user) {
     const supabase = createClient(ctx);
 
     await queryClient.prefetchQuery({
@@ -48,35 +44,49 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
 
 const Page = () => {
   const router = useRouter();
-  const { showTasks } = useTaskStore();
-  const { showWidgets } = useWidgetsStore();
 
-  const { setNote } = useWidgetsStore();
-  const { setSettings } = useSettingsStore();
-  const { setSession } = useSessionStore();
+  const userId = useStore((state) => state?.userId);
+  const showWidgets = useStore((state) => state.showWidgets);
+  const showTasks = useStore((state) => state.showTasks);
 
-  const { data } = useDashboard(router.query.project as string);
+  const { setNote, setTasks, setSettings, setSession } = useStoreActions();
 
-  const populateDashboard = () => {
+  const { data, isPending } = useDashboard(
+    (router.query.project as string) ?? null,
+    !!userId,
+  );
+
+  const populateDashboard = useCallback(() => {
     if (!data) return;
 
+    setTasks(data.tasks);
     setSettings(data.settings);
     setNote(data.widgets.note ?? "");
 
-    let currentSesion = {
-      projectId: data.project.id,
-      projectName: data.project.title,
-    } as SessionStore;
+    let currentSesion: SessionStore | object = {};
 
-    //check for existing session
+    if (data.project) {
+      currentSesion = {
+        ...currentSesion,
+        projectId: data.project.id,
+        projectName: data.project.title,
+      };
+    }
+
     if (data.sessions) {
-      const elapsedTime =
-        dayjs(data?.sessions?.lastPausedAt).diff(
-          dayjs(data?.sessions?.startedAt),
-          "second",
-        ) - data.sessions.totalPausedDuration;
-
+      //Omitting unwanted fields
       const { id, createdAt, updatedAt, ...rest } = data.sessions;
+
+      let elapsedTime = 0;
+
+      if (data.sessions.status !== "IDLE") {
+        elapsedTime =
+          dayjs(data?.sessions?.lastPausedAt).diff(
+            dayjs(data?.sessions?.startedAt),
+            "second",
+          ) - data.sessions.totalPausedDuration;
+      }
+
       currentSesion = {
         ...rest,
         ...currentSesion,
@@ -84,12 +94,13 @@ const Page = () => {
         sessionId: id,
       };
     }
+
     setSession(currentSesion);
-  };
+  }, [data]);
 
   useEffect(() => {
     populateDashboard();
-  }, []);
+  }, [populateDashboard]);
 
   return (
     <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
@@ -102,6 +113,8 @@ const Page = () => {
       <AnimatePresence initial={false}>
         {showWidgets && <Widgets />}
       </AnimatePresence>
+
+      {!!router.query.switch && isPending && <ProjectSwitchOverlay />}
 
       <NotificationPermission />
     </AppLayout>

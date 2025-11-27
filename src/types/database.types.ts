@@ -76,7 +76,6 @@ export type Database = {
           endedAt: string | null
           id: string
           intendedDuration: number
-          interruptionCount: number
           lastPausedAt: string | null
           projectId: string | null
           startedAt: string | null
@@ -91,7 +90,6 @@ export type Database = {
           endedAt?: string | null
           id?: string
           intendedDuration: number
-          interruptionCount?: number
           lastPausedAt?: string | null
           projectId?: string | null
           startedAt?: string | null
@@ -106,7 +104,6 @@ export type Database = {
           endedAt?: string | null
           id?: string
           intendedDuration?: number
-          interruptionCount?: number
           lastPausedAt?: string | null
           projectId?: string | null
           startedAt?: string | null
@@ -241,7 +238,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      dashboard: { Args: { project_id: string }; Returns: Json }
+      dashboard: { Args: { project_id?: string }; Returns: Json }
     }
     Enums: {
       sessionStatus: "IDLE" | "PAUSED" | "COMPLETED" | "RUNNING"

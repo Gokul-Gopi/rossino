@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/Button";
 import { Session } from "@/types";
 import { cn } from "@/utils/helpers";
 import { Pause, Play, Power } from "lucide-react";
+import logo from "../../../../public/assets/logo.svg";
+import Image from "next/image";
 
 interface IPomodoroInnerContentProps {
   remainingTime: string;
@@ -20,7 +22,7 @@ const PomodoroInnerContent = ({
     <div className="relative flex flex-col items-center justify-center md:gap-2">
       <p
         className={cn(
-          "text-4xl font-extrabold text-black/70 md:text-6xl 2xl:text-[4rem] dark:text-white/90",
+          "text-4xl font-extrabold text-black/70 md:text-6xl 2xl:text-7xl dark:text-white/90",
           {
             "text-muted-foreground dark:text-muted-foreground":
               status === "PAUSED",
@@ -30,21 +32,24 @@ const PomodoroInnerContent = ({
         {remainingTime}
       </p>
 
-      <p
-        className={cn(
-          "text-primary text-[10px] font-semibold tracking-widest md:text-sm md:font-medium lg:text-base",
-          {
-            "text-green-400": type === "SHORTBREAK",
-            "text-blue-400": type === "LONGBREAK",
-          },
-        )}
-      >
-        {type === "FOCUS"
-          ? "🍅 FOCUS MODE"
-          : type === "SHORTBREAK"
-            ? "🍅 SHORT BREAK"
-            : "🍅 LONG BREAK"}
-      </p>
+      <div className="flex gap-1.5">
+        <Image src={logo} alt="rossino" width={24} className="min-w-6" />{" "}
+        <p
+          className={cn(
+            "text-primary text-[10px] tracking-widest md:text-sm md:font-medium lg:text-base",
+            {
+              "text-green-400": type === "SHORTBREAK",
+              "text-blue-400": type === "LONGBREAK",
+            },
+          )}
+        >
+          {type === "FOCUS"
+            ? "FOCUS MODE"
+            : type === "SHORTBREAK"
+              ? "SHORT BREAK"
+              : "LONG BREAK"}
+        </p>
+      </div>
 
       {status !== "COMPLETED" && (
         <Button

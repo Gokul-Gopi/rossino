@@ -24,8 +24,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-import { LOCAL_STORAGE_KEY } from "@/utils/constants";
-import { useUserStore } from "@/store";
+import useStore, { useStoreActions } from "@/store";
+import Image from "next/image";
+import logo from "../../../public/assets/logo.svg";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
   className: "size-5! -translate-x-[2.5px]",
@@ -63,17 +64,18 @@ const Sidebar = () => {
   const router = useRouter();
 
   const { open, openMobile, toggleSidebar } = useSidebar();
-  const { userId } = useUserStore();
+  const userId = useStore((state) => state.userId);
 
   const [confirmLogout, setConfirmLogout] = useState(false);
 
   const logout = useLogout();
+  const { resetAll } = useStoreActions();
 
   const onLogout = () => {
     logout.mutate(undefined, {
       onSuccess: () => {
         router.push("/signin");
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        resetAll();
         toast.success("Logged out");
       },
     });
@@ -85,12 +87,12 @@ const Sidebar = () => {
         <SidebarHeader className="mt-2 mb-6 px-3">
           <Link
             href="/"
-            className="flex gap-1.5 overflow-hidden text-lg text-nowrap"
+            className="flex items-start gap-1.5 overflow-hidden text-lg text-nowrap"
           >
-            🍅
+            <Image src={logo} alt="rossino" width={24} className="min-w-6" />
             <span
               className={cn(
-                "inline overflow-hidden text-nowrap transition-opacity duration-300",
+                "inline overflow-hidden font-medium text-nowrap transition-opacity duration-300",
                 {
                   "opacity-0": !open && !openMobile,
                 },

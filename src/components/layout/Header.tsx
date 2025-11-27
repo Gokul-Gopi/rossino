@@ -7,18 +7,21 @@ import {
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
 import Link from "next/link";
-import { useUserStore } from "@/store";
+import useStore from "@/store";
+import ProjectSelect from "@/components/pages/home/ProjectSelect";
 
 const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
   ssr: false,
 });
 
 const Header = () => {
-  const { userId } = useUserStore();
+  const userId = useStore((state) => state.userId);
 
   return (
     <header className="flex items-center justify-between gap-2 px-4 py-4 lg:px-8">
       <SidebarTrigger />
+
+      {userId && <ProjectSelect />}
 
       <div className="ml-auto flex gap-2">
         <DarkMode />
@@ -37,7 +40,13 @@ const Header = () => {
             </TooltipContent>
           </Tooltip>
         ) : (
-          <Button>Zen mode</Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button>Zen mode</Button>
+            </TooltipTrigger>
+
+            <TooltipContent>Coming soon!</TooltipContent>
+          </Tooltip>
         )}
       </div>
     </header>

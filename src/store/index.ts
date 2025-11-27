@@ -30,93 +30,41 @@ const useStore = create<Store>()(
       name: LOCAL_STORAGE_KEY,
       partialize: (state) => {
         // Exclude user info from persistence
-        const { userId, email, name, setUser, ...rest } = state;
+        const { userId, email, name, ...rest } = state;
         return rest;
       },
     },
   ),
 );
 
-export const useUserStore = () =>
+// This was created purely for better readability in components
+// and to reduce the number of times useStore is called, hence reducing
+// the verbalosity. All the methods are also available via useStore.
+export const useStoreActions = () =>
   useStore(
     useShallow((state) => ({
-      userId: state.userId,
-      email: state.email,
-      name: state.name,
       setUser: state.setUser,
-    })),
-  );
 
-export const useSettingsStore = () =>
-  useStore(
-    useShallow((state) => ({
-      autoStartBreak: state.autoStartBreak,
-      autoStartPomo: state.autoStartPomo,
-      pomoDuration: state.pomoDuration,
-      shortBreakDuration: state.shortBreakDuration,
-      longBreakDuration: state.longBreakDuration,
-      longBreakInterval: state.longBreakInterval,
-      nextSessionReminder: state.nextSessionReminder,
-      timeLeftReminder: state.timeLeftReminder,
-      notificationsEnabled: state.notificationsEnabled,
-      silentNotifications: state.silentNotifications,
-      dailyGoal: state.dailyGoal,
-      setSettings: state.setSettings,
-    })),
-  );
-
-export const useSessionStore = () =>
-  useStore(
-    useShallow((state) => ({
-      sessionId: state.sessionId,
-      projectId: state.projectId,
-      projectName: state.projectName,
-      startedAt: state.startedAt,
-      endedAt: state.endedAt,
-      lastPausedAt: state.lastPausedAt,
-      elapsedTime: state.elapsedTime,
-      intendedDuration: state.intendedDuration,
-      totalPausedDuration: state.totalPausedDuration,
-      interruptionCount: state.interruptionCount,
-      focusSessionCompleted: state.focusSessionCompleted,
-      status: state.status,
-      type: state.type,
-      notifiedForTimeLeft: state.notifiedForTimeLeft,
-      notifiedForNextSession: state.notifiedForNextSession,
-      setNotifiedUser: state.setNotifiedUser,
       setSession: state.setSession,
       resetSession: state.resetSession,
-    })),
-  );
+      setNotifiedUser: state.setNotifiedUser,
 
-export const useTaskStore = () =>
-  useStore(
-    useShallow((state) => ({
-      tasks: state.tasks,
-      showTasks: state.showTasks,
-      toggleTasksVisibility: state.toggleTasksVisibility,
+      setSettings: state.setSettings,
+
+      setTasks: state.setTasks,
+      toggleTasks: state.toggleTasks,
       addTask: state.addTask,
       deleteTask: state.deleteTask,
-      editTask: state.editTask,
-      toggleCompletion: state.toggleCompletion,
+      updateTask: state.updateTask,
       resetTasks: state.resetTasks,
-    })),
-  );
+      toggleCompletion: state.toggleCompletion,
 
-export const useWidgetsStore = () =>
-  useStore(
-    useShallow((state) => ({
-      showWidgets: state.showWidgets,
-      toggleWidgets: state.toggleWidgets,
-      note: state.note,
       setNote: state.setNote,
-      dailyGoalProgress: state.dailyGoalProgress,
-    })),
-  );
+      toggleWidgets: state.toggleWidgets,
+      setTimerStyle: state.setTimerStyle,
+      setInterruptionsData: state.setInterruptionsData,
+      resetWidgets: state.resetWidgets,
 
-export const useResetStore = () =>
-  useStore(
-    useShallow((state) => ({
       resetAll: state.resetAll,
     })),
   );

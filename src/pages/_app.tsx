@@ -10,10 +10,12 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { PagesTopLoader } from "nextjs-toploader/pages";
-import { useUserStore } from "@/store";
+import { useStoreActions } from "@/store";
+import { DefaultSeo } from "next-seo";
+import seo from "@/utils/seo";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { setUser } = useUserStore();
+  const { setUser } = useStoreActions();
 
   const [queryClient] = useState(
     () =>
@@ -36,7 +38,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <ThemeProvider attribute="class" enableSystem={false}>
-          <PagesTopLoader color="hsl(0 84% 60%)" />
+          <PagesTopLoader color="hsl(0 84% 60%)" showSpinner={false} />
+          <DefaultSeo {...seo} />
           <Component {...pageProps} />
           <Toaster {...toasterOptions} />
         </ThemeProvider>
