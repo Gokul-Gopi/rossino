@@ -40,7 +40,13 @@ const Header = () => {
             </TooltipContent>
           </Tooltip>
         ) : (
-          <Button>Zen mode</Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button>Zen mode</Button>
+            </TooltipTrigger>
+
+            <TooltipContent>Coming soon!</TooltipContent>
+          </Tooltip>
         )}
       </div>
     </header>

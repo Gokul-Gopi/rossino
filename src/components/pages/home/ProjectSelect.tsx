@@ -28,8 +28,6 @@ const ProjectSelect = ({ className, onAfterSwitch }: IProjectSelectProps) => {
   const projectId = useStore((state) => state.projectId);
   const projectName = useStore((state) => state.projectName);
 
-  console.log({ userId });
-
   const { resetSession } = useStore();
 
   const onSwitchProject = (projectId: string) => {
