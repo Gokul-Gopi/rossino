@@ -27,6 +27,7 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import useStore, { useStoreActions } from "@/store";
 import Image from "next/image";
 import logo from "../../../public/assets/logo.svg";
+import { useQueryClient } from "@tanstack/react-query";
 
 const iconProps: React.SVGProps<SVGSVGElement> = {
   className: "size-5! -translate-x-[2.5px]",
@@ -62,6 +63,7 @@ const navLinks = [
 
 const Sidebar = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { open, openMobile, toggleSidebar } = useSidebar();
   const userId = useStore((state) => state.userId);
@@ -75,8 +77,9 @@ const Sidebar = () => {
     logout.mutate(undefined, {
       onSuccess: () => {
         router.push("/signin");
-        resetAll();
         toast.success("Logged out");
+        queryClient.clear();
+        resetAll();
       },
     });
   };

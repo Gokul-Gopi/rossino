@@ -123,7 +123,7 @@ const MoreOptions = () => {
             />
           </div>
 
-          <Separator className="bg-[#f7dcca]" />
+          <Separator className="bg-[#f7dcca] dark:bg-gray-700" />
 
           <div className="flex items-center justify-between">
             <Label htmlFor="widgets">
@@ -137,7 +137,7 @@ const MoreOptions = () => {
             />
           </div>
 
-          <Separator className="bg-[#f7dcca]" />
+          <Separator className="bg-[#f7dcca] dark:bg-gray-700" />
 
           <Button
             onClick={() => setCreateNewOpen(true)}
@@ -148,7 +148,7 @@ const MoreOptions = () => {
             Create new
           </Button>
 
-          <Separator className="bg-[#f7dcca]" />
+          <Separator className="bg-[#f7dcca] dark:bg-gray-700" />
 
           <Button
             onClick={() => setConfirmReset(true)}

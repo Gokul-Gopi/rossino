@@ -15,7 +15,7 @@ const toasterOptions: ToasterProps = {
   className: "flex justify-center",
   toastOptions: {
     classNames: {
-      toast: "gap-2.5! max-w-[17rem]",
+      toast: "gap-2.5! max-w-fit",
       description: "text-xs dark:text-gray-400!",
       content: "font-sans! text-sm! line-clamp-5! ",
       default:
