@@ -128,7 +128,6 @@ export type Database = {
           autoStartBreak: boolean
           autoStartPomo: boolean
           createdAt: string
-          dailyGoal: number | null
           longBreakDuration: number
           longBreakInterval: number
           nextSessionReminder: number
@@ -144,7 +143,6 @@ export type Database = {
           autoStartBreak?: boolean
           autoStartPomo?: boolean
           createdAt?: string
-          dailyGoal?: number | null
           longBreakDuration?: number
           longBreakInterval?: number
           nextSessionReminder?: number
@@ -160,7 +158,6 @@ export type Database = {
           autoStartBreak?: boolean
           autoStartPomo?: boolean
           createdAt?: string
-          dailyGoal?: number | null
           longBreakDuration?: number
           longBreakInterval?: number
           nextSessionReminder?: number

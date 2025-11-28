@@ -84,7 +84,6 @@ create table public.settings (
     CHECK ("nextSessionReminder" IN (0, 120, 300, 600)),
   "timeLeftReminder" smallInt not null default 300,
     CHECK ("timeLeftReminder" IN (0, 120, 300, 600)),
-  "dailyGoal" int,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now()
 );
@@ -167,11 +166,6 @@ begin
     order by "startedAt" desc
     limit 1
   ),
-  d as (
-    select "dailyGoal"
-    from settings
-    where "userId" = uid
-  ),
   t as (
     select id, title, completed
     from tasks
@@ -189,7 +183,6 @@ begin
     'project',  (select to_jsonb(p.*) from p),
     'sessions', (select to_jsonb(s.*) from s),
     'tasks',    (select coalesce(jsonb_agg(t.*), '[]'::jsonb) from t),
-    'settings', (select to_jsonb(d.*) from d),
     'widgets',  (select to_jsonb(w.*) from w)
     -- any computed stats/fields can go here too
   )

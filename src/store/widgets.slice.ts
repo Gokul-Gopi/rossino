@@ -4,7 +4,6 @@ import { StateCreator } from "zustand/vanilla";
 export type WidgetStore = {
   note: string;
   showWidgets: boolean;
-  dailyGoalProgress: number;
   pausedCount: number;
   pausedDuration: number;
   resetDate: Dayjs | null;
@@ -28,7 +27,6 @@ export type WidgetSlice = WidgetStore & {
 export const widgetsInitialState: WidgetStore = {
   note: "",
   showWidgets: false,
-  dailyGoalProgress: 0,
   pausedCount: 0,
   pausedDuration: 0,
   resetDate: null,

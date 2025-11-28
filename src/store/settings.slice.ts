@@ -19,7 +19,6 @@ export const settingsInitialState: SettingsStore = {
   nextSessionReminder: 30,
   timeLeftReminder: 30,
   silentNotifications: true,
-  dailyGoal: null,
 };
 
 const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({
