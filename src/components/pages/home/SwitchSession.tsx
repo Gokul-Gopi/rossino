@@ -57,8 +57,8 @@ const SwitchSession = () => {
         className="border-none shadow-none"
         highlightClassName={cn({
           "bg-primary/40": type === "FOCUS",
-          "bg-green-400/40": type === "SHORTBREAK",
-          "bg-blue-400/40": type === "LONGBREAK",
+          "bg-green-500/40": type === "SHORTBREAK",
+          "bg-blue-500/40": type === "LONGBREAK",
         })}
       />
 

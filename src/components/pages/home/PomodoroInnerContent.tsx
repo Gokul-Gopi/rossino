@@ -38,8 +38,8 @@ const PomodoroInnerContent = ({
           className={cn(
             "text-primary text-[10px] font-medium tracking-widest md:text-sm md:font-bold lg:text-base",
             {
-              "text-green-400": type === "SHORTBREAK",
-              "text-blue-400": type === "LONGBREAK",
+              "text-green-500": type === "SHORTBREAK",
+              "text-blue-500": type === "LONGBREAK",
             },
           )}
         >
@@ -57,8 +57,8 @@ const PomodoroInnerContent = ({
           className={cn(
             "text-primary absolute -bottom-[3.5rem] size-16 bg-transparent transition-transform hover:scale-105 hover:bg-transparent md:-bottom-[70%] lg:-bottom-[75%]",
             {
-              "text-green-400": type === "SHORTBREAK",
-              "text-blue-400": type === "LONGBREAK",
+              "text-green-500": type === "SHORTBREAK",
+              "text-blue-500": type === "LONGBREAK",
             },
           )}
         >

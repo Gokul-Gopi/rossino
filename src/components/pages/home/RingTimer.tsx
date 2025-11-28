@@ -25,15 +25,15 @@ const RingTimer = ({
       circleProps={{
         strokeWidth: 6,
         className: cn("stroke-primary/20", {
-          "stroke-green-400/20": type === "SHORTBREAK",
-          "stroke-blue-400/20": type === "LONGBREAK",
+          "stroke-green-500/20": type === "SHORTBREAK",
+          "stroke-blue-500/20": type === "LONGBREAK",
         }),
       }}
       progressCircleProps={{
         strokeWidth: 6,
         className: cn("stroke-primary", {
-          "stroke-green-400": type === "SHORTBREAK",
-          "stroke-blue-400": type === "LONGBREAK",
+          "stroke-green-500": type === "SHORTBREAK",
+          "stroke-blue-500": type === "LONGBREAK",
         }),
       }}
       content={

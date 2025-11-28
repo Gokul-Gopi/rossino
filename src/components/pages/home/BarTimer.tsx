@@ -24,12 +24,12 @@ const BarTimer = ({
         <Progress
           value={progress}
           className={cn("bg-primary/20 h-3", {
-            "bg-green-400/20": type === "SHORTBREAK",
-            "bg-blue-400/20": type === "LONGBREAK",
+            "bg-green-500/20": type === "SHORTBREAK",
+            "bg-blue-500/20": type === "LONGBREAK",
           })}
           indicatorClassName={cn("bg-primary", {
-            "bg-green-400": type === "SHORTBREAK",
-            "bg-blue-400": type === "LONGBREAK",
+            "bg-green-500": type === "SHORTBREAK",
+            "bg-blue-500": type === "LONGBREAK",
           })}
         />
       </div>
