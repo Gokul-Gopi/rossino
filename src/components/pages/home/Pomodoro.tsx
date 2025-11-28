@@ -11,7 +11,6 @@ import { usePomodoro } from "@/hooks/usePomodoro";
 import RingTimer from "./RingTimer";
 import BarTimer from "./BarTimer";
 import SwitchSession from "./SwitchSession";
-import DynamicDocTitle from "./DynamicDocTitle";
 
 const Pomodoro = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -29,7 +28,6 @@ const Pomodoro = () => {
     totalPausedDuration,
     intendedDuration,
     projectId,
-    projectName,
     focusSessionCompleted,
     notifiedForTimeLeft,
     notifiedForNextSession,

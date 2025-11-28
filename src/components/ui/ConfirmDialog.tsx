@@ -1,12 +1,6 @@
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Button } from "../ui/Button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  IDialogProps,
-} from "../ui/Dialog";
+import { Dialog, DialogHeader, DialogTitle, IDialogProps } from "../ui/Dialog";
 import LoaderButton from "../ui/LoaderButton";
 
 interface IConfirmDialogProps extends IDialogProps {
