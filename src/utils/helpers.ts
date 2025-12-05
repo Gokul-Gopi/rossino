@@ -62,3 +62,12 @@ export const formatTime = (time: number) => {
     .padStart(2, "0");
   return `${minutes}:${seconds}`;
 };
+
+export const excludeKeys = <T, K extends keyof T>(
+  obj: T,
+  keys: K[],
+): Omit<T, K> => {
+  const newObj = { ...obj };
+  keys.forEach((k) => delete newObj[k]);
+  return newObj;
+};

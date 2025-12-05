@@ -8,6 +8,7 @@ import createSessionSlice, { SessionSlice } from "./session.slice";
 import createResetSlice, { ResetSlice } from "./reset.slice";
 import createTaskSlice, { TaskSlice } from "./task.slice";
 import createWidgetsSlice, { WidgetSlice } from "./widgets.slice";
+import { excludeKeys } from "@/utils/helpers";
 
 export type Store = UserSlice &
   SettingsSlice &
@@ -29,9 +30,8 @@ const useStore = create<Store>()(
     {
       name: LOCAL_STORAGE_KEY,
       partialize: (state) => {
-        // Exclude user info from persistence
-        const { userId, email, name, ...rest } = state;
-        return rest;
+        const stateToPersist = excludeKeys(state, ["userId", "email", "name"]);
+        return stateToPersist;
       },
     },
   ),

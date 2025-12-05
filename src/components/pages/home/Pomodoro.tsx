@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useRef } from "react";
-import { formatTime, notification } from "@/utils/helpers";
+import { excludeKeys, formatTime, notification } from "@/utils/helpers";
 import useStore, { useStoreActions } from "@/store";
 import dayjs from "dayjs";
 import MoreOptions from "./MoreOptions";
@@ -179,8 +179,13 @@ const Pomodoro = () => {
       session.mutate(
         { ...updatedState, id: sessionId!, projectId, userId },
         {
-          onSuccess: ({ id, createdAt, updatedAt, ...rest }) => {
-            setSession({ sessionId: id, ...rest });
+          onSuccess: (response) => {
+            const updatedSession = excludeKeys(response, [
+              "id",
+              "createdAt",
+              "updatedAt",
+            ]);
+            setSession({ sessionId: response.id, ...updatedSession });
           },
           onError: () => {
             const prevState = {
@@ -234,8 +239,13 @@ const Pomodoro = () => {
           intendedDuration: updatedState.intendedDuration,
         },
         {
-          onSuccess: ({ id, createdAt, updatedAt, ...rest }) => {
-            setSession({ sessionId: id, ...rest });
+          onSuccess: (response) => {
+            const updatedSession = excludeKeys(response, [
+              "id",
+              "createdAt",
+              "updatedAt",
+            ]);
+            setSession({ sessionId: response.id, ...updatedSession });
           },
           onError: () => {
             setSession({

@@ -84,6 +84,7 @@ const SearchableSelect = ({
             return 0;
           }}
         >
+          {/* {data.length ? <></> : ""} */}
           <CommandInput
             placeholder="Search"
             className="h-9"

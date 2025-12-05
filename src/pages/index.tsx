@@ -5,7 +5,7 @@ import Widgets from "@/components/pages/home/Widgets";
 import withAuth from "@/utils/withAuth";
 import { useDashboard } from "@/query/dashboard.queries";
 import useStore, { useStoreActions } from "@/store";
-import { createClient } from "@/utils/helpers";
+import { createClient, excludeKeys } from "@/utils/helpers";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import { useRouter } from "next/router";
@@ -64,19 +64,22 @@ const Page = () => {
     setSettings(data.settings);
     setNote(data.widgets.note ?? "");
 
-    let currentSesion: SessionStore | object = {};
+    let currentSession: SessionStore | object = {};
 
     if (data.project) {
-      currentSesion = {
-        ...currentSesion,
+      currentSession = {
+        ...currentSession,
         projectId: data.project.id,
         projectName: data.project.title,
       };
     }
 
     if (data.sessions) {
-      //Omitting unwanted fields
-      const { id, createdAt, updatedAt, ...rest } = data.sessions;
+      const sessionData = excludeKeys(data.sessions, [
+        "id",
+        "createdAt",
+        "updatedAt",
+      ]);
 
       let elapsedTime = 0;
 
@@ -88,15 +91,15 @@ const Page = () => {
           ) - data.sessions.totalPausedDuration;
       }
 
-      currentSesion = {
-        ...rest,
-        ...currentSesion,
+      currentSession = {
+        ...sessionData,
+        ...currentSession,
         elapsedTime,
-        sessionId: id,
+        sessionId: data.sessions.id,
       };
     }
 
-    setSession(currentSesion);
+    setSession(currentSession);
   }, [data]);
 
   useEffect(() => {
