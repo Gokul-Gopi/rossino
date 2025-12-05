@@ -112,13 +112,12 @@ const SearchableSelect = ({
                         setValue(currentValue === value ? "" : currentValue);
                         setOpen(false);
                       }}
+                      className="group justify-between"
                     >
                       {el.label}
-                      <Check
-                        className={cn(
-                          value === el.value ? "opacity-100" : "opacity-0",
-                        )}
-                      />
+                      {value === el.value && (
+                        <Check className="group-hover:stroke-white" />
+                      )}
                     </CommandItem>
                   ))}
                 </CommandGroup>
