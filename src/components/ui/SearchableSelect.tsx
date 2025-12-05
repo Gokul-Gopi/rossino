@@ -31,6 +31,7 @@ interface ISearchableSelectProps {
   loading?: boolean;
   placeholder?: string;
   notFoundText?: string;
+  noDataView?: React.ReactNode;
   icon?: React.ReactNode;
   triggerProps?: React.ComponentProps<typeof Button>;
 }
@@ -43,6 +44,7 @@ const SearchableSelect = ({
   setSearchQuery,
   loading,
   placeholder,
+  noDataView,
   notFoundText = "No results found.",
   icon,
 
@@ -84,42 +86,47 @@ const SearchableSelect = ({
             return 0;
           }}
         >
-          {/* {data.length ? <></> : ""} */}
-          <CommandInput
-            placeholder="Search"
-            className="h-9"
-            value={searchQuery}
-            onValueChange={setSearchQuery}
-          />
-          <CommandList>
-            {loading ? (
-              <div className="h-[5rem]">
-                <Spinner className="mx-auto mt-4" />
-              </div>
-            ) : (
-              <CommandEmpty>{notFoundText}</CommandEmpty>
-            )}
+          {data.length ? (
+            <>
+              <CommandInput
+                placeholder="Search"
+                className="h-9"
+                value={searchQuery}
+                onValueChange={setSearchQuery}
+              />
+              <CommandList>
+                {loading ? (
+                  <div className="h-[5rem]">
+                    <Spinner className="mx-auto mt-4" />
+                  </div>
+                ) : (
+                  <CommandEmpty>{notFoundText}</CommandEmpty>
+                )}
 
-            <CommandGroup>
-              {data.map((el) => (
-                <CommandItem
-                  key={el.value}
-                  value={el.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {el.label}
-                  <Check
-                    className={cn(
-                      value === el.value ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
+                <CommandGroup>
+                  {data.map((el) => (
+                    <CommandItem
+                      key={el.value}
+                      value={el.value}
+                      onSelect={(currentValue) => {
+                        setValue(currentValue === value ? "" : currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      {el.label}
+                      <Check
+                        className={cn(
+                          value === el.value ? "opacity-100" : "opacity-0",
+                        )}
+                      />
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </>
+          ) : (
+            <div className="h-30 px-4 py-2">{noDataView}</div>
+          )}
         </Command>
       </PopoverContent>
     </Popover>

@@ -1,9 +1,11 @@
+import { Button } from "@/components/ui/Button";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useProjects } from "@/query/project.queries";
 import useStore from "@/store";
 import { cn } from "@/utils/helpers";
-import { FolderHeart } from "lucide-react";
+import { FolderHeart, SquareArrowOutUpRight } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -78,6 +80,19 @@ const ProjectSelect = ({ className, onAfterSwitch }: IProjectSelectProps) => {
         loading={projects.isLoading}
         icon={<FolderHeart />}
         placeholder="Select a project"
+        noDataView={
+          <div className="flex flex-col items-center gap-2 py-2">
+            <p className="text-muted-foreground text-center text-sm text-balance">
+              No projects found. Create a new project to get started.
+            </p>
+            <Link href="/projects">
+              <Button>
+                <SquareArrowOutUpRight />
+                Projects
+              </Button>
+            </Link>
+          </div>
+        }
         triggerProps={{
           disabled: !userId,
           variant: "subtle",
