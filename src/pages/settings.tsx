@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import PageHeading from "@/components/layout/PageHeading";
-import SettingsForm from "@/components/pages/settings/Settingsform";
+import SettingsForm from "@/components/pages/settings/SettingsForm";
 import { Bolt } from "lucide-react";
 import { NextSeo } from "next-seo";
 
