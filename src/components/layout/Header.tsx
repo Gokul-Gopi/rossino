@@ -8,20 +8,23 @@ import {
 } from "@/components/ui/Tooltip";
 import Link from "next/link";
 import useStore from "@/store";
-import ProjectSelect from "@/components/pages/home/ProjectSelect";
 
 const DarkMode = dynamic(() => import("@/components/layout/DarkMode"), {
   ssr: false,
 });
 
-const Header = () => {
+interface IHeaderProps {
+  heading?: React.ReactNode;
+}
+
+const Header = ({ heading }: IHeaderProps) => {
   const userId = useStore((state) => state.userId);
 
   return (
     <header className="flex items-center justify-between gap-2 px-4 py-4 lg:px-8">
       <SidebarTrigger />
 
-      {userId && <ProjectSelect />}
+      {heading && heading}
 
       <div className="ml-auto flex gap-2">
         <DarkMode />

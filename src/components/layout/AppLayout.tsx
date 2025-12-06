@@ -8,16 +8,17 @@ Chart.register(ArcElement);
 
 interface IAppLayoutProps {
   children: React.ReactNode;
+  heading?: React.ReactNode;
   className?: string;
 }
 
-const AppLayout = ({ children, className }: IAppLayoutProps) => {
+const AppLayout = ({ children, heading, className }: IAppLayoutProps) => {
   return (
     <SidebarProvider defaultOpen={false}>
       <Sidebar />
 
       <section className="min-h-dvh w-full">
-        <Header />
+        <Header heading={heading} />
 
         <main className={cn("flex justify-center p-4", className)}>
           {children}

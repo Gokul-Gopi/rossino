@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import { SessionStore } from "@/store/session.slice";
 import ProjectSwitchOverlay from "@/components/pages/home/ProjectSwitchOverlay";
 import DynamicDocTitle from "@/components/pages/home/DynamicDocTitle";
+import ProjectSelect from "@/components/pages/home/ProjectSelect";
 
 export const getServerSideProps = withAuth(async (ctx, user) => {
   const queryClient = new QueryClient();
@@ -107,7 +108,10 @@ const Page = () => {
   }, [populateDashboard]);
 
   return (
-    <AppLayout className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3">
+    <AppLayout
+      heading={userId && <ProjectSelect />}
+      className="flex grid-cols-2 flex-col gap-4 pb-20 md:gap-8 lg:px-8 2xl:grid 2xl:grid-cols-3"
+    >
       <DynamicDocTitle />
 
       <AnimatePresence initial={false}>
