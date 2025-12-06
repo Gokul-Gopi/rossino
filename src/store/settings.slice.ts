@@ -18,7 +18,6 @@ export const settingsInitialState: SettingsStore = {
   notificationsEnabled: true,
   nextSessionReminder: 30,
   timeLeftReminder: 30,
-  silentNotifications: true,
 };
 
 const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({

@@ -40,7 +40,6 @@ const Pomodoro = () => {
     nextSessionReminder,
     timeLeftReminder,
     notificationsEnabled,
-    silentNotifications,
     timerStyle,
   } = usePomodoro();
 
@@ -84,7 +83,6 @@ const Pomodoro = () => {
       notification({
         title: "Time Left Reminder",
         body: `Only ${timeLeftReminder} minutes left in your focus session!`,
-        silent: silentNotifications,
       });
       setNotifiedUser({ notifiedForTimeLeft: true });
     }
@@ -106,7 +104,6 @@ const Pomodoro = () => {
         notification({
           title: "Session Completed",
           body: `${nextSessionType === "FOCUS" ? "Time to focus!" : nextSessionType === "SHORTBREAK" ? "Take a short break!" : "Take a long break, you deserve it!"}`,
-          silent: silentNotifications,
         });
       }
 
@@ -265,7 +262,6 @@ const Pomodoro = () => {
       notification({
         title: "Next Session Reminder",
         body: "When you're ready, you can start your next session!",
-        silent: silentNotifications,
       });
       setNotifiedUser({ notifiedForNextSession: true });
 

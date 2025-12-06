@@ -30,7 +30,6 @@ export const usePomodoro = () => {
   const nextSessionReminder = useStore((state) => state.nextSessionReminder);
   const timeLeftReminder = useStore((state) => state.timeLeftReminder);
   const notificationsEnabled = useStore((state) => state.notificationsEnabled);
-  const silentNotifications = useStore((state) => state.silentNotifications);
 
   const timerStyle = useStore((state) => state.timerStyle);
 
@@ -57,7 +56,6 @@ export const usePomodoro = () => {
     nextSessionReminder,
     timeLeftReminder,
     notificationsEnabled,
-    silentNotifications,
     timerStyle,
   };
 };

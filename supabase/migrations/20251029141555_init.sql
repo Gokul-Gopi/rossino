@@ -77,7 +77,6 @@ create table public.settings (
   "longBreakDuration" int not null default 900,
   "longBreakInterval" int not null default 4,
   "notificationsEnabled" boolean not null default true,
-  "silentNotifications" boolean not null default false,
   "autoStartBreak" boolean not null default false,
   "autoStartPomo" boolean not null default false,
   "nextSessionReminder" smallInt not null default 0,

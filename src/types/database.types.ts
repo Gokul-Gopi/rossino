@@ -134,7 +134,6 @@ export type Database = {
           notificationsEnabled: boolean
           pomoDuration: number
           shortBreakDuration: number
-          silentNotifications: boolean
           timeLeftReminder: number
           updatedAt: string
           userId: string
@@ -149,7 +148,6 @@ export type Database = {
           notificationsEnabled?: boolean
           pomoDuration?: number
           shortBreakDuration?: number
-          silentNotifications?: boolean
           timeLeftReminder?: number
           updatedAt?: string
           userId: string
@@ -164,7 +162,6 @@ export type Database = {
           notificationsEnabled?: boolean
           pomoDuration?: number
           shortBreakDuration?: number
-          silentNotifications?: boolean
           timeLeftReminder?: number
           updatedAt?: string
           userId?: string
