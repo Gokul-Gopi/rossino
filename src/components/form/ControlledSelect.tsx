@@ -5,29 +5,22 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/Field";
-import { Input } from "@/components/ui/Input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/InputGroup";
+import { Select } from "@/components/ui/Select";
 
-interface IControlledTextInputProps extends React.ComponentProps<typeof Input> {
+interface IControlledSelectProps extends React.ComponentProps<typeof Select> {
   name: string;
   label?: string;
   description?: string;
-  icon?: React.ReactNode;
   fieldClassName?: string;
 }
 
-const ControlledTextInput = ({
+const ControlledSelect = ({
   name,
   label,
   description,
-  icon,
   fieldClassName,
   ...props
-}: IControlledTextInputProps) => {
+}: IControlledSelectProps) => {
   const { control } = useFormContext();
 
   return (
@@ -38,14 +31,7 @@ const ControlledTextInput = ({
         <Field data-invalid={fieldState.invalid} className={fieldClassName}>
           {label && <FieldLabel>{label}</FieldLabel>}
 
-          <InputGroup>
-            {icon && <InputGroupAddon>{icon}</InputGroupAddon>}
-            <InputGroupInput
-              {...field}
-              {...props}
-              aria-invalid={fieldState.invalid}
-            />
-          </InputGroup>
+          <Select {...field} {...props} aria-invalid={fieldState.invalid} />
 
           {description && <FieldDescription>{description}</FieldDescription>}
 
@@ -56,4 +42,4 @@ const ControlledTextInput = ({
   );
 };
 
-export default ControlledTextInput;
+export default ControlledSelect;

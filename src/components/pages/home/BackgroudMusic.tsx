@@ -1,10 +1,4 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/Select";
+import { Select } from "@/components/ui/Select";
 import { useState } from "react";
 import MusicPlayer from "./MusicPlayer";
 import { Track } from "@/types";
@@ -52,19 +46,16 @@ const BackgroudMusic = () => {
 
   return (
     <div>
-      <Select value={selectedTrack?.id || ""} onValueChange={onTrackSelect}>
-        <SelectTrigger className="mt-4 mb-8 w-full">
-          <SelectValue placeholder="Select a track" />
-        </SelectTrigger>
-
-        <SelectContent className="bg-card">
-          {tracks.map((track) => (
-            <SelectItem key={track.label} value={track.id}>
-              {track.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <Select
+        value={selectedTrack?.src}
+        onValueChange={onTrackSelect}
+        data={tracks.map((track) => ({
+          label: track.label,
+          value: track.src,
+        }))}
+        placeholder="Select a track"
+        className="mt-4 mb-8 w-full"
+      />
 
       <MusicPlayer track={selectedTrack} />
     </div>

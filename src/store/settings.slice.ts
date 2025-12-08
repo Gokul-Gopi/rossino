@@ -1,7 +1,10 @@
 import { Settings } from "@/types";
 import { StateCreator } from "zustand/vanilla";
 
-type SettingsStore = Omit<Settings, "userId" | "createdAt" | "updatedAt">;
+export type SettingsStore = Omit<
+  Settings,
+  "userId" | "createdAt" | "updatedAt"
+>;
 
 export type SettingsSlice = SettingsStore & {
   setSettings: (settings: Partial<SettingsSlice>) => void;
