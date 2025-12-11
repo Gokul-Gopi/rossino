@@ -162,6 +162,16 @@ body {
   color: var(--foreground);
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* * {
   scrollbar-width: thin;
   scrollbar-color: hsl(0 0% 80%) transparent;

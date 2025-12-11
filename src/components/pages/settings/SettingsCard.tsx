@@ -14,7 +14,7 @@ const SettingsCard = ({ title, children, className }: ISettingsCardProps) => {
         className,
       )}
     >
-      <h4 className="text-primary mb-4">{title}</h4>
+      <h4 className="text-primary mb-4 font-medium">{title}</h4>
 
       <div className="flex flex-col gap-4">{children}</div>
     </div>

@@ -11,14 +11,14 @@ interface IControlledSelectProps extends React.ComponentProps<typeof Select> {
   name: string;
   label?: string;
   description?: string;
-  fieldClassName?: string;
+  rootClassName?: string;
 }
 
 const ControlledSelect = ({
   name,
   label,
   description,
-  fieldClassName,
+  rootClassName,
   ...props
 }: IControlledSelectProps) => {
   const { control } = useFormContext();
@@ -28,7 +28,7 @@ const ControlledSelect = ({
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid} className={fieldClassName}>
+        <Field data-invalid={fieldState.invalid} className={rootClassName}>
           {label && <FieldLabel>{label}</FieldLabel>}
 
           <Select {...field} {...props} aria-invalid={fieldState.invalid} />
