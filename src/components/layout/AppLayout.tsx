@@ -20,7 +20,12 @@ const AppLayout = ({ children, heading, className }: IAppLayoutProps) => {
       <section className="min-h-dvh w-full">
         <Header heading={heading} />
 
-        <main className={cn("flex justify-center p-4", className)}>
+        <main
+          className={cn(
+            "flex justify-center px-4 pt-4 pb-4 max-md:pb-14",
+            className,
+          )}
+        >
           {children}
         </main>
       </section>

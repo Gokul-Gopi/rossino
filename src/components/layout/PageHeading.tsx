@@ -10,7 +10,7 @@ const PageHeading = ({ icon, title, subtitle }: IPageHeadingProps) => {
       <div className="flex items-center gap-1.5">
         {icon} {title}
       </div>
-      <p className="text-muted-foreground mt-0.5 text-[13px] font-medium">
+      <p className="text-muted-foreground mt-0.5 text-[13px] font-medium max-md:hidden">
         {subtitle}
       </p>
     </div>

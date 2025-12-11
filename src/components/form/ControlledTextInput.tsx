@@ -17,7 +17,8 @@ interface IControlledTextInputProps extends React.ComponentProps<typeof Input> {
   label?: string;
   description?: string;
   icon?: React.ReactNode;
-  fieldClassName?: string;
+  rootClassName?: string;
+  inputGroupClassName?: string;
 }
 
 const ControlledTextInput = ({
@@ -25,7 +26,8 @@ const ControlledTextInput = ({
   label,
   description,
   icon,
-  fieldClassName,
+  rootClassName,
+  inputGroupClassName,
   ...props
 }: IControlledTextInputProps) => {
   const { control } = useFormContext();
@@ -35,10 +37,10 @@ const ControlledTextInput = ({
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid} className={fieldClassName}>
+        <Field data-invalid={fieldState.invalid} className={rootClassName}>
           {label && <FieldLabel>{label}</FieldLabel>}
 
-          <InputGroup>
+          <InputGroup className={inputGroupClassName}>
             {icon && <InputGroupAddon>{icon}</InputGroupAddon>}
             <InputGroupInput
               {...field}

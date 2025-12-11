@@ -32,7 +32,7 @@ const PomodoroInnerContent = ({
         {remainingTime}
       </p>
 
-      <div className="flex gap-1.5">
+      <div className="flex items-end gap-1.5">
         <Image src={logo} alt="rossino" width={24} className="min-w-6" />{" "}
         <p
           className={cn(

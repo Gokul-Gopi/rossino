@@ -8,6 +8,8 @@ import LoaderButton from "@/components/ui/LoaderButton";
 import ControlledSwitch from "@/components/form/ControlledSwitch";
 import ControlledSelect from "@/components/form/ControlledSelect";
 import ControlledNumberInput from "@/components/form/ControlledNumberInput";
+import ControlledTextInput from "@/components/form/ControlledTextInput";
+import { Kbd, KbdGroup } from "@/components/ui/Kbd";
 
 const nextSessReminderOptions = [
   { label: "Disabled", value: "disabled" },
@@ -23,6 +25,11 @@ const timeLeftReminderOptions = [
   { label: "Before 10 mins", value: "10" },
 ];
 
+const defaultInputProps = {
+  inputGroupClassName: "w-full max-w-20",
+  rootClassName: "flex-row",
+};
+
 const SettingsForm = () => {
   const form = useForm<SettingsStore>({
     resolver: zodResolver(settingsSchema),
@@ -36,50 +43,56 @@ const SettingsForm = () => {
     <FormProvider {...form}>
       <form
         onSubmit={onSubmit}
-        className="grid w-full max-w-230 grid-rows-3 flex-col gap-4 md:grid-cols-2 md:gap-6"
+        className="flex w-full max-w-230 flex-col gap-4 md:mt-5 md:grid md:grid-cols-4 md:gap-6"
       >
-        <SettingsCard title="Pomodoro" className="row-span-2">
+        <SettingsCard title="Pomodoro" className="col-span-2 row-span-3">
           <ControlledNumberInput
             name="pomoDuration"
             label="Pomodoro Duration"
-            inputGroupClassName="w-full max-w-20!"
-            rootClassName="flex-row"
             min={0}
             max={999}
-            allowNegative={false}
-          />
-          <ControlledNumberInput
-            name="breakDuration"
-            label="Break Duration"
-            inputGroupClassName="w-full max-w-20!"
-            rootClassName="flex-row"
+            {...defaultInputProps}
           />
           <ControlledNumberInput
             name="shortBreakDuration"
             label="Short Break Duration"
-            inputGroupClassName="w-full max-w-20!"
-            rootClassName="flex-row"
+            min={0}
+            max={999}
+            {...defaultInputProps}
           />
           <ControlledNumberInput
             name="longBreakDuration"
             label="Long Break Duration"
-            inputGroupClassName="w-full max-w-20!"
-            rootClassName="flex-row"
+            min={0}
+            max={999}
+            {...defaultInputProps}
+          />
+          <ControlledTextInput
+            name="longBreakInterval"
+            label="Long break Interval"
+            {...defaultInputProps}
           />
         </SettingsCard>
 
-        <SettingsCard title="Auto Actions" className="col-start-1 row-start-3">
+        <SettingsCard
+          title="Auto Actions"
+          className="col-span-2 col-start-1 row-start-4"
+        >
           <ControlledSwitch name="autoStartPomo" label="Auto Start Pomodoro" />
           <ControlledSwitch name="autoStartBreak" label="Auto Start Break" />
         </SettingsCard>
 
-        <SettingsCard title="Notification" className="col-start-2 row-start-1">
-          card
+        <SettingsCard
+          title="Auto Actions"
+          className="col-span-2 col-start-1 row-start-4"
+        >
+          <ControlledSwitch name="autoStartPomo" label="Auto Start Pomodoro" />
+          <ControlledSwitch name="autoStartBreak" label="Auto Start Break" />
         </SettingsCard>
 
         <SettingsCard
           title="Notification"
-          className="col-start-2 row-span-2 row-start-2"
+          className="col-span-2 col-start-3 row-span-2 row-start-1"
         >
           <ControlledSwitch name="notificationsEnabled" label="Enabled" />
 
@@ -100,7 +113,23 @@ const SettingsForm = () => {
           />
         </SettingsCard>
 
-        <div className="col-start-2 flex justify-end gap-2">
+        <SettingsCard
+          title="Shortcuts"
+          className="col-span-2 col-start-3 row-span-2 row-start-3"
+        >
+          {[1, 2, 3].map((num) => (
+            <div key={num} className="flex justify-between text-sm">
+              <p>Play/Pause</p>
+              <KbdGroup>
+                <Kbd>Ctrl</Kbd>
+                <span>+</span>
+                <Kbd>B</Kbd>
+              </KbdGroup>
+            </div>
+          ))}
+        </SettingsCard>
+
+        <div className="col-start-4 flex justify-end gap-2">
           <LoaderButton type="submit">Submit</LoaderButton>
           <Button variant="subtle">Reset</Button>
         </div>

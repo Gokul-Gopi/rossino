@@ -18,7 +18,6 @@ interface IControlledNumberInputProps
   label?: string;
   min?: number;
   max?: number;
-  allowNegative?: boolean;
   description?: string;
   icon?: React.ReactNode;
   rootClassName?: string;
@@ -30,7 +29,6 @@ const ControlledNumberInput = ({
   label,
   description,
   icon,
-  allowNegative = true,
   rootClassName,
   inputGroupClassName,
   ...props
