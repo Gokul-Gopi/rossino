@@ -117,16 +117,18 @@ const SettingsForm = () => {
           title="Shortcuts"
           className="col-span-2 col-start-3 row-span-2 row-start-3"
         >
-          {[1, 2, 3].map((num) => (
-            <div key={num} className="flex justify-between text-sm">
-              <p>Play/Pause</p>
-              <KbdGroup>
-                <Kbd>Ctrl</Kbd>
-                <span>+</span>
-                <Kbd>B</Kbd>
-              </KbdGroup>
-            </div>
-          ))}
+          <div className="flex justify-between text-sm font-medium">
+            <p>Play/Pause</p>
+            <Kbd>Space</Kbd>
+          </div>
+          <div className="flex justify-between text-sm">
+            <p>Toggle Tasks</p>
+            <Kbd>T</Kbd>
+          </div>
+          <div className="flex justify-between text-sm">
+            <p>Toggle Widgets</p>
+            <Kbd>W</Kbd>
+          </div>
         </SettingsCard>
 
         <div className="col-start-4 flex justify-end gap-2">

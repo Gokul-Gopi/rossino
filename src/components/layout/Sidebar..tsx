@@ -37,7 +37,7 @@ const navLinks = [
   {
     label: "Pomodoro",
     link: "/",
-    icon: <Timer className="size-5.5! -translate-x-[4.5px]" />,
+    icon: <Timer className="size-5.5! -translate-x-[3px]" />,
   },
   {
     label: "Projects",
