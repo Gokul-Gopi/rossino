@@ -79,12 +79,13 @@ const Pomodoro = () => {
 
     const timeLeft = intendedDuration - elapsedTime;
 
-    if (
+    const notify =
       timeLeftReminder &&
       !notifiedForTimeLeft &&
       type === "FOCUS" &&
-      timeLeft <= timeLeftReminder
-    ) {
+      timeLeft <= timeLeftReminder;
+
+    if (notify) {
       notification({
         title: "Time Left Reminder",
         body: `Only ${timeLeftReminder} minutes left in your focus session!`,
@@ -295,10 +296,11 @@ const Pomodoro = () => {
 
   useEffect(() => {
     if (status === "IDLE") {
-      if (
+      const autoStart =
         (autoStartPomo && type === "FOCUS") ||
-        (autoStartBreak && type !== "FOCUS")
-      ) {
+        (autoStartBreak && type !== "FOCUS");
+
+      if (autoStart) {
         onStart();
       } else {
         onNextSessionReminder();
