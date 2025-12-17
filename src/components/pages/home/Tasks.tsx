@@ -196,10 +196,10 @@ const Tasks = () => {
   return (
     <motion.div
       key="tasks"
-      initial={{ x: "100%", opacity: 0, scale: 0.98 }}
+      initial={{ x: "100%", opacity: 0 }}
       animate={{ x: 0, opacity: 1, scale: 1 }}
       exit={{ x: "100%", opacity: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 40 }}
+      transition={{ type: "keyframes", duration: 0.4 }}
       className="bg-card flex min-h-[20rem] flex-col rounded-2xl border p-5 shadow md:p-10"
     >
       <form onSubmit={onSubmit} className="mb-5 flex gap-2">

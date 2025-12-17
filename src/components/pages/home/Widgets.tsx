@@ -1,15 +1,9 @@
 import { cn } from "@/utils/helpers";
-import { type HTMLMotionProps, motion, type MotionProps } from "motion/react";
+import { type HTMLMotionProps, motion } from "motion/react";
 import QuickNotes from "./QuickNotes";
 import Interruptions from "./Interruptions";
 import TimerStyle from "./TimerStyle";
 import BackgroudMusic from "./BackgroudMusic";
-
-const commonMotionProps: MotionProps = {
-  initial: { opacity: 0, scale: 0 },
-  animate: { opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0 },
-};
 
 interface WidgetCardProps extends HTMLMotionProps<"div"> {
   children: React.ReactNode;
@@ -26,6 +20,9 @@ const WidgetCard = ({
 }: WidgetCardProps) => {
   return (
     <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0 }}
       {...props}
       className={cn(
         "bg-card flex flex-col rounded-2xl border p-4 shadow",
@@ -51,8 +48,7 @@ const Widgets = () => {
   return (
     <div className="flex grid-cols-2 grid-rows-3 flex-col gap-4 md:grid md:gap-6">
       <WidgetCard
-        {...commonMotionProps}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.3, duration: 0.3 }}
         heading="Quick Notes"
         className="row-span-2"
       >
@@ -60,8 +56,7 @@ const Widgets = () => {
       </WidgetCard>
 
       <WidgetCard
-        {...commonMotionProps}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.5, duration: 0.3 }}
         heading="Interruptions"
         className="col-start-1 row-start-3 justify-between"
       >
@@ -69,8 +64,7 @@ const Widgets = () => {
       </WidgetCard>
 
       <WidgetCard
-        {...commonMotionProps}
-        transition={{ delay: 0.1 }}
+        transition={{ delay: 0.1, duration: 0.3 }}
         heading="Timer style"
         className="col-start-2 row-start-1"
       >
@@ -78,8 +72,7 @@ const Widgets = () => {
       </WidgetCard>
 
       <WidgetCard
-        {...commonMotionProps}
-        transition={{ delay: 0.8 }}
+        transition={{ delay: 0.8, duration: 0.3 }}
         heading="Bacground music"
         className="col-start-2 row-span-2 row-start-2"
       >
