@@ -43,8 +43,13 @@ const Pomodoro = () => {
     timerStyle,
   } = usePomodoro();
 
-  const { setSession, setNotifiedUser, setInterruptionsData } =
-    useStoreActions();
+  const {
+    setSession,
+    setNotifiedUser,
+    setInterruptionsData,
+    toggleTasks,
+    toggleWidgets,
+  } = useStoreActions();
 
   const remainingTime = formatTime(Math.floor(intendedDuration - elapsedTime));
 
@@ -269,6 +274,25 @@ const Pomodoro = () => {
     }, nextSessionReminder * 1000);
   };
 
+  const onShortcutTrigger = (e: KeyboardEvent) => {
+    const target = e.target as HTMLElement | null;
+
+    // Don't trigger shortcuts while
+    // typing in inputs/textareas/etc
+    const tag = target?.tagName;
+    const isTyping =
+      target?.isContentEditable ||
+      tag === "INPUT" ||
+      tag === "TEXTAREA" ||
+      tag === "SELECT";
+
+    if (isTyping) return;
+
+    if (e.code === "Space") return onStart();
+    if (e.code === "KeyT") return toggleTasks();
+    if (e.code === "KeyW") return toggleWidgets();
+  };
+
   useEffect(() => {
     if (status === "IDLE") {
       if (
@@ -279,23 +303,20 @@ const Pomodoro = () => {
       } else {
         onNextSessionReminder();
       }
-    }
-
-    if (status === "RUNNING") {
+    } else if (status === "RUNNING") {
       intervalRef.current = setInterval(updateTimer, 1000);
-    }
-
-    if (status === "COMPLETED") {
+    } else if (status === "COMPLETED") {
       onAfterCompletion();
     }
 
+    window.addEventListener("keydown", onShortcutTrigger);
+
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-      if (reminderTimeout.current) {
-        clearTimeout(reminderTimeout.current);
-      }
+      window.removeEventListener("keydown", onShortcutTrigger);
+
+      if (intervalRef.current) clearInterval(intervalRef.current);
+
+      if (reminderTimeout.current) clearTimeout(reminderTimeout.current);
     };
   }, [status, updateTimer]);
 
