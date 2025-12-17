@@ -15,11 +15,11 @@ export type WidgetSlice = WidgetStore & {
   toggleWidgets: () => void;
   setTimerStyle: (style: "RING" | "BAR") => void;
   setInterruptionsData: ({
-    count,
-    duration,
+    durationInc,
+    countInc,
   }: {
-    count: number;
-    duration: number;
+    durationInc: number;
+    countInc?: number;
   }) => void;
   resetWidgets: () => void;
 };
@@ -41,13 +41,15 @@ const createWidgetsSlice: StateCreator<WidgetSlice> = (set) => ({
 
   setTimerStyle: (style) => set(() => ({ timerStyle: style })),
 
-  setInterruptionsData: ({ count, duration }) => {
+  setInterruptionsData: ({ durationInc, countInc = 0 }) => {
     set((state) => {
       const expired = state.resetDate && dayjs().isSame(state.resetDate, "day");
 
       return {
-        pausedCount: !expired ? state.pausedCount + count : count,
-        pausedDuration: !expired ? state.pausedDuration + duration : duration,
+        pausedCount: !expired ? state.pausedCount + countInc : countInc,
+        pausedDuration: !expired
+          ? state.pausedDuration + durationInc
+          : durationInc,
         resetDate: !state.resetDate ? dayjs().add(1, "day") : state.resetDate,
       };
     });

@@ -55,13 +55,6 @@ const Pomodoro = () => {
 
   const session = useSession();
 
-  const updatePausedData = (count = 0, duration = 0) => {
-    setInterruptionsData({
-      count,
-      duration,
-    });
-  };
-
   const cleanup = () => {
     setNotifiedUser({
       notifiedForNextSession: false,
@@ -165,7 +158,10 @@ const Pomodoro = () => {
       updatedState.lastPausedAt = pausedAt;
       updatedState.status = "PAUSED";
 
-      updatePausedData(1);
+      setInterruptionsData({
+        durationInc: 0,
+        countInc: 1,
+      });
     } else if (status === "PAUSED") {
       const pausedDuration =
         dayjs().diff(dayjs(lastPausedAt), "second") + totalPausedDuration;
@@ -173,7 +169,9 @@ const Pomodoro = () => {
       updatedState.totalPausedDuration = pausedDuration;
       updatedState.status = "RUNNING";
 
-      updatePausedData(0, pausedDuration);
+      setInterruptionsData({
+        durationInc: pausedDuration,
+      });
     }
 
     setSession(updatedState);
