@@ -47,16 +47,18 @@ export const getServerSideProps = withAuth(async (ctx, user) => {
 const Page = () => {
   const router = useRouter();
 
-  const userId = useStore((state) => state?.userId);
+  const userId = useStore((state) => state.userId);
   const showWidgets = useStore((state) => state.showWidgets);
   const showTasks = useStore((state) => state.showTasks);
 
   const { setNote, setTasks, setSettings, setSession } = useStoreActions();
 
   const { data, isPending } = useDashboard(
-    (router.query.project as string) ?? null,
+    (router.query.project ?? null) as string | null,
     !!userId,
   );
+
+  console.log({ userId });
 
   const populateDashboard = useCallback(() => {
     if (!data) return;

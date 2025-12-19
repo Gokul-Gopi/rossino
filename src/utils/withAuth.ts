@@ -1,11 +1,11 @@
 import { GetServerSideProps, type GetServerSidePropsContext } from "next";
 import { createClient } from "./helpers";
-import { UserStore } from "@/store/user.slice";
+import { User } from "@supabase/supabase-js";
 
 const withAuth = (
   handler: (
     context: GetServerSidePropsContext,
-    user: UserStore | null,
+    user: User | null,
   ) => ReturnType<GetServerSideProps>,
 ) => {
   return async (ctx: GetServerSidePropsContext) => {
@@ -14,13 +14,7 @@ const withAuth = (
 
       const { data } = await supabase.auth.getUser();
 
-      const user = !data.user
-        ? null
-        : ({
-            userId: data.user.id,
-            email: data.user.email,
-            name: data.user?.user_metadata?.name ?? "",
-          } as UserStore);
+      const user = !data.user ? null : data.user;
 
       return handler(ctx, user);
     } catch {

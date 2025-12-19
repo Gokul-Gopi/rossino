@@ -9,7 +9,9 @@ import ControlledSwitch from "@/components/form/ControlledSwitch";
 import ControlledSelect from "@/components/form/ControlledSelect";
 import ControlledNumberInput from "@/components/form/ControlledNumberInput";
 import ControlledTextInput from "@/components/form/ControlledTextInput";
-import { Kbd, KbdGroup } from "@/components/ui/Kbd";
+import { Kbd } from "@/components/ui/Kbd";
+import { useSettings } from "@/query/settings.queries";
+import useStore from "@/store";
 
 const nextSessReminderOptions = [
   { label: "Disabled", value: "disabled" },
@@ -34,6 +36,12 @@ const SettingsForm = () => {
   const form = useForm<SettingsStore>({
     resolver: zodResolver(settingsSchema),
   });
+
+  const userId = useStore((state) => state.userId);
+  const settings = useSettings(userId);
+
+  console.log({ userId });
+  // console.log(settings.data);
 
   const onSubmit = form.handleSubmit((data) => {
     console.log(data);

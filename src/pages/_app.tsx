@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import {
+  type DehydratedState,
   HydrationBoundary,
   QueryClient,
   QueryClientProvider,
@@ -13,8 +14,14 @@ import { PagesTopLoader } from "nextjs-toploader/pages";
 import { useStoreActions } from "@/store";
 import { DefaultSeo } from "next-seo";
 import seo from "@/utils/seo";
+import { User } from "@/types";
 
-export default function App({ Component, pageProps }: AppProps) {
+interface IAppProps {
+  dehydratedState: DehydratedState;
+  user: User;
+}
+
+export default function App({ Component, pageProps }: AppProps<IAppProps>) {
   const { setUser } = useStoreActions();
 
   const [queryClient] = useState(
@@ -30,7 +37,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     if (pageProps.user) {
-      setUser(pageProps.user);
+      setUser({
+        userId: pageProps.user.id,
+        email: pageProps.user.email as string,
+        name: pageProps.user.user_metadata.name,
+      });
     }
   }, [pageProps.user, setUser]);
 
